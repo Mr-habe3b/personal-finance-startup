@@ -49,7 +49,6 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
     const renderLink = (item: typeof menuItems[0], isCollapsed: boolean) => {
         const linkContent = (
              <Link
-                key={item.href}
                 href={item.href}
                 className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
@@ -64,7 +63,7 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
 
         if (isCollapsed) {
             return (
-                 <Tooltip>
+                 <Tooltip key={item.href}>
                     <TooltipTrigger asChild>
                         {linkContent}
                     </TooltipTrigger>
@@ -74,7 +73,7 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
                 </Tooltip>
             );
         }
-        return linkContent;
+        return <div key={item.href}>{linkContent}</div>;
     };
 
     return (
