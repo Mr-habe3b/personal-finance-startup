@@ -4,12 +4,14 @@
 import { AppHeader } from "@/components/app-header";
 import { fundraisingDeals as initialDeals, fundraisingStages } from "@/data/mock";
 import { FundraisingDeal, FundraisingStage } from "@/types";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { FundraisingColumn } from "@/components/fundraising-column";
 import { FundraisingCard } from "@/components/fundraising-card";
 import { EditDealForm } from "@/components/edit-deal-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DollarSign, LineChart, List, Target } from "lucide-react";
 
 export default function FundraisingPage() {
     const [deals, setDeals] = useState<FundraisingDeal[]>(initialDeals);
@@ -23,6 +25,21 @@ export default function FundraisingPage() {
             },
         })
     );
+    
+    const analytics = useMemo(() => {
+        const totalPipelineValue = deals.reduce((sum, deal) => sum + deal.amount, 0);
+        const numberOfDeals = deals.length;
+        const averageDealSize = numberOfDeals > 0 ? totalPipelineValue / numberOfDeals : 0;
+        const closedDeals = deals.filter(d => d.stage === 'closed').length;
+        const closingRatio = numberOfDeals > 0 ? (closedDeals / numberOfDeals) * 100 : 0;
+        
+        return {
+            totalPipelineValue,
+            numberOfDeals,
+            averageDealSize,
+            closingRatio
+        }
+    }, [deals]);
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
@@ -111,10 +128,54 @@ export default function FundraisingPage() {
             <AppHeader />
             <main className="flex-1 overflow-x-auto">
                  <div className="p-4 md:p-8">
-                    <div className="mb-4">
+                    <div className="mb-6">
                         <h1 className="text-2xl font-bold tracking-tight">Fundraising</h1>
                         <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
                     </div>
+
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Total Pipeline Value</CardTitle>
+                                <DollarSign className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">${analytics.totalPipelineValue.toLocaleString()}</div>
+                                <p className="text-xs text-muted-foreground">Sum of all deal amounts.</p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Active Deals</CardTitle>
+                                <List className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{analytics.numberOfDeals}</div>
+                                <p className="text-xs text-muted-foreground">Total deals in the pipeline.</p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Average Deal Size</CardTitle>
+                                <LineChart className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">${Math.round(analytics.averageDealSize).toLocaleString()}</div>
+                                <p className="text-xs text-muted-foreground">Mean value of all deals.</p>
+                            </CardContent>
+                        </Card>
+                        <Card>
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                <CardTitle className="text-sm font-medium">Closing Ratio</CardTitle>
+                                <Target className="h-4 w-4 text-muted-foreground" />
+                            </CardHeader>
+                            <CardContent>
+                                <div className="text-2xl font-bold">{analytics.closingRatio.toFixed(1)}%</div>
+                                <p className="text-xs text-muted-foreground">Percentage of deals closed.</p>
+                            </CardContent>
+                        </Card>
+                    </div>
+
                      <DndContext 
                         sensors={sensors}
                         onDragStart={handleDragStart}
