@@ -35,4 +35,6 @@ export interface Milestone {
   description: string;
   dueDate: string;
   status: 'todo' | 'inprogress' | 'done';
+  owner: string;
+  priority: 'low' | 'medium' | 'high';
 }

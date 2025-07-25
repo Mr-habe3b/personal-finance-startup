@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/form';
 import type { Milestone } from '@/types';
 import { cn } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
@@ -37,6 +38,8 @@ const formSchema = z.object({
   dueDate: z.date({
     required_error: "A due date is required.",
   }),
+  owner: z.string().min(1, 'Owner is required.'),
+  priority: z.enum(['low', 'medium', 'high']),
 });
 
 interface AddMilestoneFormProps {
@@ -51,6 +54,8 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
     defaultValues: {
         title: '',
         description: '',
+        owner: '',
+        priority: 'medium',
     },
   });
 
@@ -64,7 +69,7 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
           <DialogTitle>Add New Milestone</DialogTitle>
           <DialogDescription>Set a clear target for your team to work towards.</DialogDescription>
@@ -97,6 +102,43 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                 </FormItem>
               )}
             />
+            <div className="grid grid-cols-2 gap-4">
+               <FormField
+                control={form.control}
+                name="owner"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Owner</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., Alex Johnson" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select priority" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <FormField
               control={form.control}
               name="dueDate"
@@ -128,7 +170,7 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date() || date < new Date("1900-01-01")
+                          date < new Date(new Date().setHours(0,0,0,0))
                         }
                         initialFocus
                       />
@@ -140,7 +182,7 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
             />
              <DialogFooter>
                 <DialogClose asChild>
-                    <Button type="button" variant="outline" onClick={onClose}>Cancel</Button>
+                    <Button type="button" variant="outline" onClick={() => { onClose(); form.reset(); }}>Cancel</Button>
                 </DialogClose>
                 <Button type="submit">Add Milestone</Button>
             </DialogFooter>
