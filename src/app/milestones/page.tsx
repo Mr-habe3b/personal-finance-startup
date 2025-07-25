@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Download, Plus, Target } from "lucide-react";
 import { useState } from "react";
@@ -162,7 +161,6 @@ export default function MilestonesPage() {
 
     return (
         <>
-            <AppHeader />
             <main className="flex-1 overflow-x-auto">
                 <div className="p-4 md:p-8">
                     <div className="flex items-center justify-between mb-4">

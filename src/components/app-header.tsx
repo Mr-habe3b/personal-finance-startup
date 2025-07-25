@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -10,16 +11,30 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Settings, User } from 'lucide-react';
+import { Menu, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
+import { cn } from '@/lib/utils';
 
+interface AppHeaderProps {
+    isSidebarCollapsed: boolean;
+    toggleSidebar: () => void;
+}
 
-export function AppHeader() {
+export function AppHeader({ isSidebarCollapsed, toggleSidebar }: AppHeaderProps) {
 
   return (
-    <header className="flex h-16 items-center justify-end gap-4 border-b bg-background px-4 md:px-6">
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+       <Button
+        variant="outline"
+        size="icon"
+        className="md:hidden"
+        onClick={toggleSidebar}
+        >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">Toggle Menu</span>
+        </Button>
+      <div className="flex items-center gap-4 ml-auto">
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

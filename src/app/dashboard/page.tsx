@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from '@/components/app-header';
 import { CapTableChart } from '@/components/cap-table-chart';
 import {
   Card,
@@ -69,7 +68,6 @@ export default function DashboardPage() {
 
   return (
       <>
-        <AppHeader />
         <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
             <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
               <Card>

@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import { fundraisingDeals as initialDeals, fundraisingStages } from "@/data/mock";
 import { FundraisingDeal, FundraisingStage } from "@/types";
 import { useState, useMemo, useEffect } from "react";
@@ -155,7 +154,6 @@ export default function FundraisingPage() {
 
     return (
         <>
-            <AppHeader />
             <main className="flex-1 overflow-x-auto">
                  <div className="p-4 md:p-8">
                     <div className="flex items-center justify-between mb-6">

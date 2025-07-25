@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import {
   Card,
   CardContent,
@@ -104,7 +103,6 @@ export default function FinancialsPage() {
     
     return (
         <>
-            <AppHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <div className="flex items-center justify-between">
                      <div>

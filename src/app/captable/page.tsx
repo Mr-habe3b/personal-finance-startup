@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import { CapTableChart } from '@/components/cap-table-chart';
 import {
     Card,
@@ -17,7 +16,6 @@ export default function CapTablePage() {
 
     return (
         <>
-            <AppHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <Card>
                     <CardHeader>

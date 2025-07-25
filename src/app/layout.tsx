@@ -9,6 +9,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { AppSidebar } from '@/components/app-sidebar';
 import { TeamProvider } from '@/context/team-context';
 import { useEffect, useState } from 'react';
+import { AppHeader } from '@/components/app-header';
 
 // This is a client component, so metadata should be defined in a parent server component if needed.
 // export const metadata: Metadata = {
@@ -27,6 +28,10 @@ export default function RootLayout({
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(prev => !prev);
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -49,16 +54,19 @@ export default function RootLayout({
                {isMounted && (
                 <AppSidebar 
                   isCollapsed={isSidebarCollapsed}
-                  toggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
+                  toggleSidebar={toggleSidebar}
                 />
               )}
               <div className={cn(
-                  "flex flex-col transition-all duration-300 ease-in-out",
+                  "flex flex-col h-screen",
                    isMounted && isSidebarCollapsed 
                     ? "md:pl-[72px]" 
                     : "md:pl-[220px] lg:pl-[280px]"
               )}>
-                {children}
+                <AppHeader isSidebarCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+                <main className="flex-1 overflow-y-auto">
+                    {children}
+                </main>
               </div>
             </div>
           </TeamProvider>

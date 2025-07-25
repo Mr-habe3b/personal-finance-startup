@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
@@ -102,7 +101,6 @@ export default function ClientsPage() {
 
     return (
         <>
-            <AppHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">

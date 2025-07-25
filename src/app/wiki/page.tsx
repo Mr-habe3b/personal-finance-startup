@@ -1,7 +1,6 @@
 
 'use client';
 
-import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
@@ -89,7 +88,6 @@ export default function WikiPage() {
 
     return (
         <>
-            <AppHeader />
             <main className="flex flex-1 flex-col">
                 <div className="grid md:grid-cols-[280px_1fr] flex-1">
                     <div className="flex flex-col gap-4 border-r bg-muted/40 p-4">

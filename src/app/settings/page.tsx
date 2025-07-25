@@ -1,10 +1,9 @@
-import { AppHeader } from '@/components/app-header';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function SettingsPage() {
   return (
       <>
-            <AppHeader />
             <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <Card>
                     <CardHeader>
