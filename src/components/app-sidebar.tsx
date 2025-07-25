@@ -77,7 +77,7 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
     };
 
     return (
-        <div className={cn("hidden border-r bg-muted/40 md:block transition-all duration-300 ease-in-out", isCollapsed ? "w-[72px]" : "w-[220px] lg:w-[280px]")}>
+        <div className={cn("hidden border-r bg-muted/40 md:fixed md:inset-y-0 md:left-0 md:z-10 md:flex md:flex-col transition-all duration-300 ease-in-out", isCollapsed ? "w-[72px]" : "w-[220px] lg:w-[280px]")}>
             <TooltipProvider>
                 <div className="flex h-full max-h-screen flex-col gap-2">
                     <div className="flex h-16 items-center border-b px-4 lg:px-6">
@@ -93,7 +93,7 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
                     </div>
                     <div className="mt-auto p-4 border-t">
                         <div className='mb-4'>
-                            <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-0" : "px-2 lg:px-4")}>
+                             <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-0" : "px-2 lg:px-4")}>
                                 {renderLink(settingsItem, isCollapsed)}
                             </nav>
                         </div>

@@ -45,20 +45,19 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TeamProvider>
-            <div className={cn(
-                "grid min-h-screen w-full",
-                isSidebarCollapsed 
-                  ? "md:grid-cols-[72px_1fr]" 
-                  : "md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]",
-                "transition-all duration-300 ease-in-out"
-              )}>
-              {isMounted && (
+             <div className="min-h-screen w-full">
+               {isMounted && (
                 <AppSidebar 
                   isCollapsed={isSidebarCollapsed}
                   toggleSidebar={() => setIsSidebarCollapsed(prev => !prev)}
                 />
               )}
-              <div className="flex flex-col">
+              <div className={cn(
+                  "flex flex-col transition-all duration-300 ease-in-out",
+                   isSidebarCollapsed 
+                    ? "md:pl-[72px]" 
+                    : "md:pl-[220px] lg:pl-[280px]"
+              )}>
                 {children}
               </div>
             </div>
