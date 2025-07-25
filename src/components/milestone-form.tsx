@@ -72,7 +72,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
   const isEditMode = !!milestone;
 
   useEffect(() => {
-    const defaultUser = teamMembers.length > 0 ? teamMembers[0].name : '';
+    const defaultUser = teamMembers.length > 0 ? teamMembers[0].name : 'User';
     if (milestone) {
         form.reset({
             ...milestone,
@@ -148,19 +148,10 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                     name="owner"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Owner</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select an owner" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {teamMembers.map(member => (
-                                <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Owner(s)</FormLabel>
+                         <FormControl>
+                            <Input placeholder="e.g. Alex, Ben" {...field} />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -247,18 +238,9 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                         render={({ field }) => (
                         <FormItem>
                             <FormLabel>Updated By</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a team member" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {teamMembers.map(member => (
-                                        <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
+                             <FormControl>
+                                <Input placeholder="Your name" {...field} />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                         )}
