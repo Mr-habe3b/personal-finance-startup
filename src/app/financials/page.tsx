@@ -13,21 +13,32 @@ import { financialData as initialFinancialData } from "@/data/mock";
 import { DollarSign, TrendingDown, TrendingUp, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { FinancialRecord } from "@/types";
+import type { FinancialRecord, ExpenseItem } from "@/types";
 import { FinancialsTable } from "@/components/financials-table";
 import { Button } from "@/components/ui/button";
 import { FinancialRecordForm } from "@/components/financial-record-form";
+
+const calculateTotals = (record: FinancialRecord) => {
+    const totalExpenses = record.expenses.reduce((sum, item) => sum + item.amount, 0);
+    const netIncome = record.revenue - totalExpenses;
+    return { ...record, totalExpenses, netIncome };
+}
+
 
 export default function FinancialsPage() {
     const [financialData, setFinancialData] = useState<FinancialRecord[]>(initialFinancialData);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState<FinancialRecord | null>(null);
 
+    const processedFinancialData = useMemo(() => {
+        return financialData.map(calculateTotals);
+    }, [financialData]);
+
     const analytics = useMemo(() => {
-        const totalRevenue = financialData.reduce((acc, item) => acc + item.revenue, 0);
-        const totalExpenses = financialData.reduce((acc, item) => acc + item.expenses, 0);
+        const totalRevenue = processedFinancialData.reduce((acc, item) => acc + item.revenue, 0);
+        const totalExpenses = processedFinancialData.reduce((acc, item) => acc + item.totalExpenses, 0);
         const netProfit = totalRevenue - totalExpenses;
-        const averageMonthlyBurn = financialData
+        const averageMonthlyBurn = processedFinancialData
             .filter(item => item.netIncome < 0)
             .reduce((acc, item, _, arr) => acc + Math.abs(item.netIncome) / arr.length, 0);
 
@@ -37,7 +48,7 @@ export default function FinancialsPage() {
             netProfit,
             averageMonthlyBurn,
         }
-    }, [financialData]);
+    }, [processedFinancialData]);
 
     const handleAddRecordClick = () => {
         setSelectedRecord(null);
@@ -49,20 +60,19 @@ export default function FinancialsPage() {
         setIsFormOpen(true);
     };
     
-    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'netIncome' | 'invoicePath'>) => {
-        const netIncome = recordData.revenue - recordData.expenses;
+    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath'>) => {
         const invoicePath = `/invoices/${recordData.month.toLowerCase()}-invoice.pdf`;
         
         if (selectedRecord && recordData.month === selectedRecord.month) {
             // Update existing record
-             setFinancialData(prev => prev.map(r => r.month === recordData.month ? { ...recordData, netIncome, invoicePath } : r));
+             setFinancialData(prev => prev.map(r => r.month === recordData.month ? { ...recordData, invoicePath } : r));
         } else {
             // Add new record - prevent duplicate months
             if (financialData.some(r => r.month === recordData.month)) {
                 alert("A record for this month already exists."); // Or use a toast
                 return;
             }
-             setFinancialData(prev => [...prev, { ...recordData, netIncome, invoicePath }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
+             setFinancialData(prev => [...prev, { ...recordData, invoicePath }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
         }
         setIsFormOpen(false);
     }
@@ -141,7 +151,7 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                             <FinancialsTable 
-                                records={financialData}
+                                records={processedFinancialData}
                                 onEdit={handleEditRecordClick}
                                 onDelete={(month) => handleDeleteRecord(month)}
                             />
@@ -154,13 +164,13 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                              <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={financialData}>
+                                <BarChart data={processedFinancialData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="month" />
                                     <YAxis />
                                     <Tooltip />
                                     <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Revenue" />
-                                    <Bar dataKey="expenses" fill="hsl(var(--destructive))" name="Expenses" />
+                                    <Bar dataKey="totalExpenses" fill="hsl(var(--destructive))" name="Expenses" />
                                 </BarChart>
                             </ResponsiveContainer>
                         </CardContent>
@@ -172,7 +182,7 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                              <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={financialData}>
+                                <LineChart data={processedFinancialData}>
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="month" />
                                     <YAxis />

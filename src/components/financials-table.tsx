@@ -7,9 +7,10 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Download, Edit, MoreHorizontal, Trash2, TrendingDown, TrendingUp } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Card } from './ui/card';
 
 interface FinancialsTableProps {
-  records: FinancialRecord[];
+  records: (FinancialRecord & { totalExpenses: number; netIncome: number; })[];
   onEdit: (record: FinancialRecord) => void;
   onDelete: (month: string) => void;
 }
@@ -44,16 +45,23 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                         <div className="flex items-center gap-2 p-3 bg-secondary rounded-lg">
                                             <TrendingDown className="h-5 w-5 text-red-500" />
                                             <div>
-                                                <div className="text-muted-foreground">Expenses</div>
-                                                <div className="font-semibold text-red-500">${record.expenses.toLocaleString()}</div>
+                                                <div className="text-muted-foreground">Total Expenses</div>
+                                                <div className="font-semibold text-red-500">${record.totalExpenses.toLocaleString()}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
-                                        <h4 className="font-medium mb-1">Details</h4>
-                                        <p className="text-sm text-muted-foreground">{record.details}</p>
+                                        <h4 className="font-medium mb-2">Expense Breakdown</h4>
+                                        <div className="space-y-1 text-sm text-muted-foreground">
+                                            {record.expenses.map(exp => (
+                                                <div key={exp.id} className="flex justify-between">
+                                                    <span>{exp.description}</span>
+                                                    <span>${exp.amount.toLocaleString()}</span>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center pt-2 border-t">
                                         <Button variant="outline" size="sm" asChild>
                                              <a href={record.invoicePath} download>
                                                 <Download className="mr-2" />
@@ -94,4 +102,3 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
   );
 }
 
-import { Card } from './ui/card';

@@ -2,6 +2,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -58,12 +59,16 @@ export interface WikiPage {
   content: string;
 }
 
+export interface ExpenseItem {
+  id: string;
+  description: string;
+  amount: number;
+}
+
 export interface FinancialRecord {
   month: string;
   revenue: number;
-  expenses: number;
-  netIncome: number;
-  details: string;
+  expenses: ExpenseItem[];
   invoicePath: string;
 }
 
