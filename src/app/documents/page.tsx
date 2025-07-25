@@ -6,10 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Upload, FileText, Briefcase, FileQuestion, Download } from "lucide-react";
+import { Upload, FileText, Briefcase, FileQuestion, Download, Trash2 } from "lucide-react";
 import { documents as initialDocuments } from "@/data/mock";
 import type { Document, UIDocument } from "@/types";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -26,7 +26,18 @@ const getIconForType = (type: Document['type']) => {
 
 export default function DocumentsPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [documents, setDocuments] = useState<UIDocument[]>(initialDocuments);
+    const [documents, setDocuments] = useState<UIDocument[]>(initialDocuments.map(d => ({...d, file: undefined, url: d.path})));
+
+    useEffect(() => {
+        // Cleanup object URLs on component unmount
+        return () => {
+            documents.forEach(doc => {
+                if (doc.url && doc.url.startsWith('blob:')) {
+                    URL.revokeObjectURL(doc.url);
+                }
+            });
+        };
+    }, [documents]);
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
@@ -35,17 +46,25 @@ export default function DocumentsPage() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-            console.log("Selected file:", file.name);
             const newDocument: UIDocument = {
                 id: `doc-${documents.length + 1}`,
                 name: file.name,
                 type: 'Legal', // Defaulting to legal, this could be made dynamic
                 dateAdded: new Date().toISOString().split('T')[0],
                 path: `/legaldocuments/${file.name}`,
-                file: file
+                file: file,
+                url: URL.createObjectURL(file)
             };
             setDocuments(prev => [...prev, newDocument]);
         }
+    }
+
+    const handleDelete = (docId: string) => {
+        const docToDelete = documents.find(d => d.id === docId);
+        if (docToDelete?.url && docToDelete.url.startsWith('blob:')) {
+            URL.revokeObjectURL(docToDelete.url);
+        }
+        setDocuments(prev => prev.filter(doc => doc.id !== docId));
     }
 
     return (
@@ -95,12 +114,16 @@ export default function DocumentsPage() {
                                                 <Badge variant="outline">{doc.type}</Badge>
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell text-muted-foreground">{doc.dateAdded}</TableCell>
-                                            <TableCell className="text-right">
+                                            <TableCell className="text-right space-x-2">
                                                  <Button variant="ghost" size="icon" asChild>
-                                                    <a href={doc.path} download>
+                                                    <a href={doc.url} download={doc.name}>
                                                         <Download className="h-4 w-4" />
                                                         <span className="sr-only">Download</span>
                                                     </a>
+                                                </Button>
+                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(doc.id)}>
+                                                    <Trash2 className="h-4 w-4" />
+                                                    <span className="sr-only">Delete</span>
                                                 </Button>
                                             </TableCell>
                                         </TableRow>

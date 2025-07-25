@@ -1,3 +1,4 @@
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -22,6 +23,7 @@ export interface Document {
 
 export interface UIDocument extends Document {
     file?: File;
+    url?: string;
 }
 
 export type FundraisingStage = 'lead' | 'pitched' | 'term-sheet' | 'closed';
