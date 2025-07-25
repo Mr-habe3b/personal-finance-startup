@@ -30,7 +30,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <Image
-                src="https://placehold.co/600x600.png"
+                src="/images/hero.png"
                 width="600"
                 height="600"
                 alt="Hero"
