@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -25,13 +25,14 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Plus, Trash2 } from 'lucide-react';
+import { CalendarClock, Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
 
 const projectSchema = z.object({
   id: z.string(),
@@ -75,6 +76,16 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         projects: [],
     },
   });
+
+    const upcomingDeadline = useMemo(() => {
+        const upcomingDeadlines = projects
+            .filter(p => p.deadline && new Date(p.deadline) >= new Date())
+            .map(p => new Date(p.deadline!))
+            .sort((a, b) => a.getTime() - b.getTime());
+
+        return upcomingDeadlines.length > 0 ? format(upcomingDeadlines[0], 'PP') : null;
+    }, [projects]);
+
 
   useEffect(() => {
     if (client) {
@@ -138,14 +149,27 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     <Dialog open={isOpen} onOpenChange={onCancel}>
       <DialogContent className="sm:max-w-4xl flex flex-col max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit Client' : 'Add New Client'}</DialogTitle>
-          <DialogDescription>
-            {isEditMode ? `Update the details for ${client.company}.` : 'Enter the details for the new client.'}
-          </DialogDescription>
+            <div className='flex justify-between items-start'>
+                <div>
+                    <DialogTitle>{isEditMode ? 'Edit Client' : 'Add New Client'}</DialogTitle>
+                    <DialogDescription>
+                        {isEditMode ? `Update the details for ${client.company}.` : 'Enter the details for the new client.'}
+                    </DialogDescription>
+                </div>
+                 {isEditMode && upcomingDeadline && (
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground border rounded-lg px-3 py-2">
+                        <CalendarClock className="h-4 w-4" />
+                        <div>
+                            <span>Upcoming Deadline: </span>
+                            <span className="font-semibold text-foreground">{upcomingDeadline}</span>
+                        </div>
+                    </div>
+                )}
+            </div>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col flex-1 overflow-hidden">
-            <ScrollArea className="flex-1 pr-6 pl-1 py-4">
+            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                     <FormField
@@ -286,7 +310,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                 </div>
               </div>
             </ScrollArea>
-             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 border-t">
+             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 border-t mt-auto">
                 <div>
                     {isEditMode && (
                         <AlertDialog>
