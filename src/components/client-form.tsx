@@ -30,6 +30,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
+import { ScrollArea } from './ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 const projectSchema = z.object({
   id: z.string(),
@@ -134,7 +136,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-4xl flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Client' : 'Add New Client'}</DialogTitle>
           <DialogDescription>
@@ -142,143 +144,147 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pr-6 pl-1 py-4">
+                <div className="space-y-4">
+                    <FormField
+                    control={form.control}
+                    name="company"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Company Name</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., Acme Inc." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                            </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                <SelectItem value="lead">Lead</SelectItem>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="churned">Churned</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
                 <FormField
-                control={form.control}
-                name="company"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Company Name</FormLabel>
-                    <FormControl>
-                        <Input placeholder="e.g., Acme Inc." {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-                 <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                      <FormItem>
-                      <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                          <SelectTrigger>
-                              <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                              <SelectItem value="lead">Lead</SelectItem>
-                              <SelectItem value="active">Active</SelectItem>
-                              <SelectItem value="churned">Churned</SelectItem>
-                          </SelectContent>
-                      </Select>
-                      <FormMessage />
-                      </FormItem>
-                  )}
-                />
-               <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Contact Name</FormLabel>
-                    <FormControl>
-                        <Input placeholder="e.g., Jane Doe" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Contact Name</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., Jane Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                    <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Contact Email</FormLabel>
+                        <FormControl>
+                            <Input type="email" placeholder="e.g., jane@acme.com" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
                 <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Contact Email</FormLabel>
-                    <FormControl>
-                        <Input type="email" placeholder="e.g., jane@acme.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-             <FormField
-                control={form.control}
-                name="notes"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Notes</FormLabel>
-                    <FormControl>
-                        <Textarea placeholder="Add any relevant notes here..." {...field} rows={5} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-                />
-            </div>
-            <div>
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle>Projects</CardTitle>
-                    <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4 max-h-[420px] overflow-y-auto p-4">
-                  {projects.length > 0 ? projects.map(p => (
-                    <div key={p.id} className="p-4 border rounded-lg space-y-4">
-                        <div className="flex items-center justify-between">
-                             <Input 
-                                value={p.name} 
-                                onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
-                                className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
-                             />
-                             <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
-                                 <Trash2 className="h-4 w-4" />
-                             </Button>
-                        </div>
-                        <Textarea 
-                            placeholder="Project description..." 
-                            value={p.description}
-                            onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
-                        />
-                         <div className="grid grid-cols-2 gap-4">
-                            <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select status" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="planning">Planning</SelectItem>
-                                    <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="completed">Completed</SelectItem>
-                                    <SelectItem value="on-hold">On Hold</SelectItem>
-                                </SelectContent>
-                            </Select>
-                             <Input 
-                                type="date"
-                                value={p.deadline ? p.deadline.split('T')[0] : ''}
-                                onChange={(e) => handleProjectChange(p.id, 'deadline', e.target.value)}
+                    control={form.control}
+                    name="notes"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Notes</FormLabel>
+                        <FormControl>
+                            <Textarea placeholder="Add any relevant notes here..." {...field} rows={5} />
+                        </FormControl>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                    />
+                </div>
+                <div>
+                <Card>
+                    <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <CardTitle>Projects</CardTitle>
+                        <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
+                    </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4 p-4">
+                    {projects.length > 0 ? projects.map(p => (
+                        <div key={p.id} className="p-4 border rounded-lg space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Input 
+                                    value={p.name} 
+                                    onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
+                                    className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
+                                />
+                                <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                            <Textarea 
+                                placeholder="Project description..." 
+                                value={p.description}
+                                onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
+                            />
+                            <div className="grid grid-cols-2 gap-4">
+                                <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="planning">Planning</SelectItem>
+                                        <SelectItem value="active">Active</SelectItem>
+                                        <SelectItem value="completed">Completed</SelectItem>
+                                        <SelectItem value="on-hold">On Hold</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <Input 
+                                    type="date"
+                                    value={p.deadline ? p.deadline.split('T')[0] : ''}
+                                    onChange={(e) => handleProjectChange(p.id, 'deadline', e.target.value)}
+                                />
+                            </div>
+                            <Textarea 
+                                placeholder="Client demands, review meeting notes, etc." 
+                                value={p.details}
+                                onChange={(e) => handleProjectChange(p.id, 'details', e.target.value)}
+                                rows={3}
                             />
                         </div>
-                        <Textarea 
-                            placeholder="Client demands, review meeting notes, etc." 
-                            value={p.details}
-                            onChange={(e) => handleProjectChange(p.id, 'details', e.target.value)}
-                            rows={3}
-                        />
-                    </div>
-                  )) : (
-                    <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
+                    )) : (
+                        <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
+                    )}
+                    </CardContent>
+                </Card>
+                </div>
+              </div>
+            </ScrollArea>
           </form>
         </Form>
-        <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-6 mt-6 border-t">
+        <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-6 border-t">
             <div>
                 {isEditMode && (
                     <AlertDialog>
