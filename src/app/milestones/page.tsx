@@ -7,7 +7,7 @@ export default function MilestonesPage() {
     return (
         <div className="flex min-h-screen w-full flex-col">
             <AppHeader />
-            <main className="flex-1 p-4 sm:px-6 sm:py-8 md:gap-8">
+            <main className="flex-1 p-4 md:p-6">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
