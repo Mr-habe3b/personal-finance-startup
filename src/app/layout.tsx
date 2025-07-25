@@ -1,3 +1,6 @@
+
+'use client';
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -5,20 +8,30 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AppSidebar } from '@/components/app-sidebar';
 import { TeamProvider } from '@/context/team-context';
+import { useState } from 'react';
 
-export const metadata: Metadata = {
-  title: 'EquityVision',
-  description: 'Manage and visualize your company ownership with ease.',
-};
+// This is a client component, so metadata should be defined in a parent server component if needed.
+// export const metadata: Metadata = {
+//   title: 'EquityVision',
+//   description: 'Manage and visualize your company ownership with ease.',
+// };
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <title>EquityVision</title>
+        <meta name="description" content="Manage and visualize your company ownership with ease." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -31,8 +44,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TeamProvider>
-            <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-              <AppSidebar />
+            <div className={cn(
+              "grid min-h-screen w-full transition-[grid-template-columns]",
+              isSidebarCollapsed 
+                ? "md:grid-cols-[72px_1fr]" 
+                : "md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
+            )}>
+              <AppSidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
               <div className="flex flex-col">
                 {children}
               </div>
