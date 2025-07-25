@@ -62,67 +62,67 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
 
     return (
         <div className="hidden border-r bg-muted/40 md:block">
-            <div className="flex h-full max-h-screen flex-col gap-2">
-                <div className={cn(
-                    "flex h-16 items-center border-b transition-all",
-                    isCollapsed ? "px-2 justify-center" : "px-4 lg:px-6"
-                    )}>
-                    <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
-                        <PieChart className="h-6 w-6" />
-                        <span className={cn(isCollapsed && "hidden")}>EquityVision</span>
-                    </Link>
-                </div>
-                <TooltipProvider delayDuration={0}>
-                    <div className="flex-1 overflow-y-auto">
-                        <nav className={cn(
-                            "grid items-start text-sm font-medium",
-                             isCollapsed ? "px-2" : "px-2 lg:px-4"
+            <TooltipProvider delayDuration={0}>
+                <div className="flex h-full max-h-screen flex-col gap-2">
+                    <div className={cn(
+                        "flex h-16 items-center border-b transition-all",
+                        isCollapsed ? "px-2 justify-center" : "px-4 lg:px-6"
                         )}>
-                            {menuItems.map((item) => (
-                                isCollapsed ? (
-                                    <Tooltip key={item.href}>
-                                        <TooltipTrigger asChild>
-                                            {renderLink(item)}
-                                        </TooltipTrigger>
-                                        <TooltipContent side="right">
-                                            <p>{item.label}</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                ) : (
-                                    renderLink(item)
-                                )
-                            ))}
-                        </nav>
+                        <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
+                            <PieChart className="h-6 w-6" />
+                            <span className={cn(isCollapsed && "hidden")}>EquityVision</span>
+                        </Link>
                     </div>
-                </TooltipProvider>
-                <div className="mt-auto p-4 border-t">
-                     <nav className={cn(
-                            "grid items-start text-sm font-medium",
-                             isCollapsed ? "px-0" : "px-2 lg:px-4"
-                        )}>
-                         {isCollapsed ? (
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                    {renderLink(settingsItem)}
-                                </TooltipTrigger>
-                                <TooltipContent side="right">
-                                    <p>{settingsItem.label}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                         ) : (
-                            renderLink(settingsItem)
-                         )}
-                     </nav>
-                     <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="w-full mt-4" 
-                        onClick={toggleSidebar}
-                      >
-                        <ChevronLeft className={cn("h-6 w-6 transition-transform", isCollapsed && "rotate-180")} />
-                     </Button>
+                        <div className="flex-1 overflow-y-auto">
+                            <nav className={cn(
+                                "grid items-start text-sm font-medium",
+                                isCollapsed ? "px-2" : "px-2 lg:px-4"
+                            )}>
+                                {menuItems.map((item) => (
+                                    isCollapsed ? (
+                                        <Tooltip key={item.href}>
+                                            <TooltipTrigger asChild>
+                                                {renderLink(item)}
+                                            </TooltipTrigger>
+                                            <TooltipContent side="right">
+                                                <p>{item.label}</p>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    ) : (
+                                        renderLink(item)
+                                    )
+                                ))}
+                            </nav>
+                        </div>
+                    <div className="mt-auto p-4 border-t">
+                        <nav className={cn(
+                                "grid items-start text-sm font-medium",
+                                isCollapsed ? "px-0" : "px-2 lg:px-4"
+                            )}>
+                            {isCollapsed ? (
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        {renderLink(settingsItem)}
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right">
+                                        <p>{settingsItem.label}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            ) : (
+                                renderLink(settingsItem)
+                            )}
+                        </nav>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="w-full mt-4" 
+                            onClick={toggleSidebar}
+                        >
+                            <ChevronLeft className={cn("h-6 w-6 transition-transform", isCollapsed && "rotate-180")} />
+                        </Button>
+                    </div>
                 </div>
-            </div>
+            </TooltipProvider>
         </div>
     );
 }
