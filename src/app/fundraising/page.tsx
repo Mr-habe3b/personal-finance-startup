@@ -9,14 +9,16 @@ import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, P
 import { arrayMove } from "@dnd-kit/sortable";
 import { FundraisingColumn } from "@/components/fundraising-column";
 import { FundraisingCard } from "@/components/fundraising-card";
-import { EditDealForm } from "@/components/edit-deal-form";
+import { DealForm } from "@/components/deal-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, LineChart, List, Target } from "lucide-react";
+import { DollarSign, LineChart, List, Plus, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function FundraisingPage() {
     const [deals, setDeals] = useState<FundraisingDeal[]>(initialDeals);
     const [activeDeal, setActiveDeal] = useState<FundraisingDeal | null>(null);
-    const [editingDeal, setEditingDeal] = useState<FundraisingDeal | null>(null);
+    const [selectedDeal, setSelectedDeal] = useState<FundraisingDeal | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -108,19 +110,42 @@ export default function FundraisingPage() {
         setActiveDeal(null);
     }
     
-    const handleEditDeal = (deal: FundraisingDeal) => {
-        setEditingDeal(deal);
+    const handleCardClick = (deal: FundraisingDeal) => {
+        setSelectedDeal(deal);
+        setIsFormOpen(true);
     }
 
-    const handleSaveDeal = (updatedDeal: FundraisingDeal) => {
-        setDeals(currentDeals => 
-            currentDeals.map(d => d.id === updatedDeal.id ? updatedDeal : d)
-        );
-        setEditingDeal(null);
+    const handleAddDealClick = () => {
+        setSelectedDeal(null);
+        setIsFormOpen(true);
     }
 
-    const handleCancelEdit = () => {
-        setEditingDeal(null);
+    const handleSaveDeal = (dealData: Omit<FundraisingDeal, 'id' | 'stage'>, dealId?: string) => {
+        if (dealId) {
+            // Update existing deal
+            setDeals(currentDeals => 
+                currentDeals.map(d => d.id === dealId ? { ...d, ...dealData } : d)
+            );
+        } else {
+            // Add new deal
+            const newDeal: FundraisingDeal = {
+                id: `deal-${Date.now()}`,
+                ...dealData,
+                stage: 'lead', // Default stage for new deals
+            };
+            setDeals(currentDeals => [...currentDeals, newDeal]);
+        }
+        setIsFormOpen(false);
+    }
+
+    const handleDeleteDeal = (dealId: string) => {
+        setDeals(currentDeals => currentDeals.filter(d => d.id !== dealId));
+        setIsFormOpen(false);
+    }
+
+    const handleCancel = () => {
+        setIsFormOpen(false);
+        setSelectedDeal(null);
     }
 
     return (
@@ -128,9 +153,15 @@ export default function FundraisingPage() {
             <AppHeader />
             <main className="flex-1 overflow-x-auto">
                  <div className="p-4 md:p-8">
-                    <div className="mb-6">
-                        <h1 className="text-2xl font-bold tracking-tight">Fundraising</h1>
-                        <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
+                    <div className="flex items-center justify-between mb-6">
+                        <div>
+                            <h1 className="text-2xl font-bold tracking-tight">Fundraising</h1>
+                            <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
+                        </div>
+                        <Button onClick={handleAddDealClick}>
+                            <Plus className="mr-2" />
+                            Add Deal
+                        </Button>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -188,7 +219,7 @@ export default function FundraisingPage() {
                                    key={stage.id} 
                                    stage={stage} 
                                    deals={deals.filter(deal => deal.stage === stage.id)}
-                                   onCardClick={handleEditDeal}
+                                   onCardClick={handleCardClick}
                                 />
                            ))}
                         </div>
@@ -197,12 +228,15 @@ export default function FundraisingPage() {
                         </DragOverlay>
                     </DndContext>
                 </div>
-                 {editingDeal && (
-                    <EditDealForm 
-                        deal={editingDeal}
+                
+                {isFormOpen && (
+                    <DealForm
+                        key={selectedDeal?.id || 'new'}
+                        deal={selectedDeal}
                         onSave={handleSaveDeal}
-                        onCancel={handleCancelEdit}
-                        isOpen={!!editingDeal}
+                        onDelete={handleDeleteDeal}
+                        onCancel={handleCancel}
+                        isOpen={isFormOpen}
                     />
                 )}
             </main>
