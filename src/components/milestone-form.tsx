@@ -137,7 +137,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
                 </FormItem>
               )}
             />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                <FormField
                 control={form.control}
                 name="owner"
@@ -165,7 +165,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
                 )}
               />
             </div>
-             <div className="grid grid-cols-2 gap-4">
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                <FormField
                 control={form.control}
                 name="priority"
@@ -241,12 +241,12 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
                 )}
             />
            
-             <DialogFooter className="flex justify-between items-center w-full pt-4">
+             <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center w-full pt-4 gap-4">
                 <div>
                    {isEditMode && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                           <Button type="button" variant="destructive">
+                           <Button type="button" variant="destructive" className="w-full sm:w-auto">
                               <Trash2 className="mr-2" />
                               Delete
                            </Button>
@@ -266,7 +266,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
                       </AlertDialog>
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-end">
                     <Button type="button" variant="outline" onClick={() => { onClose(); form.reset(); }}>Cancel</Button>
                     <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Milestone'}</Button>
                 </div>
