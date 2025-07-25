@@ -25,7 +25,7 @@ export default function DashboardPage() {
       <div className="flex min-h-screen w-full flex-col">
         <AppSidebar />
         <SidebarInset>
-          <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+          <main className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <div className="flex flex-col gap-8">
               <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
                 <Card>

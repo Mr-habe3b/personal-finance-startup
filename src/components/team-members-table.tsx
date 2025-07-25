@@ -20,7 +20,7 @@ interface TeamMembersTableProps {
 
 export function TeamMembersTable({ teamMembers }: TeamMembersTableProps) {
   return (
-    <div className="relative w-full overflow-auto">
+    <div>
         <div className="flex justify-end mb-4">
             <Button>
                 <PlusCircle className="mr-2 h-4 w-4" />

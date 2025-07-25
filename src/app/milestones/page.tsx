@@ -11,7 +11,7 @@ export default function MilestonesPage() {
             <div className="flex min-h-screen w-full flex-col">
                 <AppSidebar />
                 <SidebarInset>
-                    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+                    <main className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
