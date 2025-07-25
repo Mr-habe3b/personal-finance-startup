@@ -36,8 +36,8 @@ const formSchema = z.object({
   owner: z.string().min(1, 'Owner is required.'),
   priority: z.enum(['low', 'medium', 'high']),
   category: z.enum(['task', 'daily', 'monthly', 'quarterly', 'yearly']),
-  lastUpdateSummary: z.string().optional(),
-  updatedBy: z.string().optional(),
+  lastUpdateSummary: z.string().min(1, "Update summary is required."),
+  updatedBy: z.string().min(1, "Updater's name is required."),
 });
 
 type MilestoneFormData = Omit<Milestone, 'id' | 'status' | 'lastUpdated'>;
@@ -84,7 +84,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
             dueDate: '',
             category: 'task',
             lastUpdateSummary: 'Created milestone.',
-            updatedBy: 'Initial user', // Replace with actual user later
+            updatedBy: 'User', // Replace with actual user later
         });
     }
   }, [milestone, form, isOpen])
