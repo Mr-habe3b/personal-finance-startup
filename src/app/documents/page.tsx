@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Upload, FileText, Briefcase, FileQuestion, Download } from "lucide-react";
 import { documents } from "@/data/mock";
 import type { Document } from "@/types";
+import { useRef } from "react";
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -24,10 +25,20 @@ const getIconForType = (type: Document['type']) => {
 }
 
 export default function DocumentsPage() {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const handleUploadClick = () => {
-        // This would trigger a file input dialog in a real app
-        alert("File upload dialog would open here.");
+        fileInputRef.current?.click();
     }
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            console.log("Selected file:", file.name);
+            // In a real app, you would handle the file upload here.
+        }
+    }
+
     return (
         <>
             <AppHeader />
@@ -44,6 +55,12 @@ export default function DocumentsPage() {
                             <Upload className="mr-2 h-4 w-4" />
                             Upload Document
                         </Button>
+                        <input 
+                            type="file" 
+                            ref={fileInputRef} 
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }} 
+                        />
                     </CardHeader>
                     <CardContent>
                         {documents.length > 0 ? (
