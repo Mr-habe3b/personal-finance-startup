@@ -147,13 +147,22 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                     control={form.control}
                     name="owner"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Owner(s)</FormLabel>
-                         <FormControl>
-                            <Input placeholder="e.g. Alex, Ben" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+                        <FormItem>
+                            <FormLabel>Owner</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select an owner" />
+                                </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {teamMembers.map(member => (
+                                        <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
                     )}
                   />
                   <FormField
@@ -236,13 +245,22 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                         control={form.control}
                         name="updatedBy"
                         render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Updated By</FormLabel>
-                             <FormControl>
-                                <Input placeholder="Your name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
+                            <FormItem>
+                                <FormLabel>Updated By</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select the user" />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {teamMembers.map(member => (
+                                            <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
                         )}
                     />
               </div>
