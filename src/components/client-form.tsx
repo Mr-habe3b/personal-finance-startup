@@ -134,15 +134,6 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     setProjects(prev => prev.filter(p => p.id !== projectId));
   }
 
-  const getProjectStatusVariant = (status: Project['status']) => {
-    switch (status) {
-        case 'active': return 'default';
-        case 'planning': return 'secondary';
-        case 'completed': return 'outline';
-        case 'on-hold': return 'destructive';
-    }
-  }
-
   const isEditMode = !!client;
 
   return (
@@ -157,7 +148,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </DialogDescription>
                 </div>
                  {isEditMode && upcomingDeadline && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground border rounded-lg px-3 py-2">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground border rounded-lg px-3 py-2 mt-0">
                         <CalendarClock className="h-4 w-4" />
                         <div>
                             <span>Upcoming Deadline: </span>
@@ -169,7 +160,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
-            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
+            <ScrollArea className="flex-1 -mx-6 px-6 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                         <FormField
@@ -256,7 +247,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                         </div>
                         </CardHeader>
                         <CardContent className="p-4 pt-0">
-                             <div className="space-y-4 max-h-[26rem] overflow-y-auto pr-2 -mr-2">
+                             <div className="space-y-4">
                                     {projects.length > 0 ? projects.map(p => (
                                         <div key={p.id} className="p-4 border rounded-lg space-y-4">
                                             <div className="flex items-center justify-between">
@@ -344,5 +335,3 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     </Dialog>
   );
 }
-
-    
