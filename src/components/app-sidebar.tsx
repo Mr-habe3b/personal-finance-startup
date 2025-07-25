@@ -11,16 +11,16 @@ import {
   Calculator,
   LucideIcon,
   FileText,
+  Target,
 } from 'lucide-react';
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarHeader,
+  SidebarFooter,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarFooter,
 } from '@/components/ui/sidebar';
 import React from 'react';
 
@@ -36,6 +36,7 @@ const menuItems: MenuItem[] = [
   { href: '/captable', label: 'Cap Table', icon: PieChart },
   { href: '/documents', label: 'Documents', icon: FileText },
   { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
+  { href: '/milestones', label: 'Milestones', icon: Target },
 ];
 
 const settingsItem: MenuItem = { href: '/settings', label: 'Settings', icon: Settings };
