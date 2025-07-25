@@ -54,7 +54,7 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
             <TableHead>Company</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
             <TableHead className="hidden sm:table-cell">Projects</TableHead>
-            <TableHead className="hidden lg:table-cell">Upcoming Deadline</TableHead>
+            <TableHead>Upcoming Deadline</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -85,7 +85,7 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
                         <span>{client.projects?.length || 0}</span>
                     </div>
                 </TableCell>
-                <TableCell className="hidden lg:table-cell">
+                <TableCell>
                     {upcomingDeadline ? (
                         <div className="flex items-center gap-2">
                            <CalendarClock className="h-4 w-4 text-muted-foreground" />
@@ -124,4 +124,3 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
     </div>
   );
 }
-
