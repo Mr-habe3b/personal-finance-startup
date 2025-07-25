@@ -1,14 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
 export interface TeamMember {
   id: string;
   name: string;
@@ -96,6 +86,8 @@ export interface Project {
   name: string;
   description: string;
   status: 'planning' | 'active' | 'completed' | 'on-hold';
+  deadline?: string;
+  details?: string;
 }
 
 export interface Client {

@@ -124,8 +124,8 @@ export const clients: Client[] = [
         status: 'active', 
         notes: 'Initial integration complete. Monthly check-ins scheduled.',
         projects: [
-            { id: 'proj-1', name: 'Platform V2 Launch', description: 'Oversee development and launch of the new platform.', status: 'active' },
-            { id: 'proj-2', name: 'Mobile App POC', description: 'Develop a proof of concept for the new mobile application.', status: 'planning' },
+            { id: 'proj-1', name: 'Platform V2 Launch', description: 'Oversee development and launch of the new platform.', status: 'active', deadline: '2024-09-30', details: 'Weekly syncs on Tuesdays. Awaiting final design assets from their team.' },
+            { id: 'proj-2', name: 'Mobile App POC', description: 'Develop a proof of concept for the new mobile application.', status: 'planning', deadline: '2024-08-15', details: 'Initial requirements gathered. Need to scope out the tech stack.' },
         ]
     },
     { 
@@ -136,7 +136,7 @@ export const clients: Client[] = [
         status: 'active', 
         notes: 'High-value client. Exploring upsell opportunities.',
         projects: [
-            { id: 'proj-3', name: 'Q3 Marketing Campaign', description: 'Launch and manage the Q3 marketing initiatives.', status: 'active' }
+            { id: 'proj-3', name: 'Q3 Marketing Campaign', description: 'Launch and manage the Q3 marketing initiatives.', status: 'active', deadline: '2024-09-15', details: 'Ad spend approved. A/B testing for landing pages starts next week.' }
         ]
     },
     { 
@@ -156,7 +156,7 @@ export const clients: Client[] = [
         status: 'churned', 
         notes: 'Churned due to budget cuts. Re-engage in 6 months.',
         projects: [
-             { id: 'proj-4', name: 'Legacy System Migration', description: 'Migrate data from old system to our platform.', status: 'completed' }
+             { id: 'proj-4', name: 'Legacy System Migration', description: 'Migrate data from old system to our platform.', status: 'completed', deadline: '2024-03-31', details: 'Migration completed successfully. All data verified by the client.' }
         ]
     },
 ];
