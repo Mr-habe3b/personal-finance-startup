@@ -28,3 +28,11 @@ export interface FundraisingDeal {
     stage: FundraisingStage;
     contact: string;
 }
+
+export interface Milestone {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  status: 'todo' | 'inprogress' | 'done';
+}
