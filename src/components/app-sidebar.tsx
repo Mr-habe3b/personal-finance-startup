@@ -10,6 +10,7 @@ import {
   Settings,
   Calculator,
   LucideIcon,
+  FileText,
 } from 'lucide-react';
 
 import {
@@ -30,9 +31,11 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { href: '/', label: 'Dashboard', icon: Home },
-  { href: '/dilution-simulator', label: 'Dilution Simulator', icon: Calculator },
+  { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/team', label: 'Team', icon: Users },
+  { href: '/captable', label: 'Cap Table', icon: PieChart },
+  { href: '/documents', label: 'Documents', icon: FileText },
+  { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
 ];
 
 const settingsItem: MenuItem = { href: '/settings', label: 'Settings', icon: Settings };
@@ -67,17 +70,6 @@ export function AppSidebar() {
       collapsible="icon"
       variant="sidebar"
     >
-      <SidebarHeader>
-        <Link
-          href="/"
-          className="flex items-center gap-2 font-semibold text-primary"
-        >
-          <PieChart className="h-6 w-6" />
-          <span className="group-data-[collapsible=icon]:hidden">
-            EquityVision
-          </span>
-        </Link>
-      </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {menuItems.map(renderMenuItem)}

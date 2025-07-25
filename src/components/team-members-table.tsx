@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { TeamMember } from '@/types';
 import { PlusCircle } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -39,8 +40,16 @@ export function TeamMembersTable({ teamMembers }: TeamMembersTableProps) {
           {teamMembers.map((member) => (
             <TableRow key={member.id}>
               <TableCell>
-                <div className="font-medium">{member.name}</div>
-                <div className="text-sm text-muted-foreground">{member.role}</div>
+                <div className="flex items-center gap-3">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src={`https://placehold.co/40x40.png`} alt="Avatar" data-ai-hint="person" />
+                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <div className="font-medium">{member.name}</div>
+                    <div className="text-sm text-muted-foreground">{member.role}</div>
+                  </div>
+                </div>
               </TableCell>
               <TableCell className="hidden md:table-cell">
                 <Badge

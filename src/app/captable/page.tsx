@@ -1,10 +1,16 @@
-import { TeamMembersTable } from '@/components/team-members-table';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { teamMembers } from '@/data/mock';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import { CapTableChart } from '@/components/cap-table-chart';
+import { capTable } from '@/data/mock';
 
-export default function TeamPage() {
+export default function CapTablePage() {
     return (
         <SidebarProvider>
             <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -13,13 +19,13 @@ export default function TeamPage() {
                     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Team Management</CardTitle>
+                                <CardTitle>Cap Table</CardTitle>
                                 <CardDescription>
-                                    Add, view, and manage your team members and their equity stakes.
+                                    Current company ownership structure.
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <TeamMembersTable teamMembers={teamMembers} />
+                                <CapTableChart capTable={capTable} />
                             </CardContent>
                         </Card>
                     </main>

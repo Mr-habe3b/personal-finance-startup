@@ -10,16 +10,22 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Home, User } from 'lucide-react';
+import { PieChart, User } from 'lucide-react';
 import Link from 'next/link';
 
 export function AppHeader() {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-        <SidebarTrigger className="sm:hidden" />
+    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-semibold text-primary"
+        >
+          <PieChart className="h-6 w-6" />
+          <span className="font-bold">
+            EquityVision
+          </span>
+        </Link>
         <div className="relative ml-auto flex-1 md:grow-0">
-          {/* Breadcrumbs could go here */}
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
