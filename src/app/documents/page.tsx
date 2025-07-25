@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Upload, FileText, Briefcase, FileQuestion } from "lucide-react";
+import { Upload, FileText, Briefcase, FileQuestion, Download } from "lucide-react";
 import { documents } from "@/data/mock";
 import type { Document } from "@/types";
 
@@ -21,6 +21,10 @@ const getIconForType = (type: Document['type']) => {
 }
 
 export default function DocumentsPage() {
+    const handleUploadClick = () => {
+        // This would trigger a file input dialog in a real app
+        alert("File upload dialog would open here.");
+    }
     return (
         <>
             <AppHeader />
@@ -33,7 +37,7 @@ export default function DocumentsPage() {
                                 Manage and secure your company's legal agreements.
                             </CardDescription>
                         </div>
-                        <Button>
+                        <Button onClick={handleUploadClick}>
                             <Upload className="mr-2 h-4 w-4" />
                             Upload Document
                         </Button>
@@ -45,7 +49,8 @@ export default function DocumentsPage() {
                                     <TableRow>
                                         <TableHead>Name</TableHead>
                                         <TableHead className="hidden sm:table-cell">Type</TableHead>
-                                        <TableHead className="text-right">Date Added</TableHead>
+                                        <TableHead className="hidden md:table-cell">Date Added</TableHead>
+                                        <TableHead className="text-right">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -60,7 +65,15 @@ export default function DocumentsPage() {
                                             <TableCell className="hidden sm:table-cell">
                                                 <Badge variant="outline">{doc.type}</Badge>
                                             </TableCell>
-                                            <TableCell className="text-right text-muted-foreground">{doc.dateAdded}</TableCell>
+                                            <TableCell className="hidden md:table-cell text-muted-foreground">{doc.dateAdded}</TableCell>
+                                            <TableCell className="text-right">
+                                                 <Button variant="ghost" size="icon" asChild>
+                                                    <a href={doc.path} download>
+                                                        <Download className="h-4 w-4" />
+                                                        <span className="sr-only">Download</span>
+                                                    </a>
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

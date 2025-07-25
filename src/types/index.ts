@@ -17,6 +17,7 @@ export interface Document {
   name: string;
   type: 'Legal' | 'Sales' | 'RFQ';
   dateAdded: string;
+  path: string;
 }
 
 export type FundraisingStage = 'lead' | 'pitched' | 'term-sheet' | 'closed';

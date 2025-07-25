@@ -22,10 +22,10 @@ export const initialInvestment = {
 }
 
 export const documents: Document[] = [
-    { id: '1', name: 'Series A Term Sheet', type: 'Legal', dateAdded: '2024-05-15' },
-    { id: '2', name: 'Master Services Agreement', type: 'Sales', dateAdded: '2024-05-20' },
-    { id: '3', name: 'Cloud Services RFQ', type: 'RFQ', dateAdded: '2024-06-01' },
-    { id: '4', name: 'Employee NDA', type: 'Legal', dateAdded: '2024-04-10' },
+    { id: '1', name: 'Series A Term Sheet', type: 'Legal', dateAdded: '2024-05-15', path: '/documents/series-a-term-sheet.pdf' },
+    { id: '2', name: 'Master Services Agreement', type: 'Sales', dateAdded: '2024-05-20', path: '/documents/msa.pdf' },
+    { id: '3', name: 'Cloud Services RFQ', type: 'RFQ', dateAdded: '2024-06-01', path: '/documents/cloud-rfq.pdf' },
+    { id: '4', name: 'Employee NDA', type: 'Legal', dateAdded: '2024-04-10', path: '/documents/employee-nda.pdf' },
 ];
 
 export const fundraisingStages = [
