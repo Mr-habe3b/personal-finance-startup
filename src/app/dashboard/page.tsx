@@ -1,3 +1,5 @@
+import { AppHeader } from '@/components/app-header';
+import { CapTableChart } from '@/components/cap-table-chart';
 import {
   Card,
   CardContent,
@@ -6,12 +8,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { TeamMembersTable } from '@/components/team-members-table';
-import { CapTableChart } from '@/components/cap-table-chart';
-import { teamMembers, capTable, initialInvestment } from '@/data/mock';
-import { Landmark, Users, Briefcase } from 'lucide-react';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
-import { AppHeader } from '@/components/app-header';
+import { capTable, initialInvestment, teamMembers } from '@/data/mock';
+import { Briefcase, Landmark, Users } from 'lucide-react';
 
 export default function DashboardPage() {
   const totalEquityAllocated = teamMembers.reduce(
@@ -20,13 +18,10 @@ export default function DashboardPage() {
   );
 
   return (
-    <SidebarProvider>
       <div className="flex min-h-screen w-full flex-col">
-        <AppSidebar />
-        <div className="flex flex-1 flex-col">
-          <AppHeader />
-          <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-            <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <AppHeader />
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -93,8 +88,6 @@ export default function DashboardPage() {
               </Card>
             </div>
           </main>
-        </div>
       </div>
-    </SidebarProvider>
   );
 }

@@ -1,16 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
 import { AppHeader } from '@/components/app-header';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function SettingsPage() {
   return (
-    <SidebarProvider>
       <div className="flex min-h-screen w-full flex-col">
-        <AppSidebar />
-        <div className="flex flex-col flex-1">
             <AppHeader />
-            <main className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+            <main className="flex-1 p-4 sm:px-6 sm:py-8 md:gap-8">
                 <Card>
                     <CardHeader>
                         <CardTitle>Settings</CardTitle>
@@ -23,8 +18,6 @@ export default function SettingsPage() {
                     </CardContent>
                 </Card>
             </main>
-        </div>
       </div>
-    </SidebarProvider>
   );
 }
