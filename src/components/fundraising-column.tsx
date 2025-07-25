@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FundraisingDeal } from "@/types";
 import { FundraisingCard } from "./fundraising-card";
-import { SortableContext, useSortable } from "@dnd-kit/sortable";
+import { SortableContext } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import { useMemo } from "react";
 
@@ -13,9 +13,10 @@ import { useMemo } from "react";
 interface FundraisingColumnProps {
     stage: { id: string, title: string };
     deals: FundraisingDeal[];
+    onCardClick: (deal: FundraisingDeal) => void;
 }
 
-export function FundraisingColumn({ stage, deals }: FundraisingColumnProps) {
+export function FundraisingColumn({ stage, deals, onCardClick }: FundraisingColumnProps) {
     const dealsIds = useMemo(() => deals.map(d => d.id), [deals]);
     
     const { setNodeRef } = useDroppable({
@@ -27,22 +28,22 @@ export function FundraisingColumn({ stage, deals }: FundraisingColumnProps) {
     });
 
     return (
-        <Card ref={setNodeRef} className="border-0 bg-transparent shadow-none">
+        <Card ref={setNodeRef} className="border-0 bg-secondary shadow-none rounded-lg">
             <CardHeader className="px-4 py-2">
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-base font-medium">{stage.title}</CardTitle>
                     <Badge variant="outline" className="text-sm">{deals.length}</Badge>
                 </div>
             </CardHeader>
-            <CardContent className="p-4 pt-0">
+            <CardContent className="p-2">
                 <div className="space-y-3 min-h-[100px]">
                     <SortableContext items={dealsIds}>
                         {deals.map(deal => (
-                            <FundraisingCard key={deal.id} deal={deal} />
+                            <FundraisingCard key={deal.id} deal={deal} onClick={onCardClick} />
                         ))}
                     </SortableContext>
                      {deals.length === 0 && (
-                        <div className="text-center text-sm text-muted-foreground py-8">
+                        <div className="text-center text-sm text-muted-foreground py-8 px-2">
                             Drag deals here.
                         </div>
                     )}

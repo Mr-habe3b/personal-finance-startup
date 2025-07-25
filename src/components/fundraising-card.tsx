@@ -12,9 +12,10 @@ import { cn } from "@/lib/utils";
 interface FundraisingCardProps {
     deal: FundraisingDeal;
     isOverlay?: boolean;
+    onClick?: (deal: FundraisingDeal) => void;
 }
 
-export function FundraisingCard({ deal, isOverlay }: FundraisingCardProps) {
+export function FundraisingCard({ deal, isOverlay, onClick }: FundraisingCardProps) {
     const {
         attributes,
         listeners,
@@ -40,6 +41,12 @@ export function FundraisingCard({ deal, isOverlay }: FundraisingCardProps) {
         return name.split(' ').map(n => n[0]).join('');
     }
 
+    const handleCardClick = () => {
+        if (onClick) {
+            onClick(deal);
+        }
+    }
+
     if (isDragging) {
          return (
             <div ref={setNodeRef} style={style} className="opacity-50">
@@ -61,7 +68,10 @@ export function FundraisingCard({ deal, isOverlay }: FundraisingCardProps) {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <Card className={cn("hover:bg-card/90 cursor-grab", isOverlay && "ring-2 ring-primary")}>
+            <Card 
+                className={cn("hover:bg-card/90 cursor-grab", isOverlay && "ring-2 ring-primary")}
+                onClick={handleCardClick}
+            >
                 <CardContent className="p-3">
                     <div className="flex items-start gap-3">
                         <Avatar className="h-10 w-10 border">
