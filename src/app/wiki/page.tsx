@@ -7,13 +7,39 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Library, Plus, Save, Trash2, FileText } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { WikiPage as WikiPageType } from "@/types";
+
+const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
 
 export default function WikiPage() {
     const [pages, setPages] = useState<WikiPageType[]>([]);
     const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
-    const [isCreating, setIsCreating] = useState(false);
+
+    // Load pages from localStorage on initial render
+    useEffect(() => {
+        try {
+            const savedPages = localStorage.getItem(WIKI_STORAGE_KEY);
+            if (savedPages) {
+                const parsedPages = JSON.parse(savedPages);
+                setPages(parsedPages);
+                if (parsedPages.length > 0) {
+                    setSelectedPageId(parsedPages[0].id);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to load wiki pages from localStorage", error);
+        }
+    }, []);
+
+    // Save pages to localStorage whenever they change
+    useEffect(() => {
+        try {
+            localStorage.setItem(WIKI_STORAGE_KEY, JSON.stringify(pages));
+        } catch (error) {
+            console.error("Failed to save wiki pages to localStorage", error);
+        }
+    }, [pages]);
 
     const selectedPage = pages.find(p => p.id === selectedPageId) ?? null;
 
@@ -25,7 +51,6 @@ export default function WikiPage() {
         };
         setPages(prev => [...prev, newPage]);
         setSelectedPageId(newPage.id);
-        setIsCreating(false);
     };
     
     const handleUpdatePage = (id: string, title: string, content: string) => {
@@ -35,7 +60,8 @@ export default function WikiPage() {
     const handleDeletePage = (id: string) => {
         setPages(prev => prev.filter(p => p.id !== id));
         if (selectedPageId === id) {
-            setSelectedPageId(null);
+            // Select the first page if available, otherwise null
+            setSelectedPageId(pages.length > 1 ? pages.filter(p => p.id !== id)[0]?.id ?? null : null);
         }
     }
 
@@ -79,9 +105,6 @@ export default function WikiPage() {
                                         onChange={(e) => handleUpdatePage(selectedPage.id, e.target.value, selectedPage.content)}
                                     />
                                     <div className="flex gap-2">
-                                        <Button size="sm" onClick={() => handleUpdatePage(selectedPage.id, selectedPage.title, selectedPage.content)}>
-                                            <Save className="mr-2 h-4 w-4" /> Save
-                                        </Button>
                                          <Button size="sm" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)}>
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
