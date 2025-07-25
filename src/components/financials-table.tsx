@@ -26,31 +26,9 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                             <AccordionTrigger className="p-4 hover:no-underline">
                                 <div className="flex justify-between items-center w-full">
                                     <div className="font-medium text-lg">{record.month}</div>
-                                    <div className="flex items-center gap-4">
-                                        <Badge variant={record.netIncome >= 0 ? 'default' : 'destructive'} className="text-base">
-                                            ${record.netIncome.toLocaleString()}
-                                        </Badge>
-                                        <div className="flex items-center gap-2">
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="icon">
-                                                        <MoreHorizontal className="h-4 w-4" />
-                                                        <span className="sr-only">Actions</span>
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit(record); }}>
-                                                        <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(record.month); }} className="text-red-500 focus:text-red-500">
-                                                        <Trash2 className="mr-2 h-4 w-4" />
-                                                        Delete
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
-                                        </div>
-                                    </div>
+                                    <Badge variant={record.netIncome >= 0 ? 'default' : 'destructive'} className="text-base">
+                                        ${record.netIncome.toLocaleString()}
+                                    </Badge>
                                 </div>
                             </AccordionTrigger>
                             <AccordionContent className="p-6 pt-0">
@@ -75,12 +53,32 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                         <h4 className="font-medium mb-1">Details</h4>
                                         <p className="text-sm text-muted-foreground">{record.details}</p>
                                     </div>
-                                    <Button variant="outline" size="sm" asChild>
-                                         <a href={record.invoicePath} download>
-                                            <Download className="mr-2" />
-                                            Download Invoice
-                                        </a>
-                                    </Button>
+                                    <div className="flex justify-between items-center">
+                                        <Button variant="outline" size="sm" asChild>
+                                             <a href={record.invoicePath} download>
+                                                <Download className="mr-2" />
+                                                Download Invoice
+                                            </a>
+                                        </Button>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" size="icon">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                    <span className="sr-only">Actions</span>
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onEdit(record); }}>
+                                                    <Edit className="mr-2 h-4 w-4" />
+                                                    Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(record.month); }} className="text-red-500 focus:text-red-500">
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
                                 </div>
                             </AccordionContent>
                         </Card>
