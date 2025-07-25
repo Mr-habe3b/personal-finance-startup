@@ -9,6 +9,7 @@ import {
     PieChart,
     Settings,
     Target,
+    TrendingUp,
     Users
 } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +21,7 @@ const menuItems = [
     { href: '/team', label: 'Team', icon: Users },
     { href: '/captable', label: 'Cap Table', icon: PieChart },
     { href: '/fundraising', label: 'Fundraising', icon: Landmark },
+    { href: '/financials', label: 'Financials', icon: TrendingUp },
     { href: '/documents', label: 'Documents', icon: FileText },
     { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
     { href: '/milestones', label: 'Milestones', icon: Target },

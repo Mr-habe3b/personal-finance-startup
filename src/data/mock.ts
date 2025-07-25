@@ -1,4 +1,4 @@
-import type { TeamMember, Document, FundraisingDeal } from '@/types';
+import type { TeamMember, Document, FundraisingDeal, FinancialRecord } from '@/types';
 
 export const teamMembers: TeamMember[] = [
   { id: '1', name: 'Alex Johnson', role: 'CEO & Co-founder', commitment: 'Full-time', equity: 40, vesting: '4y/1y cliff' },
@@ -43,4 +43,13 @@ export const fundraisingDeals: FundraisingDeal[] = [
     { id: 'deal-4', investor: 'Techstars', amount: 120000, stage: 'closed', contact: 'david@techstars.com' },
     { id: 'deal-5', investor: 'Accel', amount: 1500000, stage: 'term-sheet', contact: 'ryan@accel.com' },
     { id: 'deal-6', investor: 'Lightspeed Venture Partners', amount: 2500000, stage: 'pitched', contact: 'nicole@lsvp.com' },
+];
+
+export const financialData: FinancialRecord[] = [
+    { month: 'Jan', revenue: 10000, expenses: 15000, netIncome: -5000 },
+    { month: 'Feb', revenue: 12000, expenses: 16000, netIncome: -4000 },
+    { month: 'Mar', revenue: 18000, expenses: 17000, netIncome: 1000 },
+    { month: 'Apr', revenue: 20000, expenses: 18000, netIncome: 2000 },
+    { month: 'May', revenue: 25000, expenses: 20000, netIncome: 5000 },
+    { month: 'Jun', revenue: 28000, expenses: 22000, netIncome: 6000 },
 ];

@@ -55,3 +55,10 @@ export interface WikiPage {
   title: string;
   content: string;
 }
+
+export interface FinancialRecord {
+  month: string;
+  revenue: number;
+  expenses: number;
+  netIncome: number;
+}
