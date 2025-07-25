@@ -232,7 +232,6 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </div>
                     </CardHeader>
                     <CardContent className="p-4">
-                     <ScrollArea className="h-[400px] pr-4">
                         <div className="space-y-4">
                             {projects.length > 0 ? projects.map(p => (
                                 <div key={p.id} className="p-4 border rounded-lg space-y-4">
@@ -280,7 +279,6 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                                 <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
                             )}
                         </div>
-                      </ScrollArea>
                     </CardContent>
                 </Card>
                 </div>
