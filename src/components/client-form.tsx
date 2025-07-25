@@ -125,7 +125,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Client' : 'Add New Client'}</DialogTitle>
           <DialogDescription>
@@ -218,7 +218,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-4 max-h-[400px] overflow-y-auto">
+                <CardContent className="space-y-4 max-h-[360px] overflow-y-auto p-4">
                   {projects.length > 0 ? projects.map(p => (
                     <div key={p.id} className="p-3 border rounded-lg space-y-3">
                         <div className="flex items-center justify-between">
