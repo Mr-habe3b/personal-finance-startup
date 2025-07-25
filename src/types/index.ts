@@ -62,3 +62,14 @@ export interface FinancialRecord {
   expenses: number;
   netIncome: number;
 }
+
+export type ClientStatus = 'lead' | 'active' | 'churned';
+
+export interface Client {
+  id: string;
+  name: string;
+  company: string;
+  email: string;
+  status: ClientStatus;
+  notes: string;
+}

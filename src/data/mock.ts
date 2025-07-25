@@ -1,4 +1,5 @@
-import type { TeamMember, Document, FundraisingDeal, FinancialRecord } from '@/types';
+
+import type { TeamMember, Document, FundraisingDeal, FinancialRecord, Client } from '@/types';
 
 export const teamMembers: TeamMember[] = [
   { id: '1', name: 'Alex Johnson', role: 'CEO & Co-founder', commitment: 'Full-time', equity: 40, vesting: '4y/1y cliff' },
@@ -52,4 +53,11 @@ export const financialData: FinancialRecord[] = [
     { month: 'Apr', revenue: 20000, expenses: 18000, netIncome: 2000 },
     { month: 'May', revenue: 25000, expenses: 20000, netIncome: 5000 },
     { month: 'Jun', revenue: 28000, expenses: 22000, netIncome: 6000 },
+];
+
+export const clients: Client[] = [
+    { id: 'client-1', name: 'Innovate Corp', company: 'Innovate Corp', email: 'contact@innovate.com', status: 'active', notes: 'Initial integration complete. Monthly check-ins scheduled.' },
+    { id: 'client-2', name: 'Synergy Solutions', company: 'Synergy Solutions', email: 'main@synergy.com', status: 'active', notes: 'High-value client. Exploring upsell opportunities.' },
+    { id: 'client-3', name: 'Lead Ventures', company: 'Lead Ventures', email: 'info@leadventures.io', status: 'lead', notes: 'Met at conference. Follow up next week.' },
+    { id: 'client-4', name: 'Old Guard Inc.', company: 'Old Guard Inc.', email: 'support@oldguard.com', status: 'churned', notes: 'Churned due to budget cuts. Re-engage in 6 months.' },
 ];

@@ -1,7 +1,9 @@
+
 "use client";
 
 import {
     Calculator,
+    Contact,
     FileText,
     Landmark,
     LayoutDashboard,
@@ -19,6 +21,7 @@ import { cn } from '@/lib/utils';
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/team', label: 'Team', icon: Users },
+    { href: '/clients', label: 'Clients', icon: Contact },
     { href: '/captable', label: 'Cap Table', icon: PieChart },
     { href: '/fundraising', label: 'Fundraising', icon: Landmark },
     { href: '/financials', label: 'Financials', icon: TrendingUp },
