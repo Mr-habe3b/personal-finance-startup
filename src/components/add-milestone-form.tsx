@@ -145,7 +145,7 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Due Date</FormLabel>
-                   <Popover>
+                  <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -170,7 +170,7 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          date < new Date(new Date().setHours(0,0,0,0))
+                          date < new Date(new Date().setHours(0, 0, 0, 0))
                         }
                         initialFocus
                       />
