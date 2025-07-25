@@ -49,19 +49,20 @@ export default function FinancialsPage() {
         setIsFormOpen(true);
     };
     
-    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'netIncome'>) => {
+    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'netIncome' | 'invoicePath'>) => {
         const netIncome = recordData.revenue - recordData.expenses;
+        const invoicePath = `/invoices/${recordData.month.toLowerCase()}-invoice.pdf`;
         
         if (selectedRecord && recordData.month === selectedRecord.month) {
             // Update existing record
-             setFinancialData(prev => prev.map(r => r.month === recordData.month ? { ...recordData, netIncome } : r));
+             setFinancialData(prev => prev.map(r => r.month === recordData.month ? { ...recordData, netIncome, invoicePath } : r));
         } else {
             // Add new record - prevent duplicate months
             if (financialData.some(r => r.month === recordData.month)) {
                 alert("A record for this month already exists."); // Or use a toast
                 return;
             }
-             setFinancialData(prev => [...prev, { ...recordData, netIncome }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
+             setFinancialData(prev => [...prev, { ...recordData, netIncome, invoicePath }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
         }
         setIsFormOpen(false);
     }
@@ -132,21 +133,20 @@ export default function FinancialsPage() {
                     </Card>
                 </div>
 
-                 <Card>
-                    <CardHeader>
-                        <CardTitle>Financial Records</CardTitle>
-                        <CardDescription>Manage your monthly financial data.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <FinancialsTable 
-                            records={financialData}
-                            onEdit={handleEditRecordClick}
-                            onDelete={(month) => handleDeleteRecord(month)}
-                        />
-                    </CardContent>
-                </Card>
-
                 <div className="grid gap-4 md:gap-8 lg:grid-cols-2">
+                     <Card className="lg:col-span-2">
+                        <CardHeader>
+                            <CardTitle>Financial Records</CardTitle>
+                            <CardDescription>Manage and review your monthly financial data.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <FinancialsTable 
+                                records={financialData}
+                                onEdit={handleEditRecordClick}
+                                onDelete={(month) => handleDeleteRecord(month)}
+                            />
+                        </CardContent>
+                    </Card>
                     <Card>
                         <CardHeader>
                             <CardTitle>Revenue vs. Expenses</CardTitle>

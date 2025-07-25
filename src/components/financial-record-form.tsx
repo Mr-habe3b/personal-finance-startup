@@ -27,14 +27,16 @@ import {
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Textarea } from './ui/textarea';
 
 const formSchema = z.object({
   month: z.string().min(1, 'Month is required.'),
   revenue: z.coerce.number().min(0, 'Revenue must be a positive number.'),
   expenses: z.coerce.number().min(0, 'Expenses must be a positive number.'),
+  details: z.string().min(1, 'Details are required.'),
 });
 
-type FinancialRecordFormData = Omit<FinancialRecord, 'netIncome'>;
+type FinancialRecordFormData = Omit<FinancialRecord, 'netIncome' | 'invoicePath'>;
 
 interface FinancialRecordFormProps {
     record: FinancialRecord | null;
@@ -53,6 +55,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
         month: '',
         revenue: 0,
         expenses: 0,
+        details: '',
     },
   });
 
@@ -64,6 +67,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
             month: '',
             revenue: 0,
             expenses: 0,
+            details: '',
         });
     }
   }, [record, form, isOpen]);
@@ -140,6 +144,19 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                 )}
                 />
             </div>
+             <FormField
+                control={form.control}
+                name="details"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Details</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder="e.g., Initial server costs and software licenses." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
              <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-4">
                 <div>
                   {isEditMode && (
@@ -176,4 +193,3 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
     </Dialog>
   );
 }
-

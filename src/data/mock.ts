@@ -47,12 +47,12 @@ export const fundraisingDeals: FundraisingDeal[] = [
 ];
 
 export const financialData: FinancialRecord[] = [
-    { month: 'Jan', revenue: 10000, expenses: 15000, netIncome: -5000 },
-    { month: 'Feb', revenue: 12000, expenses: 16000, netIncome: -4000 },
-    { month: 'Mar', revenue: 18000, expenses: 17000, netIncome: 1000 },
-    { month: 'Apr', revenue: 20000, expenses: 18000, netIncome: 2000 },
-    { month: 'May', revenue: 25000, expenses: 20000, netIncome: 5000 },
-    { month: 'Jun', revenue: 28000, expenses: 22000, netIncome: 6000 },
+    { month: 'Jan', revenue: 10000, expenses: 15000, netIncome: -5000, details: 'Initial server costs and software licenses.', invoicePath: '/invoices/jan-2024.pdf' },
+    { month: 'Feb', revenue: 12000, expenses: 16000, netIncome: -4000, details: 'Hired a part-time contractor.', invoicePath: '/invoices/feb-2024.pdf' },
+    { month: 'Mar', revenue: 18000, expenses: 17000, netIncome: 1000, details: 'First major client signed.', invoicePath: '/invoices/mar-2024.pdf' },
+    { month: 'Apr', revenue: 20000, expenses: 18000, netIncome: 2000, details: 'Increased marketing spend.', invoicePath: '/invoices/apr-2024.pdf' },
+    { month: 'May', revenue: 25000, expenses: 20000, netIncome: 5000, details: 'Recurring revenue growth.', invoicePath: '/invoices/may-2024.pdf' },
+    { month: 'Jun', revenue: 28000, expenses: 22000, netIncome: 6000, details: 'Stable operations and team expansion.', invoicePath: '/invoices/jun-2024.pdf' },
 ];
 
 export const clients: Client[] = [

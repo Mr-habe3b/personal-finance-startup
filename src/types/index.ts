@@ -1,6 +1,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -62,6 +63,8 @@ export interface FinancialRecord {
   revenue: number;
   expenses: number;
   netIncome: number;
+  details: string;
+  invoicePath: string;
 }
 
 export type ClientStatus = 'lead' | 'active' | 'churned';
