@@ -160,8 +160,8 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
-            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 overflow-hidden py-4">
+                <ScrollArea className="pr-4">
                     <div className="space-y-4">
                         <FormField
                         control={form.control}
@@ -238,67 +238,69 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                         )}
                         />
                     </div>
-                    <div>
-                    <Card>
-                        <CardHeader className='p-4'>
+                </ScrollArea>
+                <div className="flex flex-col overflow-hidden">
+                    <Card className='flex flex-col flex-1 overflow-hidden'>
+                        <CardHeader className='p-4 border-b'>
                         <div className="flex items-center justify-between">
                             <CardTitle className='text-lg'>Projects</CardTitle>
                             <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
                         </div>
                         </CardHeader>
-                        <CardContent className="p-4 pt-0">
-                             <div className="space-y-4">
-                                    {projects.length > 0 ? projects.map(p => (
-                                        <div key={p.id} className="p-4 border rounded-lg space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <Input 
-                                                    value={p.name} 
-                                                    onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
-                                                    className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
+                        <CardContent className="p-0 flex-1 overflow-hidden">
+                             <ScrollArea className='h-full p-4'>
+                                <div className="space-y-4">
+                                        {projects.length > 0 ? projects.map(p => (
+                                            <div key={p.id} className="p-4 border rounded-lg space-y-4">
+                                                <div className="flex items-center justify-between">
+                                                    <Input 
+                                                        value={p.name} 
+                                                        onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
+                                                        className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
+                                                    />
+                                                    <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </Button>
+                                                </div>
+                                                <Textarea 
+                                                    placeholder="Project description..." 
+                                                    value={p.description}
+                                                    onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
                                                 />
-                                                <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
-                                                    <Trash2 className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <Textarea 
-                                                placeholder="Project description..." 
-                                                value={p.description}
-                                                onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
-                                            />
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select status" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="planning">Planning</SelectItem>
-                                                        <SelectItem value="active">Active</SelectItem>
-                                                        <SelectItem value="completed">Completed</SelectItem>
-                                                        <SelectItem value="on-hold">On Hold</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                                <Input 
-                                                    type="date"
-                                                    value={p.deadline ? p.deadline.split('T')[0] : ''}
-                                                    onChange={(e) => handleProjectChange(p.id, 'deadline', e.target.value)}
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select status" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="planning">Planning</SelectItem>
+                                                            <SelectItem value="active">Active</SelectItem>
+                                                            <SelectItem value="completed">Completed</SelectItem>
+                                                            <SelectItem value="on-hold">On Hold</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                    <Input 
+                                                        type="date"
+                                                        value={p.deadline ? p.deadline.split('T')[0] : ''}
+                                                        onChange={(e) => handleProjectChange(p.id, 'deadline', e.target.value)}
+                                                    />
+                                                </div>
+                                                <Textarea 
+                                                    placeholder="Client demands, review meeting notes, etc." 
+                                                    value={p.details}
+                                                    onChange={(e) => handleProjectChange(p.id, 'details', e.target.value)}
+                                                    rows={3}
                                                 />
                                             </div>
-                                            <Textarea 
-                                                placeholder="Client demands, review meeting notes, etc." 
-                                                value={p.details}
-                                                onChange={(e) => handleProjectChange(p.id, 'details', e.target.value)}
-                                                rows={3}
-                                            />
-                                        </div>
-                                    )) : (
-                                        <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
-                                    )}
-                            </div>
+                                        )) : (
+                                            <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
+                                        )}
+                                </div>
+                             </ScrollArea>
                         </CardContent>
                     </Card>
-                    </div>
                 </div>
-            </ScrollArea>
+            </div>
              <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t">
                 <div>
                     {isEditMode && (
