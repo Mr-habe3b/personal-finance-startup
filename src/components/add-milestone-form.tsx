@@ -24,7 +24,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import type { Milestone } from '@/types';
+import type { Milestone, MilestoneCategory } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const formSchema = z.object({
@@ -33,6 +33,7 @@ const formSchema = z.object({
   dueDate: z.string().min(1, 'A due date is required.'),
   owner: z.string().min(1, 'Owner is required.'),
   priority: z.enum(['low', 'medium', 'high']),
+  category: z.enum(['task', 'daily', 'monthly', 'quarterly', 'yearly']),
 });
 
 interface AddMilestoneFormProps {
@@ -50,13 +51,13 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
         owner: '',
         priority: 'medium',
         dueDate: '',
+        category: 'task',
     },
   });
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
     onAdd({
         ...values,
-        dueDate: new Date(values.dueDate).toISOString(),
     });
     form.reset();
   };
@@ -110,7 +111,22 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                   </FormItem>
                 )}
               />
-              <FormField
+               <FormField
+                control={form.control}
+                name="dueDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Due Date</FormLabel>
+                    <FormControl>
+                       <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+             <div className="grid grid-cols-2 gap-4">
+               <FormField
                 control={form.control}
                 name="priority"
                 render={({ field }) => (
@@ -132,20 +148,32 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                   </FormItem>
                 )}
               />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="task">Task</SelectItem>
+                          <SelectItem value="daily">Daily Target</SelectItem>
+                          <SelectItem value="monthly">Monthly Target</SelectItem>
+                          <SelectItem value="quarterly">Quarterly Target</SelectItem>
+                          <SelectItem value="yearly">Yearly Target</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
             </div>
-            <FormField
-              control={form.control}
-              name="dueDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Due Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+           
              <DialogFooter>
                 <DialogClose asChild>
                     <Button type="button" variant="outline" onClick={() => { onClose(); form.reset(); }}>Cancel</Button>

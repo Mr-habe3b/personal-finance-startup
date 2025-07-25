@@ -29,6 +29,8 @@ export interface FundraisingDeal {
     contact: string;
 }
 
+export type MilestoneCategory = 'task' | 'daily' | 'monthly' | 'quarterly' | 'yearly';
+
 export interface Milestone {
   id: string;
   title: string;
@@ -37,4 +39,5 @@ export interface Milestone {
   status: 'todo' | 'inprogress' | 'done';
   owner: string;
   priority: 'low' | 'medium' | 'high';
+  category: MilestoneCategory;
 }
