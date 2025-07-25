@@ -24,7 +24,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import type { Milestone, MilestoneCategory } from '@/types';
+import type { Milestone, MilestoneCategory, TeamMember } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 import { Trash2 } from 'lucide-react';
@@ -46,6 +46,7 @@ type MilestoneFormData = Omit<Milestone, 'id' | 'status' | 'lastUpdated'>;
 
 interface MilestoneFormProps {
     milestone: Milestone | null;
+    teamMembers: TeamMember[];
     isOpen: boolean;
     onClose: () => void;
     onSave: (milestone: MilestoneFormData, id?: string) => void;
@@ -53,7 +54,7 @@ interface MilestoneFormProps {
     isSheet?: boolean;
 }
 
-export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, isSheet = false }: MilestoneFormProps) {
+export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave, onDelete, isSheet = false }: MilestoneFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,26 +72,27 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
   const isEditMode = !!milestone;
 
   useEffect(() => {
+    const defaultUser = teamMembers.length > 0 ? teamMembers[0].name : '';
     if (milestone) {
         form.reset({
             ...milestone,
             dueDate: milestone.dueDate.split('T')[0], // Format for date input
             lastUpdateSummary: '', // Clear for new update
-            updatedBy: '', // Clear for new updater
+            updatedBy: defaultUser,
         });
     } else {
         form.reset({
             title: '',
             description: '',
-            owner: '',
+            owner: defaultUser,
             priority: 'medium',
             dueDate: '',
             category: 'task',
             lastUpdateSummary: 'Created milestone.',
-            updatedBy: 'User', // Replace with actual user later
+            updatedBy: defaultUser, 
         });
     }
-  }, [milestone, form, isOpen])
+  }, [milestone, form, isOpen, teamMembers])
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
     onSave(values, milestone?.id);
@@ -141,15 +143,24 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
                   )}
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <FormField
+                   <FormField
                     control={form.control}
                     name="owner"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Owner</FormLabel>
-                        <FormControl>
-                          <Input placeholder="e.g., Alex Johnson" {...field} />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select an owner" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {teamMembers.map(member => (
+                                <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -230,19 +241,28 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
                         </FormItem>
                     )}
                     />
-                    <FormField
-                    control={form.control}
-                    name="updatedBy"
-                    render={({ field }) => (
+                     <FormField
+                        control={form.control}
+                        name="updatedBy"
+                        render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Updated By</FormLabel>
-                        <FormControl>
-                            <Input placeholder="Your name" {...field} />
-                        </FormControl>
-                        <FormMessage />
+                            <FormLabel>Updated By</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a team member" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {teamMembers.map(member => (
+                                        <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
                         </FormItem>
-                    )}
-                />
+                        )}
+                    />
               </div>
             </ScrollArea>
 

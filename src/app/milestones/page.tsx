@@ -16,6 +16,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
+import { useTeam } from "@/context/team-context";
 
 const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 
@@ -25,6 +26,7 @@ export default function MilestonesPage() {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedMilestone, setSelectedMilestone] = useState<Milestone | null>(null);
     const isMobile = useIsMobile();
+    const { teamMembers } = useTeam();
 
      const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -109,6 +111,7 @@ export default function MilestonesPage() {
         <MilestoneForm
             key={selectedMilestone?.id || 'new'}
             milestone={selectedMilestone}
+            teamMembers={teamMembers}
             isSheet={isMobile}
             isOpen={isFormOpen}
             onSave={handleSaveMilestone}
