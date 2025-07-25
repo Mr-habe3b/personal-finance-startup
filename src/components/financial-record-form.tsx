@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { FinancialRecord, ExpenseItem } from '@/types';
+import { FinancialRecord, ExpenseItem, RevenueItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -29,6 +29,14 @@ import { Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ScrollArea } from './ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { Separator } from './ui/separator';
+
+const revenueItemSchema = z.object({
+  id: z.string(),
+  description: z.string().min(1, 'Description is required.'),
+  amount: z.coerce.number().min(0, 'Amount must be positive.'),
+});
+
 
 const expenseItemSchema = z.object({
   id: z.string(),
@@ -38,7 +46,7 @@ const expenseItemSchema = z.object({
 
 const formSchema = z.object({
   month: z.string().min(1, 'Month is required.'),
-  revenue: z.coerce.number().min(0, 'Revenue must be a positive number.'),
+  revenueItems: z.array(revenueItemSchema),
   expenses: z.array(expenseItemSchema),
 });
 
@@ -59,33 +67,39 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
     resolver: zodResolver(formSchema),
     defaultValues: {
         month: '',
-        revenue: 0,
+        revenueItems: [],
         expenses: [],
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields: revenueFields, append: appendRevenue, remove: removeRevenue } = useFieldArray({
+      control: form.control,
+      name: "revenueItems",
+  });
+  
+  const { fields: expenseFields, append: appendExpense, remove: removeExpense } = useFieldArray({
       control: form.control,
       name: "expenses",
   });
 
-  const revenue = form.watch('revenue');
+  const revenueItems = form.watch('revenueItems');
   const expenses = form.watch('expenses');
 
+  const totalRevenue = revenueItems.reduce((sum, item) => sum + (item.amount || 0), 0);
   const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
-  const netIncome = (revenue || 0) - totalExpenses;
+  const netIncome = totalRevenue - totalExpenses;
 
   useEffect(() => {
     if (record) {
         form.reset({
             month: record.month,
-            revenue: record.revenue,
+            revenueItems: record.revenueItems.map(r => ({...r, id: r.id || `rev-${Math.random()}`})),
             expenses: record.expenses.map(e => ({...e, id: e.id || `exp-${Math.random()}`}))
         });
     } else {
         form.reset({
             month: '',
-            revenue: 0,
+            revenueItems: [],
             expenses: [],
         });
     }
@@ -106,7 +120,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Financial Record' : 'Add New Record'}</DialogTitle>
           <DialogDescription>
@@ -115,8 +129,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-                <FormField
+             <FormField
                 control={form.control}
                 name="month"
                 render={({ field }) => (
@@ -124,7 +137,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                     <FormLabel>Month</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isEditMode}>
                         <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger className='w-48'>
                             <SelectValue placeholder="Select a month" />
                             </SelectTrigger>
                         </FormControl>
@@ -135,68 +148,104 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                     <FormMessage />
                     </FormItem>
                 )}
-                />
-                 <FormField
-                    control={form.control}
-                    name="revenue"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Revenue ($)</FormLabel>
-                        <FormControl>
-                            <Input type="number" placeholder="e.g., 25000" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
+             />
 
-            <div>
-                <div className="flex justify-between items-center mb-2">
-                    <FormLabel>Expenses</FormLabel>
-                    <Button type="button" size="sm" variant="outline" onClick={() => append({ id: `exp-${Date.now()}`, description: '', amount: 0 })}>
-                        <Plus className="mr-2" /> Add Expense
-                    </Button>
-                </div>
-                <ScrollArea className="h-48 p-4 border rounded-md">
-                     {fields.length > 0 ? (
-                        <div className="space-y-3">
-                        {fields.map((field, index) => (
-                            <div key={field.id} className="flex gap-2 items-center">
-                                 <FormField
-                                    control={form.control}
-                                    name={`expenses.${index}.description`}
-                                    render={({ field }) => (
-                                        <FormItem className="flex-1">
-                                            <FormControl>
-                                                <Input placeholder="Expense description" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name={`expenses.${index}.amount`}
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormControl>
-                                                <Input type="number" className="w-28" placeholder="Amount" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
-                                    <Trash2 className="text-destructive" />
-                                </Button>
-                            </div>
-                        ))}
+            <div className="grid grid-cols-2 gap-6">
+                <div className='space-y-2'>
+                    <div className="flex justify-between items-center">
+                        <FormLabel>Revenue Items</FormLabel>
+                        <Button type="button" size="sm" variant="outline" onClick={() => appendRevenue({ id: `rev-${Date.now()}`, description: '', amount: 0 })}>
+                            <Plus className="mr-2" /> Add Item
+                        </Button>
                     </div>
-                     ) : (
-                        <p className="text-sm text-muted-foreground text-center py-4">No expenses added yet.</p>
-                     )}
-                </ScrollArea>
+                    <ScrollArea className="h-48 p-4 border rounded-md">
+                        {revenueFields.length > 0 ? (
+                            <div className="space-y-3">
+                            {revenueFields.map((field, index) => (
+                                <div key={field.id} className="flex gap-2 items-start">
+                                    <FormField
+                                        control={form.control}
+                                        name={`revenueItems.${index}.description`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormControl>
+                                                    <Input placeholder="Revenue source" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`revenueItems.${index}.amount`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input type="number" className="w-28" placeholder="Amount" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="button" variant="ghost" size="icon" onClick={() => removeRevenue(index)}>
+                                        <Trash2 className="text-destructive h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground text-center py-4">No revenue items added yet.</p>
+                        )}
+                    </ScrollArea>
+                </div>
+
+                 <div className='space-y-2'>
+                    <div className="flex justify-between items-center">
+                        <FormLabel>Expense Items</FormLabel>
+                        <Button type="button" size="sm" variant="outline" onClick={() => appendExpense({ id: `exp-${Date.now()}`, description: '', amount: 0 })}>
+                            <Plus className="mr-2" /> Add Item
+                        </Button>
+                    </div>
+                    <ScrollArea className="h-48 p-4 border rounded-md">
+                        {expenseFields.length > 0 ? (
+                            <div className="space-y-3">
+                            {expenseFields.map((field, index) => (
+                                <div key={field.id} className="flex gap-2 items-start">
+                                    <FormField
+                                        control={form.control}
+                                        name={`expenses.${index}.description`}
+                                        render={({ field }) => (
+                                            <FormItem className="flex-1">
+                                                <FormControl>
+                                                    <Input placeholder="Expense description" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name={`expenses.${index}.amount`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <Input type="number" className="w-28" placeholder="Amount" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="button" variant="ghost" size="icon" onClick={() => removeExpense(index)}>
+                                        <Trash2 className="text-destructive h-4 w-4" />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                        ) : (
+                            <p className="text-sm text-muted-foreground text-center py-4">No expenses added yet.</p>
+                        )}
+                    </ScrollArea>
+                </div>
             </div>
            
              <DialogFooter className="grid grid-cols-2 gap-4 items-center pt-4 border-t mt-4">

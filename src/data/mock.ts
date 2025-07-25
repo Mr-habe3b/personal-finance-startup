@@ -49,7 +49,7 @@ export const fundraisingDeals: FundraisingDeal[] = [
 export const financialData: FinancialRecord[] = [
     { 
         month: 'Jan', 
-        revenue: 10000, 
+        revenueItems: [ { id: 'rev1', description: 'Product Sales', amount: 10000 } ],
         expenses: [
             { id: 'exp1', description: 'Server Costs', amount: 12000 },
             { id: 'exp2', description: 'Software Licenses', amount: 3000 }
@@ -58,7 +58,7 @@ export const financialData: FinancialRecord[] = [
     },
     { 
         month: 'Feb', 
-        revenue: 12000, 
+        revenueItems: [ { id: 'rev2', description: 'Product Sales', amount: 12000 } ],
         expenses: [
             { id: 'exp3', description: 'Server Costs', amount: 12000 },
             { id: 'exp4', description: 'Part-time Contractor', amount: 4000 }
@@ -67,7 +67,7 @@ export const financialData: FinancialRecord[] = [
     },
     { 
         month: 'Mar', 
-        revenue: 18000, 
+        revenueItems: [ { id: 'rev3', description: 'Product Sales', amount: 18000 } ],
         expenses: [
             { id: 'exp5', description: 'Server Costs', amount: 13000 },
             { id: 'exp6', description: 'Part-time Contractor', amount: 4000 }
@@ -76,7 +76,7 @@ export const financialData: FinancialRecord[] = [
     },
     { 
         month: 'Apr', 
-        revenue: 20000, 
+        revenueItems: [ { id: 'rev4', description: 'Product Sales', amount: 20000 } ],
         expenses: [
             { id: 'exp7', description: 'Server Costs', amount: 13000 },
             { id: 'exp8', description: 'Marketing Spend', amount: 5000 }
@@ -85,7 +85,7 @@ export const financialData: FinancialRecord[] = [
     },
     { 
         month: 'May', 
-        revenue: 25000, 
+        revenueItems: [ { id: 'rev5', description: 'Product Sales', amount: 25000 } ],
         expenses: [
             { id: 'exp9', description: 'Server Costs', amount: 14000 },
             { id: 'exp10', description: 'Marketing Spend', amount: 6000 }
@@ -94,7 +94,7 @@ export const financialData: FinancialRecord[] = [
     },
     { 
         month: 'Jun', 
-        revenue: 28000, 
+        revenueItems: [ { id: 'rev6', description: 'Consulting', amount: 8000 }, { id: 'rev7', description: 'Product Sales', amount: 20000 } ],
         expenses: [
             { id: 'exp11', description: 'Server Costs', amount: 14000 },
             { id: 'exp12', description: 'Full-time Salaries', amount: 8000 }

@@ -13,15 +13,16 @@ import { financialData as initialFinancialData } from "@/data/mock";
 import { DollarSign, TrendingDown, TrendingUp, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import type { FinancialRecord, ExpenseItem } from "@/types";
+import type { FinancialRecord } from "@/types";
 import { FinancialsTable } from "@/components/financials-table";
 import { Button } from "@/components/ui/button";
 import { FinancialRecordForm } from "@/components/financial-record-form";
 
 const calculateTotals = (record: FinancialRecord) => {
+    const totalRevenue = record.revenueItems.reduce((sum, item) => sum + item.amount, 0);
     const totalExpenses = record.expenses.reduce((sum, item) => sum + item.amount, 0);
-    const netIncome = record.revenue - totalExpenses;
-    return { ...record, totalExpenses, netIncome };
+    const netIncome = totalRevenue - totalExpenses;
+    return { ...record, totalRevenue, totalExpenses, netIncome };
 }
 
 
@@ -35,7 +36,7 @@ export default function FinancialsPage() {
     }, [financialData]);
 
     const analytics = useMemo(() => {
-        const totalRevenue = processedFinancialData.reduce((acc, item) => acc + item.revenue, 0);
+        const totalRevenue = processedFinancialData.reduce((acc, item) => acc + item.totalRevenue, 0);
         const totalExpenses = processedFinancialData.reduce((acc, item) => acc + item.totalExpenses, 0);
         const netProfit = totalRevenue - totalExpenses;
         const averageMonthlyBurn = processedFinancialData
@@ -169,7 +170,7 @@ export default function FinancialsPage() {
                                     <XAxis dataKey="month" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Revenue" />
+                                    <Bar dataKey="totalRevenue" fill="hsl(var(--primary))" name="Revenue" />
                                     <Bar dataKey="totalExpenses" fill="hsl(var(--destructive))" name="Expenses" />
                                 </BarChart>
                             </ResponsiveContainer>

@@ -3,6 +3,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -65,9 +66,15 @@ export interface ExpenseItem {
   amount: number;
 }
 
+export interface RevenueItem {
+  id: string;
+  description: string;
+  amount: number;
+}
+
 export interface FinancialRecord {
   month: string;
-  revenue: number;
+  revenueItems: RevenueItem[];
   expenses: ExpenseItem[];
   invoicePath: string;
 }

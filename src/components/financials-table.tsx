@@ -8,9 +8,10 @@ import { Badge } from '@/components/ui/badge';
 import { Download, Edit, MoreHorizontal, Trash2, TrendingDown, TrendingUp } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Card } from './ui/card';
+import { Separator } from './ui/separator';
 
 interface FinancialsTableProps {
-  records: (FinancialRecord & { totalExpenses: number; netIncome: number; })[];
+  records: (FinancialRecord & { totalRevenue: number; totalExpenses: number; netIncome: number; })[];
   onEdit: (record: FinancialRecord) => void;
   onDelete: (month: string) => void;
 }
@@ -39,7 +40,7 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                             <TrendingUp className="h-5 w-5 text-green-500" />
                                             <div>
                                                 <div className="text-muted-foreground">Revenue</div>
-                                                <div className="font-semibold text-green-500">${record.revenue.toLocaleString()}</div>
+                                                <div className="font-semibold text-green-500">${record.totalRevenue.toLocaleString()}</div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 p-3 bg-secondary rounded-lg">
@@ -50,18 +51,32 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <h4 className="font-medium mb-2">Expense Breakdown</h4>
-                                        <div className="space-y-1 text-sm text-muted-foreground">
-                                            {record.expenses.map(exp => (
-                                                <div key={exp.id} className="flex justify-between">
-                                                    <span>{exp.description}</span>
-                                                    <span>${exp.amount.toLocaleString()}</span>
-                                                </div>
-                                            ))}
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 className="font-medium mb-2">Revenue Breakdown</h4>
+                                            <div className="space-y-1 text-sm text-muted-foreground">
+                                                {record.revenueItems.map(item => (
+                                                    <div key={item.id} className="flex justify-between">
+                                                        <span>{item.description}</span>
+                                                        <span>${item.amount.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                         <div>
+                                            <h4 className="font-medium mb-2">Expense Breakdown</h4>
+                                            <div className="space-y-1 text-sm text-muted-foreground">
+                                                {record.expenses.map(exp => (
+                                                    <div key={exp.id} className="flex justify-between">
+                                                        <span>{exp.description}</span>
+                                                        <span>${exp.amount.toLocaleString()}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex justify-between items-center pt-2 border-t">
+                                    <Separator />
+                                    <div className="flex justify-between items-center pt-2">
                                         <Button variant="outline" size="sm" asChild>
                                              <a href={record.invoicePath} download>
                                                 <Download className="mr-2" />
@@ -101,4 +116,3 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
     </div>
   );
 }
-
