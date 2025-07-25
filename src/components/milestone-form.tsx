@@ -36,6 +36,8 @@ const formSchema = z.object({
   owner: z.string().min(1, 'Owner is required.'),
   priority: z.enum(['low', 'medium', 'high']),
   category: z.enum(['task', 'daily', 'monthly', 'quarterly', 'yearly']),
+  lastUpdateSummary: z.string().optional(),
+  updatedBy: z.string().optional(),
 });
 
 type MilestoneFormData = Omit<Milestone, 'id' | 'status' | 'lastUpdated'>;
@@ -58,14 +60,20 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
         priority: 'medium',
         dueDate: '',
         category: 'task',
+        lastUpdateSummary: '',
+        updatedBy: '',
     },
   });
+
+  const isEditMode = !!milestone;
 
   useEffect(() => {
     if (milestone) {
         form.reset({
             ...milestone,
-            dueDate: milestone.dueDate.split('T')[0] // Format for date input
+            dueDate: milestone.dueDate.split('T')[0], // Format for date input
+            lastUpdateSummary: '', // Clear for new update
+            updatedBy: '', // Clear for new updater
         });
     } else {
         form.reset({
@@ -75,6 +83,8 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
             priority: 'medium',
             dueDate: '',
             category: 'task',
+            lastUpdateSummary: 'Created milestone.',
+            updatedBy: 'Initial user', // Replace with actual user later
         });
     }
   }, [milestone, form, isOpen])
@@ -89,11 +99,10 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
     }
   }
 
-  const isEditMode = !!milestone;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-[580px]">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Milestone' : 'Add New Milestone'}</DialogTitle>
           <DialogDescription>
@@ -204,6 +213,33 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: 
                   )}
                 />
             </div>
+            
+             <FormField
+                control={form.control}
+                name="lastUpdateSummary"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Update Summary</FormLabel>
+                    <FormControl>
+                        <Textarea placeholder={isEditMode ? "What did you change?" : "Initial summary..."} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
+                <FormField
+                control={form.control}
+                name="updatedBy"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Updated By</FormLabel>
+                    <FormControl>
+                        <Input placeholder="Your name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+            />
            
              <DialogFooter className="flex justify-between items-center w-full pt-4">
                 <div>

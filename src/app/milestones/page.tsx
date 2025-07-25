@@ -91,6 +91,8 @@ export default function MilestonesPage() {
                     const newMilestones = [...milestones];
                     newMilestones[activeIndex].status = newStatus;
                     newMilestones[activeIndex].lastUpdated = new Date().toISOString();
+                    newMilestones[activeIndex].updatedBy = "System"; // Or a real user name
+                    newMilestones[activeIndex].lastUpdateSummary = `Status changed to ${newStatus}`;
                     setMilestones(newMilestones);
                 }
             }

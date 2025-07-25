@@ -7,6 +7,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -56,6 +57,8 @@ export interface Milestone {
   priority: 'low' | 'medium' | 'high';
   category: MilestoneCategory;
   lastUpdated: string;
+  updatedBy: string;
+  lastUpdateSummary: string;
 }
 
 export interface WikiPage {
