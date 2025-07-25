@@ -3,7 +3,7 @@
 
 import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
-import { Plus, Target } from "lucide-react";
+import { Download, Plus, Target } from "lucide-react";
 import { useState } from "react";
 import type { Milestone } from "@/types";
 import { MilestoneForm } from "@/components/milestone-form";
@@ -106,6 +106,46 @@ export default function MilestonesPage() {
             }
         }
     };
+
+    const handleDownloadCSV = () => {
+        if (milestones.length === 0) {
+            return;
+        }
+
+        const headers = [
+            "ID", "Title", "Description", "Due Date", "Status", 
+            "Owners", "Priority", "Category", "Last Updated", 
+            "Updated By", "Last Update Summary"
+        ];
+        
+        const csvContent = [
+            headers.join(','),
+            ...milestones.map(m => [
+                m.id,
+                `"${m.title.replace(/"/g, '""')}"`,
+                `"${m.description.replace(/"/g, '""')}"`,
+                m.dueDate,
+                m.status,
+                `"${m.owner.join(', ')}"`,
+                m.priority,
+                m.category,
+                m.lastUpdated,
+                `"${m.updatedBy}"`,
+                `"${m.lastUpdateSummary.replace(/"/g, '""')}"`
+            ].join(','))
+        ].join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        if (link.href) {
+            URL.revokeObjectURL(link.href);
+        }
+        link.href = URL.createObjectURL(blob);
+        link.download = `milestones-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
     
     const renderForm = () => (
         <MilestoneForm
@@ -130,10 +170,16 @@ export default function MilestonesPage() {
                             <h1 className="text-2xl font-bold tracking-tight">Milestones & Targets</h1>
                             <p className="text-muted-foreground">Track your startup's progress with a Kanban-style board.</p>
                         </div>
-                        <Button onClick={handleAddMilestoneClick}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Milestone
-                        </Button>
+                        <div className="flex gap-2">
+                             <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Download CSV
+                            </Button>
+                            <Button onClick={handleAddMilestoneClick}>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Milestone
+                            </Button>
+                        </div>
                     </div>
 
                     {milestones.length > 0 ? (
