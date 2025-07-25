@@ -1,3 +1,6 @@
+
+'use client';
+
 import { AppHeader } from "@/components/app-header";
 import { CapTableChart } from '@/components/cap-table-chart';
 import {
@@ -7,9 +10,11 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { capTable } from '@/data/mock';
+import { useTeam } from "@/context/team-context";
 
 export default function CapTablePage() {
+    const { capTable } = useTeam();
+
     return (
         <>
             <AppHeader />

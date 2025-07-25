@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { TeamMembersTable } from '@/components/team-members-table';
-import { capTable, initialInvestment } from '@/data/mock';
+import { initialInvestment } from '@/data/mock';
 import { Briefcase, Landmark, Users } from 'lucide-react';
 import { useTeam } from '@/context/team-context';
 import { useState } from 'react';
@@ -20,7 +20,7 @@ import type { TeamMember } from '@/types';
 
 
 export default function DashboardPage() {
-  const { teamMembers, addMember, updateMember } = useTeam();
+  const { teamMembers, capTable, addMember, updateMember } = useTeam();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
@@ -41,7 +41,10 @@ export default function DashboardPage() {
 
   const handleSaveMember = (memberData: Omit<TeamMember, 'id' | 'vesting'>, memberId?: string) => {
       if (memberId) {
-          updateMember({ ...memberData, id: memberId, vesting: '4y/1y cliff' });
+          const existingMember = teamMembers.find(m => m.id === memberId);
+          if (existingMember) {
+            updateMember({ ...existingMember, ...memberData, id: memberId });
+          }
       } else {
           addMember({
               id: `member-${Date.now()}`,
@@ -94,7 +97,7 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="text-2xl font-bold">{teamMembers.length}</div>
                   <p className="text-xs text-muted-foreground">
-                    {totalEquityAllocated}% of equity allocated
+                    {totalEquityAllocated.toFixed(2)}% of equity allocated
                   </p>
                 </CardContent>
               </Card>
@@ -104,7 +107,7 @@ export default function DashboardPage() {
                   <Briefcase className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{initialInvestment.esopPool}%</div>
+                  <div className="text-2xl font-bold">{capTable['ESOP']?.toFixed(2) ?? '0.00'}%</div>
                   <p className="text-xs text-muted-foreground">
                     Employee stock ownership plan
                   </p>
