@@ -103,7 +103,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
   }
   
   const FormContent = () => (
-      <>
+      <div className={cn("flex flex-col h-full", isSheet ? "" : "max-h-[80vh]")}>
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Milestone' : 'Add New Milestone'}</DialogTitle>
           <DialogDescription>
@@ -111,9 +111,9 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className={cn("flex flex-col", isSheet ? "h-full" : "")}>
-            <ScrollArea className={cn(isSheet ? "flex-1 -mr-6" : "")}>
-              <div className={cn("space-y-4", isSheet ? "pr-6" : "")}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col flex-1 overflow-hidden">
+            <ScrollArea className="flex-1">
+              <div className="space-y-4 pr-6 pl-1 py-4">
                 <FormField
                   control={form.control}
                   name="title"
@@ -247,8 +247,8 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
             </ScrollArea>
 
             <DialogFooter className={cn(
-              "flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center w-full gap-4",
-               isSheet ? "mt-auto pt-4 border-t -mr-6 pr-6" : "pt-4"
+              "flex-col-reverse sm:flex-row sm:justify-between sm:items-center w-full gap-4 pt-4 mt-auto",
+               isSheet ? "border-t" : ""
             )}>
               <div>
                 {isEditMode && (
@@ -281,7 +281,7 @@ export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete, is
           </DialogFooter>
         </form>
       </Form>
-    </>
+    </div>
   )
 
 
