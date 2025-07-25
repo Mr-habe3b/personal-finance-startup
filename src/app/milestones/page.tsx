@@ -169,7 +169,7 @@ export default function MilestonesPage() {
                 {isFormOpen && (
                     isMobile ? (
                         <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                           <SheetContent side="bottom" className="h-[90vh] overflow-y-auto">
+                           <SheetContent side="bottom" className="h-[80vh]">
                                {renderForm()}
                            </SheetContent>
                         </Sheet>
