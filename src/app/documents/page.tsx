@@ -1,7 +1,24 @@
 import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Upload } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Upload, FileText, Briefcase, FileQuestion } from "lucide-react";
+import { documents } from "@/data/mock";
+import type { Document } from "@/types";
+
+const getIconForType = (type: Document['type']) => {
+    switch (type) {
+        case 'Legal':
+            return <Briefcase className="h-5 w-5 text-muted-foreground" />;
+        case 'Sales':
+            return <FileText className="h-5 w-5 text-muted-foreground" />;
+        case 'RFQ':
+            return <FileQuestion className="h-5 w-5 text-muted-foreground" />;
+        default:
+            return <FileText className="h-5 w-5 text-muted-foreground" />;
+    }
+}
 
 export default function DocumentsPage() {
     return (
@@ -22,10 +39,38 @@ export default function DocumentsPage() {
                         </Button>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground">No documents uploaded yet.</p>
-                            <p className="text-sm text-muted-foreground">Click "Upload Document" to get started.</p>
-                        </div>
+                        {documents.length > 0 ? (
+                             <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead className="hidden sm:table-cell">Type</TableHead>
+                                        <TableHead className="text-right">Date Added</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {documents.map((doc) => (
+                                        <TableRow key={doc.id}>
+                                            <TableCell>
+                                                <div className="flex items-center gap-3">
+                                                    {getIconForType(doc.type)}
+                                                    <span className="font-medium">{doc.name}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="hidden sm:table-cell">
+                                                <Badge variant="outline">{doc.type}</Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right text-muted-foreground">{doc.dateAdded}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        ) : (
+                            <div className="text-center py-12">
+                                <p className="text-muted-foreground">No documents uploaded yet.</p>
+                                <p className="text-sm text-muted-foreground">Click "Upload Document" to get started.</p>
+                            </div>
+                        )}
                     </CardContent>
                 </Card>
             </main>

@@ -11,3 +11,10 @@ export interface CapTableEntry {
   stakeholder: string;
   equity: number;
 }
+
+export interface Document {
+  id: string;
+  name: string;
+  type: 'Legal' | 'Sales' | 'RFQ';
+  dateAdded: string;
+}
