@@ -5,7 +5,7 @@ import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 import type { Client } from "@/types";
 import { clients as initialClients } from "@/data/mock";
 import { ClientTable } from "@/components/client-table";
@@ -49,6 +49,53 @@ export default function ClientsPage() {
         setIsFormOpen(false);
         setSelectedClient(null);
     }
+    
+    const escapeCsvCell = (cell: string) => `"${(cell || '').replace(/"/g, '""')}"`;
+
+    const handleDownloadCSV = () => {
+        if (clients.length === 0) return;
+
+        const headers = [
+            'Client ID', 'Company', 'Contact Name', 'Contact Email', 'Status', 'Notes',
+            'Project ID', 'Project Name', 'Project Description', 'Project Status', 'Project Deadline', 'Project Details'
+        ];
+
+        const rows = clients.flatMap(client => {
+            const clientData = [
+                escapeCsvCell(client.id),
+                escapeCsvCell(client.company),
+                escapeCsvCell(client.name),
+                escapeCsvCell(client.email),
+                escapeCsvCell(client.status),
+                escapeCsvCell(client.notes),
+            ];
+            
+            if (client.projects && client.projects.length > 0) {
+                 return client.projects.map(p => {
+                    const projectData = [
+                        escapeCsvCell(p.id),
+                        escapeCsvCell(p.name),
+                        escapeCsvCell(p.description),
+                        escapeCsvCell(p.status),
+                        escapeCsvCell(p.deadline || ''),
+                        escapeCsvCell(p.details || ''),
+                    ];
+                    return [...clientData, ...projectData].join(',');
+                });
+            }
+            // Return one row for clients with no projects
+            return [[...clientData, '', '', '', '', '', ''].join(',')];
+        });
+
+        const csvContent = [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `clients-activity-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     return (
         <>
@@ -62,10 +109,16 @@ export default function ClientsPage() {
                                 Manage your client relationships and track their status.
                             </CardDescription>
                         </div>
-                         <Button onClick={handleAddClientClick}>
-                            <Plus className="mr-2 h-4 w-4" />
-                            Add Client
-                        </Button>
+                        <div className="flex gap-2">
+                             <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Download CSV
+                            </Button>
+                            <Button onClick={handleAddClientClick}>
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Client
+                            </Button>
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <ClientTable 
