@@ -4,7 +4,7 @@
 import { AppHeader } from "@/components/app-header";
 import { fundraisingDeals as initialDeals, fundraisingStages } from "@/data/mock";
 import { FundraisingDeal, FundraisingStage } from "@/types";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { FundraisingColumn } from "@/components/fundraising-column";
@@ -19,6 +19,11 @@ export default function FundraisingPage() {
     const [activeDeal, setActiveDeal] = useState<FundraisingDeal | null>(null);
     const [selectedDeal, setSelectedDeal] = useState<FundraisingDeal | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -207,6 +212,7 @@ export default function FundraisingPage() {
                         </Card>
                     </div>
 
+                    {isMounted && (
                      <DndContext 
                         sensors={sensors}
                         onDragStart={handleDragStart}
@@ -227,6 +233,7 @@ export default function FundraisingPage() {
                              {activeDeal ? <FundraisingCard deal={activeDeal} isOverlay /> : null}
                         </DragOverlay>
                     </DndContext>
+                    )}
                 </div>
                 
                 {isFormOpen && (
