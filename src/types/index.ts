@@ -24,6 +24,7 @@ export interface Document {
 export interface UIDocument extends Document {
     file?: File;
     url?: string;
+    content?: string;
 }
 
 export type FundraisingStage = 'lead' | 'pitched' | 'term-sheet' | 'closed';

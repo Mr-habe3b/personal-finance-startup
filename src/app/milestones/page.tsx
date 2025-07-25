@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { Milestone } from "@/types";
 import { MilestoneForm } from "@/components/milestone-form";
 import { Card, CardContent } from "@/components/ui/card";
-import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { MilestoneColumn } from "@/components/milestone-column";
 import { MilestoneCard } from "@/components/milestone-card";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -165,7 +165,7 @@ export default function MilestonesPage() {
                 <div className="p-4 md:p-8">
                     <div className="flex items-center justify-between mb-4">
                         <div>
-                            <h1 className="text-2xl font-bold tracking-tight">Milestones & Targets</h1>
+                            <h1 className="text-2xl font-bold tracking-tight">Milestones &amp; Targets</h1>
                             <p className="text-muted-foreground">Track your startup's progress with a Kanban-style board.</p>
                         </div>
                         <div className="flex gap-2">

@@ -13,6 +13,7 @@ import {
     Library,
     PieChart,
     Settings,
+    Sparkles,
     Target,
     TrendingUp,
     Users
@@ -31,10 +32,13 @@ const menuItems = [
     { href: '/fundraising', label: 'Fundraising', icon: Landmark },
     { href: '/financials', label: 'Financials', icon: TrendingUp },
     { href: '/documents', label: 'Documents', icon: FileText },
-    { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
     { href: '/milestones', label: 'Milestones', icon: Target },
     { href: '/wiki', label: 'Wiki', icon: Library },
 ];
+
+const aiMenuItems = [
+    { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
+]
 
 const settingsItem = { href: '/settings', label: 'Settings', icon: Settings };
 
@@ -89,6 +93,14 @@ export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
                     <div className="flex-1 overflow-y-auto">
                         <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-2" : "px-2 lg:px-4")}>
                             {menuItems.map(item => renderLink(item, isCollapsed))}
+                        </nav>
+                        <div className={cn("my-4", isCollapsed ? "px-2" : "px-2 lg:px-4")}>
+                            <h3 className={cn("text-xs font-semibold text-muted-foreground uppercase tracking-wider", isCollapsed && "text-center")}>
+                               {isCollapsed ? <Sparkles className="h-5 w-5 mx-auto" /> : "AI Tools"}
+                            </h3>
+                        </div>
+                         <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-2" : "px-2 lg:px-4")}>
+                            {aiMenuItems.map(item => renderLink(item, isCollapsed))}
                         </nav>
                     </div>
                     <div className="mt-auto p-4 border-t">

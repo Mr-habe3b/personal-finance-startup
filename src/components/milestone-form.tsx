@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -27,12 +27,12 @@ import {
 import type { Milestone, MilestoneCategory, TeamMember } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Check, ChevronsUpDown, Trash2 } from 'lucide-react';
+import { Check, ChevronsUpDown, Loader2, Sparkles, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
+import { suggestMilestoneDetails } from '@/ai/flows/milestone-suggestion';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
@@ -58,6 +58,9 @@ interface MilestoneFormProps {
 }
 
 export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave, onDelete, isSheet = false }: MilestoneFormProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -106,14 +109,47 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
       onDelete(milestone.id);
     }
   }
+
+  const handleAIAssist = async () => {
+    const title = form.getValues('title');
+    if (!title) {
+        toast({ variant: 'destructive', title: 'Title Required', description: 'Please enter a title for the AI to provide suggestions.' });
+        return;
+    }
+    setIsGenerating(true);
+    try {
+        const result = await suggestMilestoneDetails({ title });
+        form.setValue('description', result.description);
+        
+        const subTasksText = result.subTasks.map(task => `- ${task}`).join('\n');
+        const newUpdateSummary = `AI-assisted creation. Sub-tasks:\n${subTasksText}`;
+        form.setValue('lastUpdateSummary', newUpdateSummary);
+
+        toast({ title: 'AI Suggestions Applied', description: 'Description and sub-tasks have been filled in.'});
+
+    } catch (error) {
+        console.error("AI suggestion failed:", error);
+        toast({ variant: 'destructive', title: 'AI Error', description: 'Failed to generate suggestions.' });
+    } finally {
+        setIsGenerating(false);
+    }
+  }
   
   const FormContent = () => (
       <div className={cn("flex flex-col h-full", isSheet ? "" : "max-h-[80vh]")}>
         <DialogHeader>
-          <DialogTitle>{isEditMode ? 'Edit Milestone' : 'Add New Milestone'}</DialogTitle>
-          <DialogDescription>
-              {isEditMode ? "Update the details for this milestone." : "Set a clear target for your team to work towards."}
-          </DialogDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <DialogTitle>{isEditMode ? 'Edit Milestone' : 'Add New Milestone'}</DialogTitle>
+              <DialogDescription>
+                  {isEditMode ? "Update the details for this milestone." : "Set a clear target for your team to work towards."}
+              </DialogDescription>
+            </div>
+            <Button type="button" variant="outline" size="sm" onClick={handleAIAssist} disabled={isGenerating}>
+              {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+              AI Assist
+            </Button>
+          </div>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col flex-1 overflow-hidden">
@@ -139,7 +175,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Describe the milestone..." {...field} />
+                        <Textarea placeholder="Describe the milestone..." {...field} rows={4} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -156,7 +192,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                                     <DropdownMenuTrigger asChild>
                                         <FormControl>
                                             <Button variant="outline" className="w-full justify-between">
-                                                <span>{field.value?.join(', ') || 'Select owners'}</span>
+                                                <span className="truncate">{field.value?.join(', ') || 'Select owners'}</span>
                                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                             </Button>
                                         </FormControl>
@@ -250,9 +286,9 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                     name="lastUpdateSummary"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel>Update Summary</FormLabel>
+                        <FormLabel>Update Summary / Sub-tasks</FormLabel>
                         <FormControl>
-                            <Textarea placeholder={isEditMode ? "What did you change?" : "Initial summary..."} {...field} />
+                            <Textarea placeholder={isEditMode ? "What did you change?" : "Initial summary..."} {...field} rows={5} />
                         </FormControl>
                         <FormMessage />
                         </FormItem>

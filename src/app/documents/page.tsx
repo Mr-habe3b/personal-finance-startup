@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Upload, FileText, Briefcase, FileQuestion, Download, Trash2 } from "lucide-react";
+import { Upload, FileText, Briefcase, FileQuestion, Download, Trash2, Sparkles } from "lucide-react";
 import { documents as initialDocuments } from "@/data/mock";
 import type { Document, UIDocument } from "@/types";
 import { useRef, useState, useEffect } from "react";
+import { DocumentQADialog } from "@/components/document-qa-dialog";
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -25,9 +26,41 @@ const getIconForType = (type: Document['type']) => {
 
 export default function DocumentsPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [documents, setDocuments] = useState<UIDocument[]>(initialDocuments.map(d => ({...d, file: undefined, url: d.path})));
+    const [documents, setDocuments] = useState<UIDocument[]>([]);
+    const [isQADialogOpen, setIsQADialogOpen] = useState(false);
+    const [selectedDocument, setSelectedDocument] = useState<UIDocument | null>(null);
 
     useEffect(() => {
+        const loadInitialDocuments = async () => {
+             const docsWithContent = await Promise.all(initialDocuments.map(async (doc) => {
+                try {
+                    // In a real app, you would fetch from a URL.
+                    // For this mock, we'll simulate fetching by creating a dummy file.
+                    const response = await fetch(doc.path);
+                    const blob = await response.blob();
+                    const file = new File([blob], doc.name, { type: blob.type });
+                    const content = await file.text();
+
+                    return {
+                        ...doc,
+                        file,
+                        url: URL.createObjectURL(file),
+                        content: content
+                    };
+                } catch (e) {
+                     console.error("Error loading initial doc", e);
+                     return {
+                         ...doc,
+                         file: undefined,
+                         url: doc.path,
+                         content: "Could not load content"
+                     }
+                }
+            }));
+            setDocuments(docsWithContent);
+        }
+        loadInitialDocuments();
+
         // Cleanup object URLs on component unmount
         return () => {
             documents.forEach(doc => {
@@ -36,26 +69,34 @@ export default function DocumentsPage() {
                 }
             });
         };
-    }, [documents]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
     }
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            const content = await file.text();
             const newDocument: UIDocument = {
-                id: `doc-${documents.length + 1}`,
+                id: `doc-${Date.now()}`,
                 name: file.name,
-                type: 'Legal', // Defaulting to legal, this could be made dynamic
+                type: 'Legal', // Defaulting, could be dynamic
                 dateAdded: new Date().toISOString().split('T')[0],
-                path: `/legaldocuments/${file.name}`,
+                path: `/documents/${file.name}`,
                 file: file,
-                url: URL.createObjectURL(file)
+                url: URL.createObjectURL(file),
+                content,
             };
             setDocuments(prev => [...prev, newDocument]);
         }
+    }
+    
+    const handleAskAI = (doc: UIDocument) => {
+        setSelectedDocument(doc);
+        setIsQADialogOpen(true);
     }
 
     const handleDelete = (docId: string) => {
@@ -74,7 +115,7 @@ export default function DocumentsPage() {
                         <div>
                             <CardTitle>Legal Documents</CardTitle>
                             <CardDescription>
-                                Manage and secure your company's legal agreements.
+                                Manage, secure, and ask questions about your company's legal agreements.
                             </CardDescription>
                         </div>
                         <Button onClick={handleUploadClick}>
@@ -85,7 +126,8 @@ export default function DocumentsPage() {
                             type="file" 
                             ref={fileInputRef} 
                             onChange={handleFileChange}
-                            style={{ display: 'none' }} 
+                            style={{ display: 'none' }}
+                            accept=".txt,.md,.pdf,.doc,.docx"
                         />
                     </CardHeader>
                     <CardContent>
@@ -113,6 +155,10 @@ export default function DocumentsPage() {
                                             </TableCell>
                                             <TableCell className="hidden md:table-cell text-muted-foreground">{doc.dateAdded}</TableCell>
                                             <TableCell className="text-right space-x-2">
+                                                 <Button variant="outline" size="sm" onClick={() => handleAskAI(doc)} disabled={!doc.content}>
+                                                    <Sparkles className="mr-2 h-4 w-4" />
+                                                    Ask AI
+                                                </Button>
                                                  <Button variant="ghost" size="icon" asChild>
                                                     <a href={doc.url} download={doc.name}>
                                                         <Download className="h-4 w-4" />
@@ -137,6 +183,13 @@ export default function DocumentsPage() {
                     </CardContent>
                 </Card>
             </main>
+            {isQADialogOpen && selectedDocument && (
+                 <DocumentQADialog
+                    isOpen={isQADialogOpen}
+                    onClose={() => setIsQADialogOpen(false)}
+                    document={selectedDocument}
+                />
+            )}
         </>
     );
 }

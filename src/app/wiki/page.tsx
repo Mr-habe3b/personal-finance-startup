@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Library, Plus, Save, Trash2, FileText } from "lucide-react";
+import { Library, Plus, Save, Trash2, FileText, Sparkles, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { WikiPage as WikiPageType } from "@/types";
+import { useToast } from "@/hooks/use-toast";
+import { generateWikiContent } from "@/ai/flows/wiki-content-generator";
 
 const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
 
@@ -16,6 +18,8 @@ export default function WikiPage() {
     const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
     const [activeTitle, setActiveTitle] = useState('');
     const [activeContent, setActiveContent] = useState('');
+    const [isGenerating, setIsGenerating] = useState(false);
+    const { toast } = useToast();
 
     // Load pages from localStorage on initial render
     useEffect(() => {
@@ -70,10 +74,12 @@ export default function WikiPage() {
     const handleUpdatePage = () => {
         if (selectedPageId) {
             setPages(prev => prev.map(p => p.id === selectedPageId ? { ...p, title: activeTitle, content: activeContent } : p));
+             toast({ title: "Page Saved", description: `"${activeTitle}" has been updated.`});
         }
     }
 
     const handleDeletePage = (id: string) => {
+        const pageToDelete = pages.find(p => p.id === id);
         const newPages = pages.filter(p => p.id !== id);
         setPages(newPages);
         
@@ -84,7 +90,27 @@ export default function WikiPage() {
         if (selectedPageId === id) {
             setSelectedPageId(newPages.length > 0 ? newPages[0].id : null);
         }
+        
+        toast({ title: "Page Deleted", description: `"${pageToDelete?.title}" has been removed.`});
     }
+
+    const handleGenerateContent = async () => {
+        if (!activeTitle) {
+            toast({ variant: 'destructive', title: 'Title Required', description: 'Please provide a title for the AI to generate content.' });
+            return;
+        }
+        setIsGenerating(true);
+        try {
+            const result = await generateWikiContent({ title: activeTitle });
+            setActiveContent(prev => prev ? `${prev}\n\n---\n\n${result.content}` : result.content);
+        } catch (error) {
+            console.error("AI content generation failed:", error);
+            toast({ variant: 'destructive', title: 'AI Error', description: 'Failed to generate content.' });
+        } finally {
+            setIsGenerating(false);
+        }
+    }
+
 
     return (
         <>
@@ -123,13 +149,18 @@ export default function WikiPage() {
                                         className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 p-0" 
                                         value={activeTitle}
                                         onChange={(e) => setActiveTitle(e.target.value)}
+                                        onBlur={handleUpdatePage}
                                     />
                                     <div className="flex gap-2">
+                                        <Button size="sm" variant="outline" onClick={handleGenerateContent} disabled={isGenerating}>
+                                            {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                                            Generate
+                                        </Button>
                                         <Button size="sm" onClick={handleUpdatePage}>
                                             <Save className="mr-2 h-4 w-4" />
                                             Save
                                         </Button>
-                                         <Button size="sm" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)}>
+                                         <Button size="icon" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)}>
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
                                     </div>
