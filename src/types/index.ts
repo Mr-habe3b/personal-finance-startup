@@ -1,5 +1,6 @@
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -65,6 +66,13 @@ export interface FinancialRecord {
 
 export type ClientStatus = 'lead' | 'active' | 'churned';
 
+export interface Project {
+  id: string;
+  name: string;
+  description: string;
+  status: 'planning' | 'active' | 'completed' | 'on-hold';
+}
+
 export interface Client {
   id: string;
   name: string;
@@ -72,4 +80,5 @@ export interface Client {
   email: string;
   status: ClientStatus;
   notes: string;
+  projects?: Project[];
 }

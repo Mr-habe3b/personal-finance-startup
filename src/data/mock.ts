@@ -56,8 +56,47 @@ export const financialData: FinancialRecord[] = [
 ];
 
 export const clients: Client[] = [
-    { id: 'client-1', name: 'Innovate Corp', company: 'Innovate Corp', email: 'contact@innovate.com', status: 'active', notes: 'Initial integration complete. Monthly check-ins scheduled.' },
-    { id: 'client-2', name: 'Synergy Solutions', company: 'Synergy Solutions', email: 'main@synergy.com', status: 'active', notes: 'High-value client. Exploring upsell opportunities.' },
-    { id: 'client-3', name: 'Lead Ventures', company: 'Lead Ventures', email: 'info@leadventures.io', status: 'lead', notes: 'Met at conference. Follow up next week.' },
-    { id: 'client-4', name: 'Old Guard Inc.', company: 'Old Guard Inc.', email: 'support@oldguard.com', status: 'churned', notes: 'Churned due to budget cuts. Re-engage in 6 months.' },
+    { 
+        id: 'client-1', 
+        name: 'Innovate Corp', 
+        company: 'Innovate Corp', 
+        email: 'contact@innovate.com', 
+        status: 'active', 
+        notes: 'Initial integration complete. Monthly check-ins scheduled.',
+        projects: [
+            { id: 'proj-1', name: 'Platform V2 Launch', description: 'Oversee development and launch of the new platform.', status: 'active' },
+            { id: 'proj-2', name: 'Mobile App POC', description: 'Develop a proof of concept for the new mobile application.', status: 'planning' },
+        ]
+    },
+    { 
+        id: 'client-2', 
+        name: 'Synergy Solutions', 
+        company: 'Synergy Solutions', 
+        email: 'main@synergy.com', 
+        status: 'active', 
+        notes: 'High-value client. Exploring upsell opportunities.',
+        projects: [
+            { id: 'proj-3', name: 'Q3 Marketing Campaign', description: 'Launch and manage the Q3 marketing initiatives.', status: 'active' }
+        ]
+    },
+    { 
+        id: 'client-3', 
+        name: 'Lead Ventures', 
+        company: 'Lead Ventures', 
+        email: 'info@leadventures.io', 
+        status: 'lead', 
+        notes: 'Met at conference. Follow up next week.',
+        projects: []
+    },
+    { 
+        id: 'client-4', 
+        name: 'Old Guard Inc.', 
+        company: 'Old Guard Inc.', 
+        email: 'support@oldguard.com', 
+        status: 'churned', 
+        notes: 'Churned due to budget cuts. Re-engage in 6 months.',
+        projects: [
+             { id: 'proj-4', name: 'Legacy System Migration', description: 'Migrate data from old system to our platform.', status: 'completed' }
+        ]
+    },
 ];

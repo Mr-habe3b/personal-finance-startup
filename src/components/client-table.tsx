@@ -12,7 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Client } from '@/types';
-import { Edit } from 'lucide-react';
+import { Edit, FolderKanban } from 'lucide-react';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
@@ -44,7 +44,7 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
           <TableRow>
             <TableHead>Company</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
-            <TableHead className="hidden sm:table-cell">Contact</TableHead>
+            <TableHead className="hidden sm:table-cell">Projects</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -67,7 +67,12 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
                   {client.status}
                 </Badge>
               </TableCell>
-              <TableCell className="hidden sm:table-cell">{client.email}</TableCell>
+              <TableCell className="hidden sm:table-cell">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                    <FolderKanban className="h-4 w-4" />
+                    <span>{client.projects?.length || 0}</span>
+                </div>
+              </TableCell>
                <TableCell className="text-right">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

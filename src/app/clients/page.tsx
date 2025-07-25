@@ -33,6 +33,7 @@ export default function ClientsPage() {
             const newClient: Client = {
                 id: `client-${Date.now()}`,
                 ...clientData,
+                projects: []
             };
             setClients(prev => [...prev, newClient]);
         }

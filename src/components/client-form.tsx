@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Client, ClientStatus } from '@/types';
+import { Client, ClientStatus, Project } from '@/types';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -25,9 +25,18 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+
+const projectSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, 'Project name is required.'),
+  description: z.string().optional(),
+  status: z.enum(['planning', 'active', 'completed', 'on-hold']),
+});
 
 const formSchema = z.object({
   name: z.string().min(1, 'Contact name is required.'),
@@ -35,6 +44,7 @@ const formSchema = z.object({
   email: z.string().email('Invalid email address.'),
   status: z.enum(['lead', 'active', 'churned']),
   notes: z.string().optional(),
+  projects: z.array(projectSchema).optional(),
 });
 
 type ClientFormData = Omit<Client, 'id'>;
@@ -48,6 +58,8 @@ interface ClientFormProps {
 }
 
 export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: ClientFormProps) {
+  const [projects, setProjects] = useState<Project[]>(client?.projects || []);
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,12 +68,14 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         email: '',
         status: 'lead',
         notes: '',
+        projects: [],
     },
   });
 
   useEffect(() => {
     if (client) {
         form.reset(client);
+        setProjects(client.projects || []);
     } else {
         form.reset({
             name: '',
@@ -69,13 +83,15 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
             email: '',
             status: 'lead',
             notes: '',
+            projects: [],
         });
+        setProjects([]);
     }
   }, [client, form, isOpen]);
 
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values, client?.id);
+    onSave({...values, projects}, client?.id);
   };
 
   const handleDeleteClick = () => {
@@ -84,11 +100,32 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     }
   }
 
+  const handleAddProject = () => {
+    setProjects(prev => [...prev, {id: `proj-${Date.now()}`, name: "New Project", description: "", status: 'planning'}]);
+  }
+  
+  const handleProjectChange = (projectId: string, field: keyof Project, value: string) => {
+    setProjects(prev => prev.map(p => p.id === projectId ? {...p, [field]: value} : p));
+  }
+
+  const handleDeleteProject = (projectId: string) => {
+    setProjects(prev => prev.filter(p => p.id !== projectId));
+  }
+
+  const getProjectStatusVariant = (status: Project['status']) => {
+    switch (status) {
+        case 'active': return 'default';
+        case 'planning': return 'secondary';
+        case 'completed': return 'outline';
+        case 'on-hold': return 'destructive';
+    }
+  }
+
   const isEditMode = !!client;
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Client' : 'Add New Client'}</DialogTitle>
           <DialogDescription>
@@ -96,8 +133,8 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
                 <FormField
                 control={form.control}
                 name="company"
@@ -133,8 +170,6 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                       </FormItem>
                   )}
                 />
-            </div>
-             <div className="grid grid-cols-2 gap-4">
                <FormField
                 control={form.control}
                 name="name"
@@ -161,7 +196,6 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </FormItem>
                 )}
                 />
-            </div>
              <FormField
                 control={form.control}
                 name="notes"
@@ -169,45 +203,89 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     <FormItem>
                     <FormLabel>Notes</FormLabel>
                     <FormControl>
-                        <Textarea placeholder="Add any relevant notes here..." {...field} />
+                        <Textarea placeholder="Add any relevant notes here..." {...field} rows={5} />
                     </FormControl>
                     <FormMessage />
                     </FormItem>
                 )}
                 />
-           
-             <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-4">
-                <div>
-                  {isEditMode && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                           <Button type="button" variant="destructive">
-                              <Trash2 className="mr-2" />
-                              Delete Client
-                           </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete {client?.company}.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteClick}>Delete</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+            </div>
+            <div>
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>Projects</CardTitle>
+                    <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4 max-h-[400px] overflow-y-auto">
+                  {projects.length > 0 ? projects.map(p => (
+                    <div key={p.id} className="p-3 border rounded-lg space-y-3">
+                        <div className="flex items-center justify-between">
+                             <Input 
+                                value={p.name} 
+                                onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
+                                className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
+                             />
+                             <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
+                                 <Trash2 className="h-4 w-4" />
+                             </Button>
+                        </div>
+                        <Textarea 
+                            placeholder="Project description..." 
+                            value={p.description}
+                            onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
+                        />
+                         <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="planning">Planning</SelectItem>
+                                <SelectItem value="active">Active</SelectItem>
+                                <SelectItem value="completed">Completed</SelectItem>
+                                <SelectItem value="on-hold">On Hold</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                  )) : (
+                    <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
                   )}
-                </div>
-                <div className="flex gap-2">
-                    <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-                    <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Client'}</Button>
-                </div>
-            </DialogFooter>
+                </CardContent>
+              </Card>
+            </div>
           </form>
         </Form>
+        <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-6 mt-6 border-t">
+            <div>
+                {isEditMode && (
+                    <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button type="button" variant="destructive">
+                            <Trash2 className="mr-2" />
+                            Delete Client
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete {client?.company}.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteClick}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                    </AlertDialog>
+                )}
+            </div>
+            <div className="flex gap-2">
+                <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+                <Button type="button" onClick={form.handleSubmit(handleFormSubmit)}>{isEditMode ? 'Save Changes' : 'Add Client'}</Button>
+            </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
