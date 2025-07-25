@@ -11,6 +11,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import { MilestoneColumn } from "@/components/milestone-column";
 import { MilestoneCard } from "@/components/milestone-card";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  Sheet,
+  SheetContent,
+} from "@/components/ui/sheet"
 
 const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 
@@ -19,6 +24,7 @@ export default function MilestonesPage() {
     const [activeMilestone, setActiveMilestone] = useState<Milestone | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedMilestone, setSelectedMilestone] = useState<Milestone | null>(null);
+    const isMobile = useIsMobile();
 
      const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -98,6 +104,18 @@ export default function MilestonesPage() {
             }
         }
     };
+    
+    const renderForm = () => (
+        <MilestoneForm
+            key={selectedMilestone?.id || 'new'}
+            milestone={selectedMilestone}
+            isSheet={isMobile}
+            isOpen={isFormOpen}
+            onSave={handleSaveMilestone}
+            onDelete={handleDeleteMilestone}
+            onClose={handleCancel}
+        />
+    )
 
     return (
         <>
@@ -149,14 +167,13 @@ export default function MilestonesPage() {
                 </div>
                 
                 {isFormOpen && (
-                    <MilestoneForm
-                        key={selectedMilestone?.id || 'new'}
-                        milestone={selectedMilestone}
-                        isOpen={isFormOpen}
-                        onSave={handleSaveMilestone}
-                        onDelete={handleDeleteMilestone}
-                        onClose={handleCancel}
-                    />
+                    isMobile ? (
+                        <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
+                           <SheetContent side="bottom" className="h-[90vh] overflow-y-auto">
+                               {renderForm()}
+                           </SheetContent>
+                        </Sheet>
+                    ) : renderForm()
                 )}
             </main>
         </>
