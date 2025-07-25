@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -11,18 +12,22 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { TeamMember } from '@/types';
-import { PlusCircle } from 'lucide-react';
+import { Edit, PlusCircle, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { MoreHorizontal } from 'lucide-react';
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
+  onAddMember: () => void;
+  onEditMember: (member: TeamMember) => void;
 }
 
-export function TeamMembersTable({ teamMembers }: TeamMembersTableProps) {
+export function TeamMembersTable({ teamMembers, onAddMember, onEditMember }: TeamMembersTableProps) {
   return (
     <div>
         <div className="flex justify-end mb-4">
-            <Button>
+            <Button onClick={onAddMember}>
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Member
             </Button>
@@ -34,6 +39,7 @@ export function TeamMembersTable({ teamMembers }: TeamMembersTableProps) {
             <TableHead className="hidden md:table-cell">Commitment</TableHead>
             <TableHead className="hidden sm:table-cell">Vesting</TableHead>
             <TableHead className="text-right">Equity</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -62,6 +68,22 @@ export function TeamMembersTable({ teamMembers }: TeamMembersTableProps) {
               </TableCell>
               <TableCell className="hidden sm:table-cell">{member.vesting}</TableCell>
               <TableCell className="text-right font-medium">{member.equity}%</TableCell>
+               <TableCell className="text-right">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Actions</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onEditMember(member)}>
+                            <Edit className="mr-2 h-4 w-4" />
+                            Edit
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
