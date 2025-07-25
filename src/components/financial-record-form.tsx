@@ -46,16 +46,17 @@ const expenseItemSchema = z.object({
 
 const formSchema = z.object({
   month: z.string().min(1, 'Month is required.'),
+  year: z.coerce.number().min(2000, "Year must be after 2000").max(new Date().getFullYear() + 5, "Year seems too far in the future"),
   revenueItems: z.array(revenueItemSchema),
   expenses: z.array(expenseItemSchema),
 });
 
-type FinancialRecordFormData = Omit<FinancialRecord, 'invoicePath'>;
+type FinancialRecordFormData = Omit<FinancialRecord, 'invoicePath' | 'lastUpdated'>;
 
 interface FinancialRecordFormProps {
     record: FinancialRecord | null;
-    onSave: (data: FinancialRecordFormData, originalMonth?: string) => void;
-    onDelete: (month: string) => void;
+    onSave: (data: FinancialRecordFormData, originalRecord?: { month: string, year: number }) => void;
+    onDelete: (month: string, year: number) => void;
     onCancel: () => void;
     isOpen: boolean;
 }
@@ -67,6 +68,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
     resolver: zodResolver(formSchema),
     defaultValues: {
         month: '',
+        year: new Date().getFullYear(),
         revenueItems: [],
         expenses: [],
     },
@@ -93,12 +95,14 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
     if (record) {
         form.reset({
             month: record.month,
+            year: record.year,
             revenueItems: record.revenueItems.map(r => ({...r, id: r.id || `rev-${Math.random()}`})),
             expenses: record.expenses.map(e => ({...e, id: e.id || `exp-${Math.random()}`}))
         });
     } else {
         form.reset({
             month: '',
+            year: new Date().getFullYear(),
             revenueItems: [],
             expenses: [],
         });
@@ -107,12 +111,13 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
 
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values as FinancialRecordFormData, record?.month);
+    const originalRecord = record ? { month: record.month, year: record.year } : undefined;
+    onSave(values as FinancialRecordFormData, originalRecord);
   };
 
   const handleDeleteClick = () => {
     if (record) {
-        onDelete(record.month);
+        onDelete(record.month, record.year);
     }
   }
 
@@ -120,35 +125,50 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>{isEditMode ? 'Edit Financial Record' : 'Add New Record'}</DialogTitle>
           <DialogDescription>
-            {isEditMode ? `Update the financial data for ${record.month}.` : 'Enter the financial data for a new month.'}
+            {isEditMode ? `Update the financial data for ${record.month} ${record.year}.` : 'Enter the financial data for a new month.'}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
-             <FormField
-                control={form.control}
-                name="month"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Month</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+             <div className="flex gap-4">
+                 <FormField
+                    control={form.control}
+                    name="month"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Month</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger className='w-48'>
+                                <SelectValue placeholder="Select a month" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {months.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
+                            </SelectContent>
+                            </Select>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="year"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Year</FormLabel>
                         <FormControl>
-                            <SelectTrigger className='w-48'>
-                            <SelectValue placeholder="Select a month" />
-                            </SelectTrigger>
+                           <Input type="number" className="w-32" {...field} />
                         </FormControl>
-                        <SelectContent>
-                            {months.map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}
-                        </SelectContent>
-                        </Select>
-                    <FormMessage />
-                    </FormItem>
-                )}
-             />
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+             </div>
 
             <div className="grid grid-cols-2 gap-6">
                 <div className='space-y-2'>
@@ -262,7 +282,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete the financial record for {record?.month}.
+                                    This action cannot be undone. This will permanently delete the financial record for {record?.month} {record?.year}.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

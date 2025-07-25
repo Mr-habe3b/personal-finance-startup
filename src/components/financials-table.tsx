@@ -9,11 +9,12 @@ import { Download, Edit, MoreHorizontal, Trash2, TrendingDown, TrendingUp } from
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Card } from './ui/card';
 import { Separator } from './ui/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface FinancialsTableProps {
   records: (FinancialRecord & { totalRevenue: number; totalExpenses: number; netIncome: number; })[];
   onEdit: (record: FinancialRecord) => void;
-  onDelete: (month: string) => void;
+  onDelete: (month: string, year: number) => void;
 }
 
 export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTableProps) {
@@ -23,11 +24,11 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
        {records.length > 0 ? (
             <Accordion type="single" collapsible className="w-full">
                 {records.map((record) => (
-                    <AccordionItem value={record.month} key={record.month} className="border-b-0">
+                    <AccordionItem value={`${record.month}-${record.year}`} key={`${record.month}-${record.year}`} className="border-b-0">
                          <Card className="mb-2">
                             <AccordionTrigger className="p-4 hover:no-underline">
                                 <div className="flex justify-between items-center w-full">
-                                    <div className="font-medium text-lg">{record.month}</div>
+                                    <div className="font-medium text-lg">{record.month} {record.year}</div>
                                     <Badge variant={record.netIncome >= 0 ? 'default' : 'destructive'} className="text-base">
                                         ${record.netIncome.toLocaleString()}
                                     </Badge>
@@ -77,12 +78,26 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                     </div>
                                     <Separator />
                                     <div className="flex justify-between items-center pt-2">
-                                        <Button variant="outline" size="sm" asChild>
-                                             <a href={record.invoicePath} download>
-                                                <Download className="mr-2" />
-                                                Download Invoice
-                                            </a>
-                                        </Button>
+                                        <div className='flex items-center gap-2'>
+                                            <Button variant="outline" size="sm" asChild>
+                                                <a href={record.invoicePath} download>
+                                                    <Download className="mr-2" />
+                                                    Download Invoice
+                                                </a>
+                                            </Button>
+                                             <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                         <p className='text-xs text-muted-foreground'>
+                                                            Last updated: {new Date(record.lastUpdated).toLocaleDateString()}
+                                                        </p>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>{new Date(record.lastUpdated).toLocaleString()}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
+                                        </div>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
                                                 <Button variant="ghost" size="icon">
@@ -95,7 +110,7 @@ export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTablePr
                                                     <Edit className="mr-2 h-4 w-4" />
                                                     Edit
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(record.month); }} className="text-red-500 focus:text-red-500">
+                                                <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(record.month, record.year); }} className="text-red-500 focus:text-red-500">
                                                     <Trash2 className="mr-2 h-4 w-4" />
                                                     Delete
                                                 </DropdownMenuItem>

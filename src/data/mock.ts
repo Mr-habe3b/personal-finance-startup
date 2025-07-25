@@ -49,57 +49,69 @@ export const fundraisingDeals: FundraisingDeal[] = [
 export const financialData: FinancialRecord[] = [
     { 
         month: 'Jan', 
+        year: 2024,
         revenueItems: [ { id: 'rev1', description: 'Product Sales', amount: 10000 } ],
         expenses: [
             { id: 'exp1', description: 'Server Costs', amount: 12000 },
             { id: 'exp2', description: 'Software Licenses', amount: 3000 }
         ],
-        invoicePath: '/invoices/jan-2024.pdf' 
+        invoicePath: '/invoices/jan-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
     { 
         month: 'Feb', 
+        year: 2024,
         revenueItems: [ { id: 'rev2', description: 'Product Sales', amount: 12000 } ],
         expenses: [
             { id: 'exp3', description: 'Server Costs', amount: 12000 },
             { id: 'exp4', description: 'Part-time Contractor', amount: 4000 }
         ],
-        invoicePath: '/invoices/feb-2024.pdf' 
+        invoicePath: '/invoices/feb-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
     { 
         month: 'Mar', 
+        year: 2024,
         revenueItems: [ { id: 'rev3', description: 'Product Sales', amount: 18000 } ],
         expenses: [
             { id: 'exp5', description: 'Server Costs', amount: 13000 },
             { id: 'exp6', description: 'Part-time Contractor', amount: 4000 }
         ],
-        invoicePath: '/invoices/mar-2024.pdf' 
+        invoicePath: '/invoices/mar-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
     { 
         month: 'Apr', 
+        year: 2024,
         revenueItems: [ { id: 'rev4', description: 'Product Sales', amount: 20000 } ],
         expenses: [
             { id: 'exp7', description: 'Server Costs', amount: 13000 },
             { id: 'exp8', description: 'Marketing Spend', amount: 5000 }
         ], 
-        invoicePath: '/invoices/apr-2024.pdf' 
+        invoicePath: '/invoices/apr-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
     { 
         month: 'May', 
+        year: 2024,
         revenueItems: [ { id: 'rev5', description: 'Product Sales', amount: 25000 } ],
         expenses: [
             { id: 'exp9', description: 'Server Costs', amount: 14000 },
             { id: 'exp10', description: 'Marketing Spend', amount: 6000 }
         ],
-        invoicePath: '/invoices/may-2024.pdf' 
+        invoicePath: '/invoices/may-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
     { 
         month: 'Jun', 
+        year: 2024,
         revenueItems: [ { id: 'rev6', description: 'Consulting', amount: 8000 }, { id: 'rev7', description: 'Product Sales', amount: 20000 } ],
         expenses: [
             { id: 'exp11', description: 'Server Costs', amount: 14000 },
             { id: 'exp12', description: 'Full-time Salaries', amount: 8000 }
         ],
-        invoicePath: '/invoices/jun-2024.pdf' 
+        invoicePath: '/invoices/jun-2024.pdf',
+        lastUpdated: '2024-07-01T10:00:00Z',
     },
 ];
 

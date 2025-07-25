@@ -4,6 +4,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -74,9 +75,11 @@ export interface RevenueItem {
 
 export interface FinancialRecord {
   month: string;
+  year: number;
   revenueItems: RevenueItem[];
   expenses: ExpenseItem[];
   invoicePath: string;
+  lastUpdated: string;
 }
 
 export type ClientStatus = 'lead' | 'active' | 'churned';

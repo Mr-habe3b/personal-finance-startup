@@ -25,6 +25,7 @@ const calculateTotals = (record: FinancialRecord) => {
     return { ...record, totalRevenue, totalExpenses, netIncome };
 }
 
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export default function FinancialsPage() {
     const [financialData, setFinancialData] = useState<FinancialRecord[]>(initialFinancialData);
@@ -61,27 +62,36 @@ export default function FinancialsPage() {
         setIsFormOpen(true);
     };
     
-    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath'>, originalMonth?: string) => {
-        const invoicePath = `/invoices/${recordData.month.toLowerCase()}-invoice.pdf`;
+    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath' | 'lastUpdated'>, originalRecord?: { month: string, year: number }) => {
+        const invoicePath = `/invoices/${recordData.month.toLowerCase()}-${recordData.year}-invoice.pdf`;
+        const lastUpdated = new Date().toISOString();
         
-        if (originalMonth) { // This is an update
-            if (originalMonth !== recordData.month && financialData.some(r => r.month === recordData.month)) {
-                 alert("A record for this month already exists.");
+        const recordExists = (month: string, year: number) => financialData.some(r => r.month === month && r.year === year);
+
+        if (originalRecord) { // This is an update
+            const isNewMonthYear = originalRecord.month !== recordData.month || originalRecord.year !== recordData.year;
+            if (isNewMonthYear && recordExists(recordData.month, recordData.year)) {
+                 alert("A record for this month and year already exists.");
                  return;
             }
-            setFinancialData(prev => prev.map(r => r.month === originalMonth ? { ...recordData, invoicePath } : r));
+            setFinancialData(prev => prev.map(r => (r.month === originalRecord.month && r.year === originalRecord.year) ? { ...recordData, invoicePath, lastUpdated } : r));
         } else { // This is a new record
-            if (financialData.some(r => r.month === recordData.month)) {
-                alert("A record for this month already exists.");
+            if (recordExists(recordData.month, recordData.year)) {
+                alert("A record for this month and year already exists.");
                 return;
             }
-             setFinancialData(prev => [...prev, { ...recordData, invoicePath }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
+            const newRecord = { ...recordData, invoicePath, lastUpdated };
+             setFinancialData(prev => [...prev, newRecord].sort((a, b) => {
+                const dateA = new Date(a.year, months.indexOf(a.month));
+                const dateB = new Date(b.year, months.indexOf(b.month));
+                return dateA.getTime() - dateB.getTime();
+             }));
         }
         setIsFormOpen(false);
     }
     
-    const handleDeleteRecord = (month: string) => {
-        setFinancialData(prev => prev.filter(r => r.month !== month));
+    const handleDeleteRecord = (month: string, year: number) => {
+        setFinancialData(prev => prev.filter(r => !(r.month === month && r.year === year)));
         setIsFormOpen(false);
     }
 
@@ -156,7 +166,7 @@ export default function FinancialsPage() {
                             <FinancialsTable 
                                 records={processedFinancialData}
                                 onEdit={handleEditRecordClick}
-                                onDelete={(month) => handleDeleteRecord(month)}
+                                onDelete={(month, year) => handleDeleteRecord(month, year)}
                             />
                         </CardContent>
                     </Card>
@@ -167,9 +177,9 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                              <ResponsiveContainer width="100%" height={300}>
-                                <BarChart data={processedFinancialData}>
+                                <BarChart data={processedFinancialData.map(d => ({...d, name: `${d.month} ${d.year}`}))}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
+                                    <XAxis dataKey="name" />
                                     <YAxis />
                                     <Tooltip />
                                     <Bar dataKey="totalRevenue" fill="hsl(var(--primary))" name="Revenue" />
@@ -185,9 +195,9 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                              <ResponsiveContainer width="100%" height={300}>
-                                <LineChart data={processedFinancialData}>
+                                <LineChart data={processedFinancialData.map(d => ({...d, name: `${d.month} ${d.year}`}))}>
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="month" />
+                                    <XAxis dataKey="name" />
                                     <YAxis />
                                     <Tooltip />
                                     <Line type="monotone" dataKey="netIncome" stroke="hsl(var(--primary))" name="Net Income" />
@@ -200,7 +210,7 @@ export default function FinancialsPage() {
             </main>
             {isFormOpen && (
                  <FinancialRecordForm
-                    key={selectedRecord?.month || 'new'}
+                    key={selectedRecord ? `${selectedRecord.month}-${selectedRecord.year}` : 'new'}
                     record={selectedRecord}
                     onSave={handleSaveRecord}
                     onDelete={handleDeleteRecord}
