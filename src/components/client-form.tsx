@@ -168,9 +168,9 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
             </div>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 overflow-hidden">
-            <ScrollArea className="h-full px-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
+            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                         <FormField
                         control={form.control}
@@ -256,7 +256,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                         </div>
                         </CardHeader>
                         <CardContent className="p-4 pt-0">
-                            <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
+                             <div className="space-y-4 max-h-[26rem] overflow-y-auto pr-2 -mr-2">
                                     {projects.length > 0 ? projects.map(p => (
                                         <div key={p.id} className="p-4 border rounded-lg space-y-4">
                                             <div className="flex items-center justify-between">
@@ -308,7 +308,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </div>
                 </div>
             </ScrollArea>
-             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full p-6 border-t bg-background rounded-b-lg">
+             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 -mx-6 px-6 border-t mt-auto bg-background rounded-b-lg">
                 <div>
                     {isEditMode && (
                         <AlertDialog>
@@ -344,7 +344,5 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     </Dialog>
   );
 }
-
-    
 
     
