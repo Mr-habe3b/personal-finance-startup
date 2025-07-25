@@ -25,17 +25,17 @@ export default function TeamPage() {
         setIsFormOpen(true);
     };
 
-    const handleSaveMember = (memberData: Omit<TeamMember, 'id' | 'vesting'>, memberId?: string) => {
+    const handleSaveMember = (memberData: Omit<TeamMember, 'id'>, memberId?: string) => {
         if (memberId) {
-            // Here we assume a default vesting, this could be part of the form in a real app
             const existingMember = teamMembers.find(m => m.id === memberId);
-            updateMember({ ...existingMember, ...memberData, id: memberId });
+            if (existingMember) {
+                updateMember({ ...existingMember, ...memberData, id: memberId });
+            }
         } else {
              // Add new member
             const newMember: TeamMember = {
                 id: `member-${Date.now()}`,
                 ...memberData,
-                vesting: '4y/1y cliff', // Default vesting
             };
             addMember(newMember);
         }

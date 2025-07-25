@@ -39,7 +39,7 @@ export default function DashboardPage() {
       setIsFormOpen(true);
   };
 
-  const handleSaveMember = (memberData: Omit<TeamMember, 'id' | 'vesting'>, memberId?: string) => {
+  const handleSaveMember = (memberData: Omit<TeamMember, 'id'>, memberId?: string) => {
       if (memberId) {
           const existingMember = teamMembers.find(m => m.id === memberId);
           if (existingMember) {
@@ -49,7 +49,6 @@ export default function DashboardPage() {
           addMember({
               id: `member-${Date.now()}`,
               ...memberData,
-              vesting: '4y/1y cliff',
           });
       }
       setIsFormOpen(false);

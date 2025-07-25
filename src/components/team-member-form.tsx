@@ -33,9 +33,10 @@ const formSchema = z.object({
   role: z.string().min(1, 'Role is required.'),
   commitment: z.enum(['Full-time', 'Part-time']),
   equity: z.coerce.number().min(0, 'Equity cannot be negative.').max(100, 'Equity cannot exceed 100.'),
+  vesting: z.string().min(1, 'Vesting schedule is required.'),
 });
 
-type MemberFormData = Omit<TeamMember, 'id' | 'vesting'>;
+type MemberFormData = Omit<TeamMember, 'id'>;
 
 interface TeamMemberFormProps {
     member: TeamMember | null;
@@ -53,6 +54,7 @@ export function TeamMemberForm({ member, onSave, onDelete, onCancel, isOpen }: T
         role: '',
         commitment: 'Full-time',
         equity: 0,
+        vesting: '4y/1y cliff',
     },
   });
 
@@ -63,6 +65,7 @@ export function TeamMemberForm({ member, onSave, onDelete, onCancel, isOpen }: T
             role: member.role,
             commitment: member.commitment,
             equity: member.equity,
+            vesting: member.vesting,
         });
     } else {
         form.reset({
@@ -70,6 +73,7 @@ export function TeamMemberForm({ member, onSave, onDelete, onCancel, isOpen }: T
             role: '',
             commitment: 'Full-time',
             equity: 0,
+            vesting: '4y/1y cliff',
         });
     }
   }, [member, form, isOpen]);
@@ -162,6 +166,19 @@ export function TeamMemberForm({ member, onSave, onDelete, onCancel, isOpen }: T
                 )}
                 />
             </div>
+             <FormField
+                control={form.control}
+                name="vesting"
+                render={({ field }) => (
+                    <FormItem>
+                    <FormLabel>Vesting Schedule</FormLabel>
+                    <FormControl>
+                        <Input placeholder="e.g., 4y/1y cliff" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                    </FormItem>
+                )}
+                />
            
              <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-4">
                 <div>
