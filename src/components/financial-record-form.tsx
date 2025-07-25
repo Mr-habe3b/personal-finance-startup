@@ -28,6 +28,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { ScrollArea } from './ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 const expenseItemSchema = z.object({
   id: z.string(),
@@ -63,10 +64,16 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
     },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
       control: form.control,
       name: "expenses",
   });
+
+  const revenue = form.watch('revenue');
+  const expenses = form.watch('expenses');
+
+  const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
+  const netIncome = (revenue || 0) - totalExpenses;
 
   useEffect(() => {
     if (record) {
@@ -187,13 +194,13 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                         ))}
                     </div>
                      ) : (
-                        <p className="text-sm text-muted-foreground text-center">No expenses added yet.</p>
+                        <p className="text-sm text-muted-foreground text-center py-4">No expenses added yet.</p>
                      )}
                 </ScrollArea>
             </div>
            
-             <DialogFooter className="flex justify-between items-center sm:justify-between w-full pt-4">
-                <div>
+             <DialogFooter className="grid grid-cols-2 gap-4 items-center pt-4 border-t mt-4">
+                <div className="text-left">
                   {isEditMode && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
@@ -217,9 +224,20 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                       </AlertDialog>
                   )}
                 </div>
-                <div className="flex gap-2">
-                    <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-                    <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Record'}</Button>
+                <div className="flex flex-col items-end gap-2">
+                     <div className='flex items-baseline gap-2'>
+                        <span className='text-muted-foreground text-sm'>Net Income:</span>
+                         <span className={cn(
+                            "text-lg font-bold",
+                            netIncome >= 0 ? "text-green-500" : "text-red-500"
+                        )}>
+                            ${netIncome.toLocaleString()}
+                        </span>
+                    </div>
+                    <div className='flex gap-2'>
+                        <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
+                        <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Record'}</Button>
+                    </div>
                 </div>
             </DialogFooter>
           </form>
