@@ -1,7 +1,7 @@
 import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus } from "lucide-react";
+import { Plus, Target } from "lucide-react";
 
 export default function MilestonesPage() {
     return (
