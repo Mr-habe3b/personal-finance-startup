@@ -169,7 +169,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex flex-col flex-1 overflow-hidden">
-            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
+            <ScrollArea className="flex-1 -mx-6 px-6 py-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                     <FormField
@@ -310,7 +310,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                 </div>
               </div>
             </ScrollArea>
-             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 border-t mt-auto">
+             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 -mx-6 px-6 border-t mt-auto bg-background rounded-b-lg">
                 <div>
                     {isEditMode && (
                         <AlertDialog>
@@ -347,3 +347,5 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     </Dialog>
   );
 }
+
+    
