@@ -60,19 +60,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7 md:gap-8">
-        <Card className="lg:col-span-4">
-          <CardHeader>
-            <CardTitle>Team Overview</CardTitle>
-            <CardDescription>
-              Manage and view your team's equity allocation.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TeamMembersTable teamMembers={teamMembers} />
-          </CardContent>
-        </Card>
-        <Card className="lg:col-span-3">
+      <div className="grid grid-cols-1 gap-8">
+        <Card>
           <CardHeader>
             <CardTitle>Cap Table</CardTitle>
             <CardDescription>
@@ -81,6 +70,17 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <CapTableChart capTable={capTable} />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Team Overview</CardTitle>
+            <CardDescription>
+              Manage and view your team's equity allocation.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TeamMembersTable teamMembers={teamMembers} />
           </CardContent>
         </Card>
       </div>
