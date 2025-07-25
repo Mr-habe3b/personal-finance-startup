@@ -11,6 +11,7 @@ import { Calendar, CheckSquare, Clock, Edit, MessageSquare, Target, User } from 
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
 
 interface MilestoneCardProps {
     milestone: Milestone;
