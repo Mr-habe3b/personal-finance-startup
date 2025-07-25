@@ -7,7 +7,7 @@ import type { Milestone, MilestoneCategory } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
-import { Calendar, CheckSquare, Clock, Edit, MessageSquare, Target, User } from "lucide-react";
+import { Calendar, CheckSquare, Clock, Edit, MessageSquare, Target, User, Users } from "lucide-react";
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
 import { formatDistanceToNow } from "date-fns";
 import { Separator } from "./ui/separator";
@@ -100,8 +100,8 @@ export function MilestoneCard({ milestone, isOverlay, onClick }: MilestoneCardPr
                      <div className="flex items-center justify-between text-muted-foreground">
                         {getCategoryDisplay(milestone.category)}
                          <span className="flex items-center gap-1 text-xs">
-                            <User className="h-3 w-3" />
-                            {milestone.owner}
+                            <Users className="h-3 w-3" />
+                            {milestone.owner.join(', ')}
                         </span>
                     </div>
 

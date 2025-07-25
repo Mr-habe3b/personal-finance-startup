@@ -27,15 +27,18 @@ import {
 import type { Milestone, MilestoneCategory, TeamMember } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { Trash2 } from 'lucide-react';
+import { Check, ChevronsUpDown, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from './ui/scroll-area';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from './ui/command';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
   description: z.string().min(1, 'Description is required.'),
   dueDate: z.string().min(1, 'A due date is required.'),
-  owner: z.string().min(1, 'Owner is required.'),
+  owner: z.array(z.string()).min(1, 'At least one owner is required.'),
   priority: z.enum(['low', 'medium', 'high']),
   category: z.enum(['task', 'daily', 'monthly', 'quarterly', 'yearly']),
   lastUpdateSummary: z.string().min(1, "Update summary is required."),
@@ -60,7 +63,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
     defaultValues: {
         title: '',
         description: '',
-        owner: '',
+        owner: [],
         priority: 'medium',
         dueDate: '',
         category: 'task',
@@ -72,7 +75,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
   const isEditMode = !!milestone;
 
   useEffect(() => {
-    const defaultUser = teamMembers.length > 0 ? teamMembers[0].name : 'User';
+    const defaultUser = teamMembers.length > 0 ? teamMembers[0].name : '';
     if (milestone) {
         form.reset({
             ...milestone,
@@ -84,7 +87,7 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
         form.reset({
             title: '',
             description: '',
-            owner: defaultUser,
+            owner: defaultUser ? [defaultUser] : [],
             priority: 'medium',
             dueDate: '',
             category: 'task',
@@ -143,28 +146,42 @@ export function MilestoneForm({ milestone, teamMembers, isOpen, onClose, onSave,
                   )}
                 />
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   <FormField
-                    control={form.control}
-                    name="owner"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Owner</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select an owner" />
-                                </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {teamMembers.map(member => (
-                                        <SelectItem key={member.id} value={member.name}>{member.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                  />
+                    <FormField
+                        control={form.control}
+                        name="owner"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Owner</FormLabel>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <FormControl>
+                                            <Button variant="outline" className="w-full justify-between">
+                                                <span>{field.value?.join(', ') || 'Select owners'}</span>
+                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </FormControl>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full">
+                                        {teamMembers.map(member => (
+                                            <DropdownMenuCheckboxItem
+                                                key={member.id}
+                                                checked={field.value?.includes(member.name)}
+                                                onCheckedChange={(checked) => {
+                                                    const newOwners = checked 
+                                                        ? [...(field.value || []), member.name] 
+                                                        : (field.value || []).filter(name => name !== member.name);
+                                                    field.onChange(newOwners);
+                                                }}
+                                            >
+                                                {member.name}
+                                            </DropdownMenuCheckboxItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                   <FormField
                     control={form.control}
                     name="dueDate"

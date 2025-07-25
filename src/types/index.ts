@@ -8,6 +8,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -53,7 +54,7 @@ export interface Milestone {
   description: string;
   dueDate: string;
   status: 'todo' | 'inprogress' | 'done';
-  owner: string;
+  owner: string[];
   priority: 'low' | 'medium' | 'high';
   category: MilestoneCategory;
   lastUpdated: string;
