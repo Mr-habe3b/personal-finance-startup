@@ -12,13 +12,15 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PieChart, User } from 'lucide-react';
 import Link from 'next/link';
+import { SidebarTrigger } from './ui/sidebar';
 
 export function AppHeader() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
+        <SidebarTrigger className="md:hidden"/>
         <Link
           href="/"
-          className="flex items-center gap-2 font-semibold text-primary"
+          className="hidden md:flex items-center gap-2 font-semibold text-primary"
         >
           <PieChart className="h-6 w-6" />
           <span className="font-bold">

@@ -3,14 +3,15 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
-import { SidebarInset } from "@/components/ui/sidebar";
+import { AppHeader } from "@/components/app-header";
 
 export default function DocumentsPage() {
     return (
         <SidebarProvider>
             <div className="flex min-h-screen w-full flex-col">
                 <AppSidebar />
-                <SidebarInset>
+                <div className="flex flex-col flex-1">
+                    <AppHeader />
                     <main className="grid flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
@@ -33,7 +34,7 @@ export default function DocumentsPage() {
                             </CardContent>
                         </Card>
                     </main>
-                </SidebarInset>
+                </div>
             </div>
         </SidebarProvider>
     );

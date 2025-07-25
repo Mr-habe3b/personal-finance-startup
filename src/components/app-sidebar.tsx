@@ -6,18 +6,20 @@ import { usePathname } from 'next/navigation';
 import {
   Home,
   Users,
-  PieChart,
+  PieChart as PieChartIcon,
   Settings,
   Calculator,
   LucideIcon,
   FileText,
   Target,
+  PieChart,
 } from 'lucide-react';
 
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
@@ -33,7 +35,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/team', label: 'Team', icon: Users },
-  { href: '/captable', label: 'Cap Table', icon: PieChart },
+  { href: '/captable', label: 'Cap Table', icon: PieChartIcon },
   { href: '/documents', label: 'Documents', icon: FileText },
   { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
   { href: '/milestones', label: 'Milestones', icon: Target },
@@ -71,6 +73,17 @@ export function AppSidebar() {
       collapsible="icon"
       variant="sidebar"
     >
+      <SidebarHeader>
+        <Link
+            href="/"
+            className="flex items-center gap-2 font-semibold text-primary"
+            >
+            <PieChart className="h-6 w-6" />
+            <span className="font-bold group-data-[collapsible=icon]:hidden">
+                EquityVision
+            </span>
+            </Link>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {menuItems.map(renderMenuItem)}
