@@ -18,3 +18,13 @@ export interface Document {
   type: 'Legal' | 'Sales' | 'RFQ';
   dateAdded: string;
 }
+
+export type FundraisingStage = 'lead' | 'pitched' | 'term-sheet' | 'closed';
+
+export interface FundraisingDeal {
+    id: string;
+    investor: string;
+    amount: number;
+    stage: FundraisingStage;
+    contact: string;
+}

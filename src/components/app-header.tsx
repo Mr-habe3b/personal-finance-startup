@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calculator, FileText, LayoutDashboard, PieChart, Settings, Target, User, Users } from 'lucide-react';
+import { Calculator, FileText, Landmark, LayoutDashboard, PieChart, Settings, Target, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import {
   Sheet,
@@ -27,6 +27,7 @@ const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/team', label: 'Team', icon: Users },
   { href: '/captable', label: 'Cap Table', icon: PieChart },
+  { href: '/fundraising', label: 'Fundraising', icon: Landmark },
   { href: '/documents', label: 'Documents', icon: FileText },
   { href: '/dilution-simulator', label: 'Simulator', icon: Calculator },
   { href: '/milestones', label: 'Milestones', icon: Target },

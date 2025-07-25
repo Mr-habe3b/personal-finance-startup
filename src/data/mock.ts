@@ -1,4 +1,4 @@
-import type { TeamMember, Document } from '@/types';
+import type { TeamMember, Document, FundraisingDeal } from '@/types';
 
 export const teamMembers: TeamMember[] = [
   { id: '1', name: 'Alex Johnson', role: 'CEO & Co-founder', commitment: 'Full-time', equity: 40, vesting: '4y/1y cliff' },
@@ -26,4 +26,21 @@ export const documents: Document[] = [
     { id: '2', name: 'Master Services Agreement', type: 'Sales', dateAdded: '2024-05-20' },
     { id: '3', name: 'Cloud Services RFQ', type: 'RFQ', dateAdded: '2024-06-01' },
     { id: '4', name: 'Employee NDA', type: 'Legal', dateAdded: '2024-04-10' },
+];
+
+export const fundraisingStages = [
+    { id: 'lead', title: 'Lead' },
+    { id: 'pitched', title: 'Pitched' },
+    { id: 'term-sheet', title: 'Term Sheet' },
+    { id: 'closed', title: 'Closed' },
+] as const;
+
+
+export const fundraisingDeals: FundraisingDeal[] = [
+    { id: 'deal-1', investor: 'Sequoia Capital', amount: 2000000, stage: 'pitched', contact: 'rori@sequoia.com' },
+    { id: 'deal-2', investor: 'Andreessen Horowitz', amount: 3000000, stage: 'lead', contact: 'marc@a16z.com' },
+    { id: 'deal-3', investor: 'Y Combinator', amount: 150000, stage: 'closed', contact: 'garry@ycombinator.com' },
+    { id: 'deal-4', investor: 'Techstars', amount: 120000, stage: 'closed', contact: 'david@techstars.com' },
+    { id: 'deal-5', investor: 'Accel', amount: 1500000, stage: 'term-sheet', contact: 'ryan@accel.com' },
+    { id: 'deal-6', investor: 'Lightspeed Venture Partners', amount: 2500000, stage: 'pitched', contact: 'nicole@lsvp.com' },
 ];
