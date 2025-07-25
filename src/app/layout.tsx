@@ -54,9 +54,9 @@ export default function RootLayout({
               )}
               <div className={cn(
                   "flex flex-col transition-all duration-300 ease-in-out",
-                   isSidebarCollapsed 
+                   isMounted && (isSidebarCollapsed 
                     ? "md:pl-[72px]" 
-                    : "md:pl-[220px] lg:pl-[280px]"
+                    : "md:pl-[220px] lg:pl-[280px]")
               )}>
                 {children}
               </div>
