@@ -3,13 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { teamMembers } from '@/data/mock';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
+import { SidebarInset } from '@/components/ui/sidebar';
 
 export default function TeamPage() {
     return (
         <SidebarProvider>
-            <div className="flex min-h-screen w-full flex-col bg-muted/40">
+            <div className="flex min-h-screen w-full flex-col">
                 <AppSidebar />
-                <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+                <SidebarInset>
                     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                         <Card>
                             <CardHeader>
@@ -23,7 +24,7 @@ export default function TeamPage() {
                             </CardContent>
                         </Card>
                     </main>
-                </div>
+                </SidebarInset>
             </div>
         </SidebarProvider>
     );
