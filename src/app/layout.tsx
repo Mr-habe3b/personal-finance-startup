@@ -8,7 +8,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AppSidebar } from '@/components/app-sidebar';
 import { TeamProvider } from '@/context/team-context';
-import { useState } from 'react';
 
 // This is a client component, so metadata should be defined in a parent server component if needed.
 // export const metadata: Metadata = {
@@ -21,11 +20,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  }
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -44,13 +38,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TeamProvider>
-            <div className={cn(
-              "grid min-h-screen w-full transition-[grid-template-columns]",
-              isSidebarCollapsed 
-                ? "md:grid-cols-[72px_1fr]" 
-                : "md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
-            )}>
-              <AppSidebar isCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
+            <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+              <AppSidebar />
               <div className="flex flex-col">
                 {children}
               </div>
