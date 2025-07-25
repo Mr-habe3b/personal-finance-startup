@@ -15,14 +15,16 @@ interface FinancialsTableProps {
   records: (FinancialRecord & { totalRevenue: number; totalExpenses: number; netIncome: number; })[];
   onEdit: (record: FinancialRecord) => void;
   onDelete: (month: string, year: number) => void;
+  openItem?: string;
+  onOpenChange: (value?: string) => void;
 }
 
-export function FinancialsTable({ records, onEdit, onDelete }: FinancialsTableProps) {
+export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenChange }: FinancialsTableProps) {
   
   return (
     <div className="space-y-2">
        {records.length > 0 ? (
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion type="single" collapsible className="w-full" value={openItem} onValueChange={onOpenChange}>
                 {records.map((record) => (
                     <AccordionItem value={`${record.month}-${record.year}`} key={`${record.month}-${record.year}`} className="border-b-0">
                          <Card className="mb-2">

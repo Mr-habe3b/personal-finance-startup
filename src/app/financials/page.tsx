@@ -31,6 +31,7 @@ export default function FinancialsPage() {
     const [financialData, setFinancialData] = useState<FinancialRecord[]>(initialFinancialData);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState<FinancialRecord | null>(null);
+    const [openAccordionItem, setOpenAccordionItem] = useState<string | undefined>(undefined);
 
     const processedFinancialData = useMemo(() => {
         return financialData.map(calculateTotals);
@@ -87,6 +88,7 @@ export default function FinancialsPage() {
                 return dateA.getTime() - dateB.getTime();
              }));
         }
+        setOpenAccordionItem(`${recordData.month}-${recordData.year}`);
         setIsFormOpen(false);
     }
     
@@ -167,6 +169,8 @@ export default function FinancialsPage() {
                                 records={processedFinancialData}
                                 onEdit={handleEditRecordClick}
                                 onDelete={(month, year) => handleDeleteRecord(month, year)}
+                                openItem={openAccordionItem}
+                                onOpenChange={setOpenAccordionItem}
                             />
                         </CardContent>
                     </Card>
