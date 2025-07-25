@@ -1,4 +1,5 @@
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -47,4 +48,10 @@ export interface Milestone {
   owner: string;
   priority: 'low' | 'medium' | 'high';
   category: MilestoneCategory;
+}
+
+export interface WikiPage {
+  id: string;
+  title: string;
+  content: string;
 }
