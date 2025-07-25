@@ -4,6 +4,8 @@
 
 import {
     Calculator,
+    ChevronLeft,
+    ChevronRight,
     Contact,
     FileText,
     Landmark,
@@ -18,6 +20,8 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Button } from './ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -34,43 +38,78 @@ const menuItems = [
 
 const settingsItem = { href: '/settings', label: 'Settings', icon: Settings };
 
-export function AppSidebar() {
+interface AppSidebarProps {
+    isCollapsed: boolean;
+    toggleSidebar: () => void;
+}
+
+export function AppSidebar({ isCollapsed, toggleSidebar }: AppSidebarProps) {
     const pathname = usePathname();
 
-    const renderLink = (item: typeof menuItems[0]) => (
-        <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                pathname === item.href && "text-primary bg-muted"
-            )}
-        >
-            <item.icon className="h-5 w-5" />
-            <span className="truncate">{item.label}</span>
-        </Link>
-    );
+    const renderLink = (item: typeof menuItems[0], isCollapsed: boolean) => {
+        const linkContent = (
+             <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                    pathname === item.href && "text-primary bg-muted",
+                    isCollapsed && "justify-center"
+                )}
+            >
+                <item.icon className="h-5 w-5" />
+                <span className={cn("truncate", isCollapsed && "sr-only")}>{item.label}</span>
+            </Link>
+        );
+
+        if (isCollapsed) {
+            return (
+                 <Tooltip>
+                    <TooltipTrigger asChild>
+                        {linkContent}
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                        <p>{item.label}</p>
+                    </TooltipContent>
+                </Tooltip>
+            );
+        }
+        return linkContent;
+    };
 
     return (
-        <div className="hidden border-r bg-muted/40 md:block">
-            <div className="flex h-full max-h-screen flex-col gap-2">
-                <div className="flex h-16 items-center border-b px-4 lg:px-6">
-                    <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
-                        <PieChart className="h-6 w-6" />
-                        <span>EquityVision</span>
-                    </Link>
+        <div className={cn("hidden border-r bg-muted/40 md:block transition-all duration-300 ease-in-out", isCollapsed ? "w-[72px]" : "w-[220px] lg:w-[280px]")}>
+            <TooltipProvider>
+                <div className="flex h-full max-h-screen flex-col gap-2">
+                    <div className="flex h-16 items-center border-b px-4 lg:px-6">
+                        <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
+                            <PieChart className="h-6 w-6" />
+                            <span className={cn("truncate", isCollapsed && "sr-only")}>EquityVision</span>
+                        </Link>
+                    </div>
+                    <div className="flex-1 overflow-y-auto">
+                        <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-2" : "px-2 lg:px-4")}>
+                            {menuItems.map(item => renderLink(item, isCollapsed))}
+                        </nav>
+                    </div>
+                    <div className="mt-auto p-4 border-t">
+                        <div className='mb-4'>
+                            <nav className={cn("grid items-start text-sm font-medium", isCollapsed ? "px-0" : "px-2 lg:px-4")}>
+                                {renderLink(settingsItem, isCollapsed)}
+                            </nav>
+                        </div>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="w-full flex justify-center"
+                            onClick={toggleSidebar}
+                        >
+                            {isCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
+                            <span className="sr-only">Toggle sidebar</span>
+                        </Button>
+                    </div>
                 </div>
-                <div className="flex-1 overflow-y-auto">
-                    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                        {menuItems.map(renderLink)}
-                    </nav>
-                </div>
-                <div className="mt-auto p-4 border-t">
-                     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-                        {renderLink(settingsItem)}
-                    </nav>
-                </div>
-            </div>
+            </TooltipProvider>
         </div>
     );
 }
