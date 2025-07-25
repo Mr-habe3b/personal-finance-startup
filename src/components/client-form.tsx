@@ -148,7 +148,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </DialogDescription>
                 </div>
                  {isEditMode && upcomingDeadline && (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground border rounded-lg px-3 py-2 mt-0">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground border rounded-lg px-3 py-2 mt-0 shrink-0">
                         <CalendarClock className="h-4 w-4" />
                         <div>
                             <span>Upcoming Deadline: </span>
@@ -160,7 +160,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
-            <ScrollArea className="flex-1 -mx-6 px-6 py-4">
+            <ScrollArea className="flex-1 pr-6 -ml-6 pl-6 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                         <FormField
@@ -299,7 +299,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                     </div>
                 </div>
             </ScrollArea>
-             <DialogFooter className="flex-shrink-0 flex justify-between items-center sm:justify-between w-full pt-6 -mx-6 px-6 border-t mt-auto bg-background rounded-b-lg">
+             <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t">
                 <div>
                     {isEditMode && (
                         <AlertDialog>
@@ -335,3 +335,5 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     </Dialog>
   );
 }
+
+    
