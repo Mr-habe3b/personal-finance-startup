@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import {
   PieChart,
   Settings,
   Calculator,
+  LucideIcon,
 } from 'lucide-react';
 
 import {
@@ -19,19 +21,45 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from '@/components/ui/sidebar';
-import { cn } from '@/lib/utils';
 import React from 'react';
 
-const menuItems = [
+interface MenuItem {
+    href: string;
+    label: string;
+    icon: LucideIcon;
+}
+
+const menuItems: MenuItem[] = [
   { href: '/', label: 'Dashboard', icon: Home },
   { href: '/dilution-simulator', label: 'Dilution Simulator', icon: Calculator },
   { href: '/team', label: 'Team', icon: Users },
 ];
 
-const settingsItem = { href: '/settings', label: 'Settings', icon: Settings };
+const settingsItem: MenuItem = { href: '/settings', label: 'Settings', icon: Settings };
 
 export function AppSidebar() {
   const pathname = usePathname();
+
+  const renderMenuItem = (item: MenuItem) => {
+    const Icon = item.icon;
+    return (
+        <SidebarMenuItem key={item.href}>
+            <SidebarMenuButton
+            asChild
+            isActive={pathname === item.href}
+            tooltip={item.label}
+            className="w-full justify-start"
+            >
+            <Link href={item.href}>
+                <Icon className="h-5 w-5" />
+                <span className="group-data-[collapsible=icon]:hidden">
+                {item.label}
+                </span>
+            </Link>
+            </SidebarMenuButton>
+        </SidebarMenuItem>
+    );
+  }
 
   return (
     <Sidebar
@@ -52,42 +80,12 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {menuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
-                isActive={pathname === item.href}
-                tooltip={item.label}
-                className="w-full justify-start"
-              >
-                <Link href={item.href}>
-                  <item.icon className="h-5 w-5" />
-                  <span className="group-data-[collapsible=icon]:hidden">
-                    {item.label}
-                  </span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {menuItems.map(renderMenuItem)}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
          <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton
-                    asChild
-                    isActive={pathname === settingsItem.href}
-                    tooltip={settingsItem.label}
-                    className="w-full justify-start"
-                >
-                     <Link href={settingsItem.href}>
-                        <settingsItem.icon className="h-5 w-5" />
-                        <span className="group-data-[collapsible=icon]:hidden">
-                            {settingsItem.label}
-                        </span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
+            {renderMenuItem(settingsItem)}
          </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
