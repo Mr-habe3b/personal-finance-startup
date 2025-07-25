@@ -337,7 +337,3 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
     </Dialog>
   );
 }
-
-    
-
-    
