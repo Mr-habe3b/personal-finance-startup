@@ -54,21 +54,19 @@ export function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === item.href}
-                  tooltip={item.label}
-                  className="w-full justify-start"
-                >
-                  <a>
-                    <item.icon className="h-5 w-5" />
-                    <span className="group-data-[collapsible=icon]:hidden">
-                      {item.label}
-                    </span>
-                  </a>
-                </SidebarMenuButton>
-              </Link>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === item.href}
+                tooltip={item.label}
+                className="w-full justify-start"
+              >
+                <Link href={item.href}>
+                  <item.icon className="h-5 w-5" />
+                  <span className="group-data-[collapsible=icon]:hidden">
+                    {item.label}
+                  </span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
@@ -76,21 +74,19 @@ export function AppSidebar() {
       <SidebarFooter>
          <SidebarMenu>
             <SidebarMenuItem>
-                <Link href={settingsItem.href} passHref>
-                    <SidebarMenuButton
-                        asChild
-                        isActive={pathname === settingsItem.href}
-                        tooltip={settingsItem.label}
-                        className="w-full justify-start"
-                    >
-                         <a>
-                            <settingsItem.icon className="h-5 w-5" />
-                            <span className="group-data-[collapsible=icon]:hidden">
-                                {settingsItem.label}
-                            </span>
-                        </a>
-                    </SidebarMenuButton>
-                </Link>
+                <SidebarMenuButton
+                    asChild
+                    isActive={pathname === settingsItem.href}
+                    tooltip={settingsItem.label}
+                    className="w-full justify-start"
+                >
+                     <Link href={settingsItem.href}>
+                        <settingsItem.icon className="h-5 w-5" />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                            {settingsItem.label}
+                        </span>
+                    </Link>
+                </SidebarMenuButton>
             </SidebarMenuItem>
          </SidebarMenu>
       </SidebarFooter>
