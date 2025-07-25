@@ -20,6 +20,10 @@ export interface Document {
   path: string;
 }
 
+export interface UIDocument extends Document {
+    file?: File;
+}
+
 export type FundraisingStage = 'lead' | 'pitched' | 'term-sheet' | 'closed';
 
 export interface FundraisingDeal {

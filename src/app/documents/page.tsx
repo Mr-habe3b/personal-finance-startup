@@ -7,9 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Upload, FileText, Briefcase, FileQuestion, Download } from "lucide-react";
-import { documents } from "@/data/mock";
-import type { Document } from "@/types";
-import { useRef } from "react";
+import { documents as initialDocuments } from "@/data/mock";
+import type { Document, UIDocument } from "@/types";
+import { useRef, useState } from "react";
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -26,6 +26,7 @@ const getIconForType = (type: Document['type']) => {
 
 export default function DocumentsPage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [documents, setDocuments] = useState<UIDocument[]>(initialDocuments);
 
     const handleUploadClick = () => {
         fileInputRef.current?.click();
@@ -35,7 +36,15 @@ export default function DocumentsPage() {
         const file = event.target.files?.[0];
         if (file) {
             console.log("Selected file:", file.name);
-            // In a real app, you would handle the file upload here.
+            const newDocument: UIDocument = {
+                id: `doc-${documents.length + 1}`,
+                name: file.name,
+                type: 'Legal', // Defaulting to legal, this could be made dynamic
+                dateAdded: new Date().toISOString().split('T')[0],
+                path: `/legaldocuments/${file.name}`,
+                file: file
+            };
+            setDocuments(prev => [...prev, newDocument]);
         }
     }
 
