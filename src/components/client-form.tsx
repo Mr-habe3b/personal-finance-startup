@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Client, ClientStatus, Project } from '@/types';
+import { Client, ClientStatus, Project, TeamMember } from '@/types';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -25,7 +25,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { CalendarClock, Plus, Trash2 } from 'lucide-react';
+import { CalendarClock, Check, ChevronsUpDown, Plus, Trash2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -33,6 +33,7 @@ import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from './ui/dropdown-menu';
 
 const projectSchema = z.object({
   id: z.string(),
@@ -50,19 +51,21 @@ const formSchema = z.object({
   status: z.enum(['lead', 'active', 'churned']),
   notes: z.string().optional(),
   projects: z.array(projectSchema).optional(),
+  assignedTo: z.array(z.string()).optional(),
 });
 
 type ClientFormData = Omit<Client, 'id'>;
 
 interface ClientFormProps {
     client: Client | null;
+    teamMembers: TeamMember[];
     onSave: (data: ClientFormData, clientId?: string) => void;
     onDelete: (clientId: string) => void;
     onCancel: () => void;
     isOpen: boolean;
 }
 
-export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: ClientFormProps) {
+export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, isOpen }: ClientFormProps) {
   const [projects, setProjects] = useState<Project[]>(client?.projects || []);
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,6 +77,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
         status: 'lead',
         notes: '',
         projects: [],
+        assignedTo: [],
     },
   });
 
@@ -106,6 +110,7 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
             status: 'lead',
             notes: '',
             projects: [],
+            assignedTo: [],
         });
         setProjects([]);
     }
@@ -175,6 +180,42 @@ export function ClientForm({ client, onSave, onDelete, onCancel, isOpen }: Clien
                             <FormMessage />
                             </FormItem>
                         )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="assignedTo"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Assigned To</FormLabel>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <FormControl>
+                                                <Button variant="outline" className="w-full justify-between">
+                                                    <span>{field.value?.join(', ') || 'Select team members'}</span>
+                                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                </Button>
+                                            </FormControl>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+                                            {teamMembers.map(member => (
+                                                <DropdownMenuCheckboxItem
+                                                    key={member.id}
+                                                    checked={field.value?.includes(member.name)}
+                                                    onCheckedChange={(checked) => {
+                                                        const newOwners = checked 
+                                                            ? [...(field.value || []), member.name] 
+                                                            : (field.value || []).filter(name => name !== member.name);
+                                                        field.onChange(newOwners);
+                                                    }}
+                                                >
+                                                    {member.name}
+                                                </DropdownMenuCheckboxItem>
+                                            ))}
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
                         />
                         <FormField
                         control={form.control}

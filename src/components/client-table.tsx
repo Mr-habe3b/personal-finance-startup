@@ -13,9 +13,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Client, Project } from '@/types';
 import { Edit, FolderKanban, MoreHorizontal, CalendarClock } from 'lucide-react';
-import { Avatar, AvatarFallback } from './ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { format } from 'date-fns';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface ClientTableProps {
   clients: Client[];
@@ -53,6 +54,7 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
           <TableRow>
             <TableHead>Company</TableHead>
             <TableHead className="hidden md:table-cell">Status</TableHead>
+            <TableHead className="hidden lg:table-cell">Assigned To</TableHead>
             <TableHead className="hidden sm:table-cell">Projects</TableHead>
             <TableHead>Upcoming Deadline</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -78,6 +80,29 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
                     <Badge variant={getStatusVariant(client.status)} className="capitalize">
                     {client.status}
                     </Badge>
+                </TableCell>
+                <TableCell className="hidden lg:table-cell">
+                    <div className="flex items-center -space-x-2">
+                      {client.assignedTo && client.assignedTo.length > 0 ? (
+                        client.assignedTo.map(name => (
+                          <TooltipProvider key={name}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                  <Avatar className="h-7 w-7 border-2 border-background">
+                                      <AvatarImage src={`https://placehold.co/32x32.png`} alt={name} data-ai-hint="person" />
+                                      <AvatarFallback>{name.charAt(0)}</AvatarFallback>
+                                  </Avatar>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{name}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        ))
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Unassigned</span>
+                      )}
+                    </div>
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">
                     <div className="flex items-center gap-2 text-muted-foreground">

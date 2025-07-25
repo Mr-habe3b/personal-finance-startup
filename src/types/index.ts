@@ -98,4 +98,5 @@ export interface Client {
   status: ClientStatus;
   notes: string;
   projects?: Project[];
+  assignedTo?: string[];
 }

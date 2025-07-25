@@ -10,11 +10,13 @@ import type { Client } from "@/types";
 import { clients as initialClients } from "@/data/mock";
 import { ClientTable } from "@/components/client-table";
 import { ClientForm } from "@/components/client-form";
+import { useTeam } from "@/context/team-context";
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>(initialClients);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+    const { teamMembers } = useTeam();
 
     const handleAddClientClick = () => {
         setSelectedClient(null);
@@ -28,7 +30,7 @@ export default function ClientsPage() {
 
     const handleSaveClient = (clientData: Omit<Client, 'id'>, clientId?: string) => {
         if (clientId) {
-            setClients(prev => prev.map(c => c.id === clientId ? { ...c, ...clientData } : c));
+            setClients(prev => prev.map(c => c.id === clientId ? { ...c, ...clientData, id: clientId } : c));
         } else {
             const newClient: Client = {
                 id: `client-${Date.now()}`,
@@ -56,7 +58,7 @@ export default function ClientsPage() {
         if (clients.length === 0) return;
 
         const headers = [
-            'Client ID', 'Company', 'Contact Name', 'Contact Email', 'Status', 'Notes',
+            'Client ID', 'Company', 'Contact Name', 'Contact Email', 'Status', 'Notes', 'Assigned To',
             'Project ID', 'Project Name', 'Project Description', 'Project Status', 'Project Deadline', 'Project Details'
         ];
 
@@ -68,6 +70,7 @@ export default function ClientsPage() {
                 escapeCsvCell(client.email),
                 escapeCsvCell(client.status),
                 escapeCsvCell(client.notes),
+                escapeCsvCell(client.assignedTo?.join(', ') || ''),
             ];
             
             if (client.projects && client.projects.length > 0) {
@@ -132,6 +135,7 @@ export default function ClientsPage() {
                 <ClientForm
                     key={selectedClient?.id || 'new'}
                     client={selectedClient}
+                    teamMembers={teamMembers}
                     onSave={handleSaveClient}
                     onDelete={handleDeleteClient}
                     onCancel={handleCancel}
