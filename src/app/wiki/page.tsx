@@ -15,6 +15,8 @@ const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
 export default function WikiPage() {
     const [pages, setPages] = useState<WikiPageType[]>([]);
     const [selectedPageId, setSelectedPageId] = useState<string | null>(null);
+    const [activeTitle, setActiveTitle] = useState('');
+    const [activeContent, setActiveContent] = useState('');
 
     // Load pages from localStorage on initial render
     useEffect(() => {
@@ -23,25 +25,38 @@ export default function WikiPage() {
             if (savedPages) {
                 const parsedPages = JSON.parse(savedPages);
                 setPages(parsedPages);
-                if (parsedPages.length > 0) {
+                if (parsedPages.length > 0 && !selectedPageId) {
                     setSelectedPageId(parsedPages[0].id);
                 }
             }
         } catch (error) {
             console.error("Failed to load wiki pages from localStorage", error);
         }
-    }, []);
+    }, [selectedPageId]);
 
     // Save pages to localStorage whenever they change
     useEffect(() => {
         try {
-            localStorage.setItem(WIKI_STORAGE_KEY, JSON.stringify(pages));
+             if (pages.length > 0) {
+                localStorage.setItem(WIKI_STORAGE_KEY, JSON.stringify(pages));
+            }
         } catch (error) {
             console.error("Failed to save wiki pages to localStorage", error);
         }
     }, [pages]);
 
     const selectedPage = pages.find(p => p.id === selectedPageId) ?? null;
+
+    useEffect(() => {
+        if (selectedPage) {
+            setActiveTitle(selectedPage.title);
+            setActiveContent(selectedPage.content);
+        } else {
+            setActiveTitle('');
+            setActiveContent('');
+        }
+    }, [selectedPage]);
+
 
     const handleNewPage = () => {
         const newPage: WikiPageType = {
@@ -53,15 +68,22 @@ export default function WikiPage() {
         setSelectedPageId(newPage.id);
     };
     
-    const handleUpdatePage = (id: string, title: string, content: string) => {
-        setPages(prev => prev.map(p => p.id === id ? { ...p, title, content } : p));
+    const handleUpdatePage = () => {
+        if (selectedPageId) {
+            setPages(prev => prev.map(p => p.id === selectedPageId ? { ...p, title: activeTitle, content: activeContent } : p));
+        }
     }
 
     const handleDeletePage = (id: string) => {
-        setPages(prev => prev.filter(p => p.id !== id));
+        const newPages = pages.filter(p => p.id !== id);
+        setPages(newPages);
+        
+        if(newPages.length === 0) {
+             localStorage.removeItem(WIKI_STORAGE_KEY);
+        }
+
         if (selectedPageId === id) {
-            // Select the first page if available, otherwise null
-            setSelectedPageId(pages.length > 1 ? pages.filter(p => p.id !== id)[0]?.id ?? null : null);
+            setSelectedPageId(newPages.length > 0 ? newPages[0].id : null);
         }
     }
 
@@ -101,10 +123,14 @@ export default function WikiPage() {
                                 <div className="flex items-center justify-between mb-4">
                                      <Input 
                                         className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 p-0" 
-                                        value={selectedPage.title}
-                                        onChange={(e) => handleUpdatePage(selectedPage.id, e.target.value, selectedPage.content)}
+                                        value={activeTitle}
+                                        onChange={(e) => setActiveTitle(e.target.value)}
                                     />
                                     <div className="flex gap-2">
+                                        <Button size="sm" onClick={handleUpdatePage}>
+                                            <Save className="mr-2 h-4 w-4" />
+                                            Save
+                                        </Button>
                                          <Button size="sm" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)}>
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
@@ -113,8 +139,8 @@ export default function WikiPage() {
                                 <Textarea 
                                     className="flex-1 text-base resize-none border-none shadow-none focus-visible:ring-0"
                                     placeholder="Start writing your document..."
-                                    value={selectedPage.content}
-                                    onChange={(e) => handleUpdatePage(selectedPage.id, selectedPage.title, e.target.value)}
+                                    value={activeContent}
+                                    onChange={(e) => setActiveContent(e.target.value)}
                                 />
                             </div>
                         ) : (
