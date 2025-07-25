@@ -11,9 +11,9 @@ import { capTable } from '@/data/mock';
 
 export default function CapTablePage() {
     return (
-        <div className="flex min-h-screen w-full flex-col">
+        <>
             <AppHeader />
-            <main className="flex-1 p-4 md:p-6">
+            <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <Card>
                     <CardHeader>
                         <CardTitle>Cap Table</CardTitle>
@@ -26,6 +26,6 @@ export default function CapTablePage() {
                     </CardContent>
                 </Card>
             </main>
-        </div>
+        </>
     );
 }

@@ -22,9 +22,9 @@ const getIconForType = (type: Document['type']) => {
 
 export default function DocumentsPage() {
     return (
-        <div className="flex min-h-screen w-full flex-col">
+        <>
             <AppHeader />
-            <main className="flex-1 p-4 md:p-6">
+            <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
@@ -43,24 +43,24 @@ export default function DocumentsPage() {
                              <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead className="py-2">Name</TableHead>
-                                        <TableHead className="hidden sm:table-cell py-2">Type</TableHead>
-                                        <TableHead className="text-right py-2">Date Added</TableHead>
+                                        <TableHead>Name</TableHead>
+                                        <TableHead className="hidden sm:table-cell">Type</TableHead>
+                                        <TableHead className="text-right">Date Added</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {documents.map((doc) => (
                                         <TableRow key={doc.id}>
-                                            <TableCell className="py-2">
+                                            <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     {getIconForType(doc.type)}
                                                     <span className="font-medium">{doc.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="hidden sm:table-cell py-2">
+                                            <TableCell className="hidden sm:table-cell">
                                                 <Badge variant="outline">{doc.type}</Badge>
                                             </TableCell>
-                                            <TableCell className="text-right text-muted-foreground py-2">{doc.dateAdded}</TableCell>
+                                            <TableCell className="text-right text-muted-foreground">{doc.dateAdded}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -74,6 +74,6 @@ export default function DocumentsPage() {
                     </CardContent>
                 </Card>
             </main>
-        </div>
+        </>
     );
 }

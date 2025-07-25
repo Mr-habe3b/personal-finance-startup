@@ -1,9 +1,9 @@
 import { AppHeader } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plus } from "lucide-react";
+import { Library, Plus } from "lucide-react";
 
-export default function MilestonesPage() {
+export default function WikiPage() {
     return (
         <>
             <AppHeader />
@@ -11,21 +11,21 @@ export default function MilestonesPage() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between">
                         <div>
-                            <CardTitle>Milestones & Targets</CardTitle>
+                            <CardTitle>Wiki</CardTitle>
                             <CardDescription>
-                                Track your startup's progress, set targets, and assign tasks.
+                                Your team's central knowledge base.
                             </CardDescription>
                         </div>
                         <Button>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Milestone
+                            New Page
                         </Button>
                     </CardHeader>
                     <CardContent>
                         <div className="text-center py-20 flex flex-col items-center">
-                            <Target className="h-12 w-12 text-muted-foreground mb-4" />
-                            <p className="text-lg font-semibold text-muted-foreground">No milestones created yet.</p>
-                            <p className="text-sm text-muted-foreground">Click "Add Milestone" to set your first target.</p>
+                            <Library className="h-12 w-12 text-muted-foreground mb-4" />
+                            <p className="text-lg font-semibold text-muted-foreground">No wiki pages created yet.</p>
+                            <p className="text-sm text-muted-foreground">Click "New Page" to create your first document.</p>
                         </div>
                     </CardContent>
                 </Card>

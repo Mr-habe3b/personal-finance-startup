@@ -6,17 +6,17 @@ import { FundraisingCard } from "@/components/fundraising-card";
 
 export default function FundraisingPage() {
     return (
-        <div className="flex min-h-screen w-full flex-col">
+        <>
             <AppHeader />
-            <main className="flex-1 p-4 md:p-6">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold tracking-tight">Fundraising Tracker</h1>
+            <main className="flex flex-1 flex-col gap-4 p-4 md:p-8">
+                <div className="mb-4">
+                    <h1 className="text-3xl font-bold tracking-tight">Fundraising</h1>
                     <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
                 </div>
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid flex-1 items-start gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
                     {fundraisingStages.map((stage) => (
-                        <Card key={stage.id} className="border-0 bg-secondary/50">
-                            <CardHeader className="p-4">
+                        <Card key={stage.id} className="border-0 bg-transparent shadow-none">
+                            <CardHeader className="px-4 py-2">
                                 <div className="flex items-center justify-between">
                                     <CardTitle className="text-base font-medium">{stage.title}</CardTitle>
                                     <Badge variant="outline" className="text-sm">{
@@ -42,6 +42,6 @@ export default function FundraisingPage() {
                     ))}
                 </div>
             </main>
-        </div>
+        </>
     );
 }

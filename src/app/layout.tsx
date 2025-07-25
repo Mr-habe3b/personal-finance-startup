@@ -3,6 +3,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
+import { AppSidebar } from '@/components/app-sidebar';
 
 export const metadata: Metadata = {
   title: 'EquityVision',
@@ -24,11 +25,16 @@ export default function RootLayout({
       <body className={cn('min-h-screen bg-background font-body antialiased')}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+            <AppSidebar />
+            <div className="flex flex-col">
+              {children}
+            </div>
+          </div>
           <Toaster />
         </ThemeProvider>
       </body>
