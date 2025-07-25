@@ -54,7 +54,7 @@ type FinancialRecordFormData = Omit<FinancialRecord, 'invoicePath'>;
 
 interface FinancialRecordFormProps {
     record: FinancialRecord | null;
-    onSave: (data: FinancialRecordFormData) => void;
+    onSave: (data: FinancialRecordFormData, originalMonth?: string) => void;
     onDelete: (month: string) => void;
     onCancel: () => void;
     isOpen: boolean;
@@ -107,7 +107,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
 
 
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    onSave(values as FinancialRecordFormData);
+    onSave(values as FinancialRecordFormData, record?.month);
   };
 
   const handleDeleteClick = () => {
@@ -135,7 +135,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                 render={({ field }) => (
                     <FormItem>
                     <FormLabel>Month</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isEditMode}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                             <SelectTrigger className='w-48'>
                             <SelectValue placeholder="Select a month" />

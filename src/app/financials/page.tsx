@@ -61,16 +61,18 @@ export default function FinancialsPage() {
         setIsFormOpen(true);
     };
     
-    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath'>) => {
+    const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath'>, originalMonth?: string) => {
         const invoicePath = `/invoices/${recordData.month.toLowerCase()}-invoice.pdf`;
         
-        if (selectedRecord && recordData.month === selectedRecord.month) {
-            // Update existing record
-             setFinancialData(prev => prev.map(r => r.month === recordData.month ? { ...recordData, invoicePath } : r));
-        } else {
-            // Add new record - prevent duplicate months
+        if (originalMonth) { // This is an update
+            if (originalMonth !== recordData.month && financialData.some(r => r.month === recordData.month)) {
+                 alert("A record for this month already exists.");
+                 return;
+            }
+            setFinancialData(prev => prev.map(r => r.month === originalMonth ? { ...recordData, invoicePath } : r));
+        } else { // This is a new record
             if (financialData.some(r => r.month === recordData.month)) {
-                alert("A record for this month already exists."); // Or use a toast
+                alert("A record for this month already exists.");
                 return;
             }
              setFinancialData(prev => [...prev, { ...recordData, invoicePath }].sort((a, b) => new Date(`1 ${a.month} 2000`).getTime() - new Date(`1 ${b.month} 2000`).getTime()));
