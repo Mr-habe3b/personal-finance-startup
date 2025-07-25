@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calculator, FileText, Home, PieChart, Settings, Target, User, Users } from 'lucide-react';
+import { Calculator, FileText, LayoutDashboard, PieChart, Settings, Target, User, Users } from 'lucide-react';
 import Link from 'next/link';
 import {
   Sheet,
@@ -24,7 +24,7 @@ import { ThemeToggle } from './theme-toggle';
 
 
 const menuItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: Home },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/team', label: 'Team', icon: Users },
   { href: '/captable', label: 'Cap Table', icon: PieChart },
   { href: '/documents', label: 'Documents', icon: FileText },
@@ -36,8 +36,8 @@ export function AppHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+      <div className="flex items-center gap-4">
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-semibold md:text-base text-primary"
@@ -45,19 +45,24 @@ export function AppHeader() {
           <PieChart className="h-6 w-6" />
           <span className="sr-only">EquityVision</span>
         </Link>
+      </div>
+      
+      <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
         {menuItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              "transition-colors hover:text-foreground",
+              "flex items-center gap-2 transition-colors hover:text-foreground",
               pathname === item.href ? "text-foreground" : "text-muted-foreground"
             )}
           >
+            <item.icon className="h-4 w-4" />
             {item.label}
           </Link>
         ))}
       </nav>
+
       <Sheet>
         <SheetTrigger asChild>
           <Button
@@ -72,7 +77,7 @@ export function AppHeader() {
         <SheetContent side="left">
           <nav className="grid gap-6 text-lg font-medium">
             <Link
-              href="#"
+              href="/"
               className="flex items-center gap-2 text-lg font-semibold text-primary"
             >
               <PieChart className="h-6 w-6" />
@@ -83,19 +88,19 @@ export function AppHeader() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "hover:text-foreground",
+                  "flex items-center gap-4 hover:text-foreground",
                   pathname === item.href ? "text-foreground" : "text-muted-foreground"
                 )}
               >
+                <item.icon className="h-5 w-5" />
                 {item.label}
               </Link>
             ))}
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <div className="ml-auto flex-1 sm:flex-initial">
-        </div>
+
+      <div className="flex items-center gap-2">
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
