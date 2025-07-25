@@ -38,7 +38,7 @@ export function CapTableChart({ capTable }: CapTableChartProps) {
   
 
   return (
-    <div className="w-full h-[350px]">
+    <div className="w-full h-[250px]">
       <ChartContainer
         config={chartConfig}
         className="mx-auto aspect-square h-full"
@@ -52,7 +52,7 @@ export function CapTableChart({ capTable }: CapTableChartProps) {
             data={chartData}
             dataKey="value"
             nameKey="name"
-            innerRadius={60}
+            innerRadius={50}
             strokeWidth={5}
           >
             {chartData.map((entry, index) => (
