@@ -43,24 +43,24 @@ export default function DocumentsPage() {
                              <Table>
                                 <TableHeader>
                                     <TableRow>
-                                        <TableHead>Name</TableHead>
-                                        <TableHead className="hidden sm:table-cell">Type</TableHead>
-                                        <TableHead className="text-right">Date Added</TableHead>
+                                        <TableHead className="py-2">Name</TableHead>
+                                        <TableHead className="hidden sm:table-cell py-2">Type</TableHead>
+                                        <TableHead className="text-right py-2">Date Added</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {documents.map((doc) => (
                                         <TableRow key={doc.id}>
-                                            <TableCell>
+                                            <TableCell className="py-2">
                                                 <div className="flex items-center gap-3">
                                                     {getIconForType(doc.type)}
                                                     <span className="font-medium">{doc.name}</span>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="hidden sm:table-cell">
+                                            <TableCell className="hidden sm:table-cell py-2">
                                                 <Badge variant="outline">{doc.type}</Badge>
                                             </TableCell>
-                                            <TableCell className="text-right text-muted-foreground">{doc.dateAdded}</TableCell>
+                                            <TableCell className="text-right text-muted-foreground py-2">{doc.dateAdded}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
