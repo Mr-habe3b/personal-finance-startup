@@ -44,19 +44,19 @@ export function AppSidebar() {
     const Icon = item.icon;
     return (
         <SidebarMenuItem key={item.href}>
-          <Link href={item.href} passHref>
-            <SidebarMenuButton
-              as="a"
-              isActive={pathname === item.href}
-              tooltip={item.label}
-              className="w-full justify-start"
-            >
-              <Icon className="h-5 w-5" />
-              <span className="group-data-[collapsible=icon]:hidden">
+          <SidebarMenuButton
+            asChild
+            isActive={pathname === item.href}
+            tooltip={item.label}
+            className="w-full justify-start"
+          >
+            <Link href={item.href}>
+                <Icon className="h-5 w-5" />
+                <span className="group-data-[collapsible=icon]:hidden">
                 {item.label}
-              </span>
-            </SidebarMenuButton>
-          </Link>
+                </span>
+            </Link>
+          </SidebarMenuButton>
         </SidebarMenuItem>
     );
   }
