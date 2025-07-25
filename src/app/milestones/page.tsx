@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Plus, Target } from "lucide-react";
 import { useState } from "react";
 import type { Milestone } from "@/types";
-import { AddMilestoneForm } from "@/components/add-milestone-form";
+import { MilestoneForm } from "@/components/milestone-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { MilestoneColumn } from "@/components/milestone-column";
 import { MilestoneCard } from "@/components/milestone-card";
 
@@ -18,7 +17,8 @@ const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 export default function MilestonesPage() {
     const [milestones, setMilestones] = useState<Milestone[]>([]);
     const [activeMilestone, setActiveMilestone] = useState<Milestone | null>(null);
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [selectedMilestone, setSelectedMilestone] = useState<Milestone | null>(null);
 
      const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -28,17 +28,45 @@ export default function MilestonesPage() {
         })
     );
 
-    const handleAddMilestone = (newMilestone: Omit<Milestone, 'id' | 'status'>) => {
-        setMilestones(prev => [
-            ...prev,
-            {
-                id: `ms-${prev.length + 1}`,
-                ...newMilestone,
-                status: 'todo'
-            }
-        ]);
-        setIsAddModalOpen(false);
+    const handleAddMilestoneClick = () => {
+        setSelectedMilestone(null);
+        setIsFormOpen(true);
+    }
+    
+    const handleEditMilestoneClick = (milestone: Milestone) => {
+        setSelectedMilestone(milestone);
+        setIsFormOpen(true);
+    }
+
+    const handleSaveMilestone = (milestoneData: Omit<Milestone, 'id' | 'status' | 'lastUpdated'>, milestoneId?: string) => {
+        const timestamp = new Date().toISOString();
+        if (milestoneId) {
+            // Update
+            setMilestones(prev => prev.map(m => m.id === milestoneId ? { ...m, ...milestoneData, lastUpdated: timestamp } : m));
+        } else {
+            // Add
+            setMilestones(prev => [
+                ...prev,
+                {
+                    id: `ms-${Date.now()}`,
+                    ...milestoneData,
+                    status: 'todo',
+                    lastUpdated: timestamp,
+                }
+            ]);
+        }
+        setIsFormOpen(false);
     };
+
+    const handleDeleteMilestone = (milestoneId: string) => {
+        setMilestones(prev => prev.filter(m => m.id !== milestoneId));
+        setIsFormOpen(false);
+    }
+    
+    const handleCancel = () => {
+        setIsFormOpen(false);
+        setSelectedMilestone(null);
+    }
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event;
@@ -59,11 +87,12 @@ export default function MilestonesPage() {
 
             if (overIsColumn) {
                 const newStatus = overId as Milestone['status'];
-                setMilestones(currentMilestones => {
-                    const newMilestones = [...currentMilestones];
+                if (milestones[activeIndex].status !== newStatus) {
+                    const newMilestones = [...milestones];
                     newMilestones[activeIndex].status = newStatus;
-                    return newMilestones;
-                });
+                    newMilestones[activeIndex].lastUpdated = new Date().toISOString();
+                    setMilestones(newMilestones);
+                }
             }
         }
     };
@@ -78,7 +107,7 @@ export default function MilestonesPage() {
                             <h1 className="text-2xl font-bold tracking-tight">Milestones & Targets</h1>
                             <p className="text-muted-foreground">Track your startup's progress with a Kanban-style board.</p>
                         </div>
-                        <Button onClick={() => setIsAddModalOpen(true)}>
+                        <Button onClick={handleAddMilestoneClick}>
                             <Plus className="mr-2 h-4 w-4" />
                             Add Milestone
                         </Button>
@@ -96,6 +125,7 @@ export default function MilestonesPage() {
                                         key={status}
                                         status={status}
                                         milestones={milestones.filter(m => m.status === status)}
+                                        onCardClick={handleEditMilestoneClick}
                                     />
                                 ))}
                             </div>
@@ -116,11 +146,16 @@ export default function MilestonesPage() {
                     )}
                 </div>
                 
-                <AddMilestoneForm
-                    isOpen={isAddModalOpen}
-                    onClose={() => setIsAddModalOpen(false)}
-                    onAdd={handleAddMilestone}
-                />
+                {isFormOpen && (
+                    <MilestoneForm
+                        key={selectedMilestone?.id || 'new'}
+                        milestone={selectedMilestone}
+                        isOpen={isFormOpen}
+                        onSave={handleSaveMilestone}
+                        onDelete={handleDeleteMilestone}
+                        onClose={handleCancel}
+                    />
+                )}
             </main>
         </>
     );

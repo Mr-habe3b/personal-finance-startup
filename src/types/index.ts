@@ -6,6 +6,7 @@
 
 
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -54,6 +55,7 @@ export interface Milestone {
   owner: string;
   priority: 'low' | 'medium' | 'high';
   category: MilestoneCategory;
+  lastUpdated: string;
 }
 
 export interface WikiPage {

@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,7 +13,6 @@ import {
     DialogTitle,
     DialogDescription,
     DialogFooter,
-    DialogClose,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,6 +26,8 @@ import {
 } from '@/components/ui/form';
 import type { Milestone, MilestoneCategory } from '@/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
+import { Trash2 } from 'lucide-react';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Title is required.'),
@@ -36,13 +38,17 @@ const formSchema = z.object({
   category: z.enum(['task', 'daily', 'monthly', 'quarterly', 'yearly']),
 });
 
-interface AddMilestoneFormProps {
+type MilestoneFormData = Omit<Milestone, 'id' | 'status' | 'lastUpdated'>;
+
+interface MilestoneFormProps {
+    milestone: Milestone | null;
     isOpen: boolean;
     onClose: () => void;
-    onAdd: (milestone: Omit<Milestone, 'id' | 'status'>) => void;
+    onSave: (milestone: MilestoneFormData, id?: string) => void;
+    onDelete: (id: string) => void;
 }
 
-export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormProps) {
+export function MilestoneForm({ milestone, isOpen, onClose, onSave, onDelete }: MilestoneFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,19 +61,44 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
     },
   });
 
+  useEffect(() => {
+    if (milestone) {
+        form.reset({
+            ...milestone,
+            dueDate: milestone.dueDate.split('T')[0] // Format for date input
+        });
+    } else {
+        form.reset({
+            title: '',
+            description: '',
+            owner: '',
+            priority: 'medium',
+            dueDate: '',
+            category: 'task',
+        });
+    }
+  }, [milestone, form, isOpen])
+
   const handleFormSubmit = (values: z.infer<typeof formSchema>) => {
-    onAdd({
-        ...values,
-    });
-    form.reset();
+    onSave(values, milestone?.id);
   };
+  
+  const handleDeleteClick = () => {
+    if (milestone) {
+      onDelete(milestone.id);
+    }
+  }
+
+  const isEditMode = !!milestone;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle>Add New Milestone</DialogTitle>
-          <DialogDescription>Set a clear target for your team to work towards.</DialogDescription>
+          <DialogTitle>{isEditMode ? 'Edit Milestone' : 'Add New Milestone'}</DialogTitle>
+          <DialogDescription>
+              {isEditMode ? "Update the details for this milestone." : "Set a clear target for your team to work towards."}
+          </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -174,11 +205,35 @@ export function AddMilestoneForm({ isOpen, onClose, onAdd }: AddMilestoneFormPro
                 />
             </div>
            
-             <DialogFooter>
-                <DialogClose asChild>
+             <DialogFooter className="flex justify-between items-center w-full pt-4">
+                <div>
+                   {isEditMode && (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                           <Button type="button" variant="destructive">
+                              <Trash2 className="mr-2" />
+                              Delete
+                           </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete this milestone.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDeleteClick}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                  )}
+                </div>
+                <div className="flex gap-2">
                     <Button type="button" variant="outline" onClick={() => { onClose(); form.reset(); }}>Cancel</Button>
-                </DialogClose>
-                <Button type="submit">Add Milestone</Button>
+                    <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Milestone'}</Button>
+                </div>
             </DialogFooter>
           </form>
         </Form>

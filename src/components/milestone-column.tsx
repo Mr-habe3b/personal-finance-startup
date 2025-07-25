@@ -11,9 +11,10 @@ import { MilestoneCard } from "./milestone-card";
 interface MilestoneColumnProps {
     status: Milestone['status'];
     milestones: Milestone[];
+    onCardClick: (milestone: Milestone) => void;
 }
 
-export function MilestoneColumn({ status, milestones }: MilestoneColumnProps) {
+export function MilestoneColumn({ status, milestones, onCardClick }: MilestoneColumnProps) {
     const milestonesIds = useMemo(() => milestones.map(m => m.id), [milestones]);
     
     const { setNodeRef } = useDroppable({
@@ -45,7 +46,11 @@ export function MilestoneColumn({ status, milestones }: MilestoneColumnProps) {
                     <div className="space-y-3 min-h-[100px]">
                         <SortableContext items={milestonesIds}>
                             {milestones.map(milestone => (
-                                <MilestoneCard key={milestone.id} milestone={milestone} />
+                                <MilestoneCard 
+                                    key={milestone.id} 
+                                    milestone={milestone} 
+                                    onClick={() => onCardClick(milestone)} 
+                                />
                             ))}
                         </SortableContext>
                         {milestones.length === 0 && (

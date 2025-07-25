@@ -7,14 +7,17 @@ import type { Milestone, MilestoneCategory } from "@/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "@/lib/utils";
-import { Calendar, CheckSquare, Target } from "lucide-react";
+import { Calendar, CheckSquare, Clock, Target } from "lucide-react";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
+import { formatDistanceToNow } from "date-fns";
 
 interface MilestoneCardProps {
     milestone: Milestone;
     isOverlay?: boolean;
+    onClick?: (milestone: Milestone) => void;
 }
 
-export function MilestoneCard({ milestone, isOverlay }: MilestoneCardProps) {
+export function MilestoneCard({ milestone, isOverlay, onClick }: MilestoneCardProps) {
     const {
         attributes,
         listeners,
@@ -80,9 +83,9 @@ export function MilestoneCard({ milestone, isOverlay }: MilestoneCardProps) {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            <Card className={cn("hover:bg-card/90 cursor-grab", isOverlay && "ring-2 ring-primary")}>
-                <CardContent className="p-4 space-y-2">
-                    <div className="flex justify-between items-start">
+            <Card className={cn("hover:bg-card/90 cursor-grab", isOverlay && "ring-2 ring-primary")} onClick={() => onClick?.(milestone)}>
+                <CardContent className="p-4 space-y-3">
+                    <div className="flex justify-between items-start gap-2">
                         <h4 className="font-semibold leading-snug">{milestone.title}</h4>
                         <Badge variant={getPriorityVariant(milestone.priority)} className="capitalize shrink-0">{milestone.priority}</Badge>
                     </div>
@@ -90,13 +93,24 @@ export function MilestoneCard({ milestone, isOverlay }: MilestoneCardProps) {
                         {getCategoryDisplay(milestone.category)}
                     </div>
                     <p className="text-sm text-muted-foreground pt-1">{milestone.description}</p>
-                    <div className="mt-2 flex justify-between items-center">
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <div className="mt-2 flex justify-between items-center text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
                             <Calendar className="h-3 w-3" />
                             {new Date(milestone.dueDate).toLocaleDateString()}
                         </span>
-                        <span className="text-xs font-medium text-muted-foreground">Owner: {milestone.owner}</span>
+                         <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger className="flex items-center gap-1">
+                                    <Clock className="h-3 w-3" />
+                                    <span>{formatDistanceToNow(new Date(milestone.lastUpdated), { addSuffix: true })}</span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Last updated: {new Date(milestone.lastUpdated).toLocaleString()}
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
+                     <div className="text-xs font-medium text-muted-foreground text-right">Owner: {milestone.owner}</div>
                 </CardContent>
             </Card>
         </div>
