@@ -1,3 +1,6 @@
+
+'use client';
+
 import { AppHeader } from '@/components/app-header';
 import { CapTableChart } from '@/components/cap-table-chart';
 import {
@@ -8,14 +11,59 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { TeamMembersTable } from '@/components/team-members-table';
-import { capTable, initialInvestment, teamMembers } from '@/data/mock';
+import { capTable, initialInvestment } from '@/data/mock';
 import { Briefcase, Landmark, Users } from 'lucide-react';
+import { useTeam } from '@/context/team-context';
+import { useState } from 'react';
+import { TeamMemberForm } from '@/components/team-member-form';
+import type { TeamMember } from '@/types';
+
 
 export default function DashboardPage() {
+  const { teamMembers, addMember, updateMember } = useTeam();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+
   const totalEquityAllocated = teamMembers.reduce(
     (acc, member) => acc + member.equity,
     0
   );
+
+  const handleAddMemberClick = () => {
+    setSelectedMember(null);
+    setIsFormOpen(true);
+  };
+
+  const handleEditMemberClick = (member: TeamMember) => {
+      setSelectedMember(member);
+      setIsFormOpen(true);
+  };
+
+  const handleSaveMember = (memberData: Omit<TeamMember, 'id' | 'vesting'>, memberId?: string) => {
+      if (memberId) {
+          updateMember({ ...memberData, id: memberId, vesting: '4y/1y cliff' });
+      } else {
+          addMember({
+              id: `member-${Date.now()}`,
+              ...memberData,
+              vesting: '4y/1y cliff',
+          });
+      }
+      setIsFormOpen(false);
+  };
+
+  const handleDeleteMember = (memberId: string) => {
+    // Note: The useTeam hook does not expose a delete function in this implementation.
+    // To add delete functionality, you would need to expose it from the context.
+    console.log("Delete functionality not implemented in this context provider version.");
+    setIsFormOpen(false);
+  };
+
+  const handleCancel = () => {
+      setIsFormOpen(false);
+      setSelectedMember(null);
+  }
+
 
   return (
       <>
@@ -44,7 +92,7 @@ export default function DashboardPage() {
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{initialInvestment.teamMembersCount}</div>
+                  <div className="text-2xl font-bold">{teamMembers.length}</div>
                   <p className="text-xs text-muted-foreground">
                     {totalEquityAllocated}% of equity allocated
                   </p>
@@ -84,7 +132,11 @@ export default function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <TeamMembersTable teamMembers={teamMembers} />
+                  <TeamMembersTable 
+                    teamMembers={teamMembers} 
+                    onAddMember={handleAddMemberClick}
+                    onEditMember={handleEditMemberClick}
+                  />
                 </CardContent>
               </Card>
               <Card>
@@ -100,6 +152,16 @@ export default function DashboardPage() {
               </Card>
             </div>
           </main>
+           {isFormOpen && (
+                <TeamMemberForm
+                    key={selectedMember?.id || 'new'}
+                    member={selectedMember}
+                    onSave={handleSaveMember}
+                    onDelete={handleDeleteMember}
+                    onCancel={handleCancel}
+                    isOpen={isFormOpen}
+                />
+            )}
       </>
   );
 }

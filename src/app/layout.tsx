@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { ThemeProvider } from '@/components/theme-provider';
 import { AppSidebar } from '@/components/app-sidebar';
+import { TeamProvider } from '@/context/team-context';
 
 export const metadata: Metadata = {
   title: 'EquityVision',
@@ -29,12 +30,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-            <AppSidebar />
-            <div className="flex flex-col">
-              {children}
+          <TeamProvider>
+            <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+              <AppSidebar />
+              <div className="flex flex-col">
+                {children}
+              </div>
             </div>
-          </div>
+          </TeamProvider>
           <Toaster />
         </ThemeProvider>
       </body>

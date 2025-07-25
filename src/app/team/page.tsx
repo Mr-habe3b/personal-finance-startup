@@ -4,14 +4,14 @@
 import { AppHeader } from '@/components/app-header';
 import { TeamMembersTable } from '@/components/team-members-table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { teamMembers as initialTeamMembers } from '@/data/mock';
 import type { TeamMember } from '@/types';
 import { useState } from 'react';
 import { TeamMemberForm } from '@/components/team-member-form';
+import { useTeam } from '@/context/team-context';
 
 
 export default function TeamPage() {
-    const [teamMembers, setTeamMembers] = useState<TeamMember[]>(initialTeamMembers);
+    const { teamMembers, addMember, updateMember, deleteMember } = useTeam();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
 
@@ -27,10 +27,9 @@ export default function TeamPage() {
 
     const handleSaveMember = (memberData: Omit<TeamMember, 'id' | 'vesting'>, memberId?: string) => {
         if (memberId) {
-            // Update existing member
-             setTeamMembers(currentMembers => 
-                currentMembers.map(m => m.id === memberId ? { ...m, ...memberData } : m)
-            );
+            // Here we assume a default vesting, this could be part of the form in a real app
+            const existingMember = teamMembers.find(m => m.id === memberId);
+            updateMember({ ...existingMember, ...memberData, id: memberId });
         } else {
              // Add new member
             const newMember: TeamMember = {
@@ -38,13 +37,13 @@ export default function TeamPage() {
                 ...memberData,
                 vesting: '4y/1y cliff', // Default vesting
             };
-            setTeamMembers(currentMembers => [...currentMembers, newMember]);
+            addMember(newMember);
         }
         setIsFormOpen(false);
     };
 
     const handleDeleteMember = (memberId: string) => {
-        setTeamMembers(currentMembers => currentMembers.filter(m => m.id !== memberId));
+        deleteMember(memberId);
         setIsFormOpen(false);
     };
 
