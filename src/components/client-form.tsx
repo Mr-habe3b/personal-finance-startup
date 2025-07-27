@@ -25,7 +25,7 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
-import { CalendarClock, Check, ChevronsUpDown, Plus, Trash2 } from 'lucide-react';
+import { CalendarClock, Check, ChevronsUpDown, Plus, Save, Trash2, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -335,9 +335,9 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                     {isEditMode && (
                         <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button type="button" variant="destructive">
-                                <Trash2 className="mr-2" />
-                                Delete Client
+                            <Button type="button" variant="destructive" size={isSheet ? "icon" : "default"}>
+                                <Trash2 />
+                                <span className="sr-only sm:not-sr-only sm:ml-2">Delete Client</span>
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -355,9 +355,15 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                         </AlertDialog>
                     )}
                 </div>
-                <div className="flex gap-2">
-                    <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-                    <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Client'}</Button>
+                <div className="flex gap-2 w-full sm:w-auto">
+                    <Button type="button" variant="outline" onClick={onCancel} className="flex-1 sm:flex-initial" size={isSheet ? "icon" : "default"}>
+                      <X />
+                      <span className="sr-only sm:not-sr-only sm:ml-2">Cancel</span>
+                    </Button>
+                    <Button type="submit" className="flex-1 sm:flex-initial" size={isSheet ? "icon" : "default"}>
+                      <Save />
+                      <span className="sr-only sm:not-sr-only sm:ml-2">{isEditMode ? 'Save Changes' : 'Add Client'}</span>
+                    </Button>
                 </div>
             </DialogFooter>
           </form>
