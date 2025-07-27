@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -38,7 +39,7 @@ export function CapTableChart({ capTable }: CapTableChartProps) {
   
 
   return (
-    <div className="w-full h-[250px]">
+    <div className="w-full h-[200px]">
       <ChartContainer
         config={chartConfig}
         className="mx-auto aspect-square h-full"
@@ -52,7 +53,7 @@ export function CapTableChart({ capTable }: CapTableChartProps) {
             data={chartData}
             dataKey="value"
             nameKey="name"
-            innerRadius={50}
+            innerRadius={40}
             strokeWidth={5}
           >
             {chartData.map((entry, index) => (
