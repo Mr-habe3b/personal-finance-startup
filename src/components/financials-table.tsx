@@ -54,27 +54,27 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <h4 className="font-medium mb-2">Revenue Breakdown</h4>
                                             <div className="space-y-1 text-sm text-muted-foreground">
-                                                {record.revenueItems.map(item => (
+                                                {record.revenueItems.length > 0 ? record.revenueItems.map(item => (
                                                     <div key={item.id} className="flex justify-between">
                                                         <span>{item.description}</span>
                                                         <span>₹{item.amount.toLocaleString()}</span>
                                                     </div>
-                                                ))}
+                                                )) : <p className='text-xs'>No revenue items.</p>}
                                             </div>
                                         </div>
                                          <div>
                                             <h4 className="font-medium mb-2">Expense Breakdown</h4>
                                             <div className="space-y-1 text-sm text-muted-foreground">
-                                                {record.expenses.map(exp => (
+                                                {record.expenses.length > 0 ? record.expenses.map(exp => (
                                                     <div key={exp.id} className="flex justify-between">
                                                         <span>{exp.description}</span>
                                                         <span>₹{exp.amount.toLocaleString()}</span>
                                                     </div>
-                                                ))}
+                                                )) : <p className='text-xs'>No expense items.</p>}
                                             </div>
                                         </div>
                                     </div>
