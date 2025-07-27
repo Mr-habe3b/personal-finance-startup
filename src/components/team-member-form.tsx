@@ -178,7 +178,12 @@ export function TeamMemberForm({ member, onSave, onDelete, onCancel, isOpen, isM
                         />
                 </div>
             </ScrollArea>
-            <DialogFooter className={cn("flex-shrink-0 pt-4", isMobile ? "flex-col-reverse sm:flex-row sm:justify-between items-center w-full gap-2 border-t" : "flex justify-between items-center w-full")}>
+            <DialogFooter className={cn(
+                "pt-4",
+                isMobile 
+                    ? "flex-col-reverse sm:flex-row sm:justify-between items-center w-full gap-2 border-t" 
+                    : "flex justify-between items-center w-full"
+            )}>
                 <div>
                   {isEditMode && (
                       <AlertDialog>

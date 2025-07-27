@@ -88,7 +88,7 @@ export default function TeamPage() {
              {isFormOpen && (
                 isMobile ? (
                     <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                        <SheetContent side="bottom" className="h-[50vh] p-0">
+                        <SheetContent side="bottom" className="h-[80vh] p-0">
                             <SheetHeader className="p-4">
                                 <SheetTitle>{selectedMember ? 'Edit Team Member' : 'Add New Member'}</SheetTitle>
                             </SheetHeader>
