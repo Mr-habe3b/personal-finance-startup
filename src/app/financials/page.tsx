@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { financialData as initialFinancialData } from "@/data/mock";
 import { DollarSign, TrendingDown, TrendingUp, Plus, Sparkles, Loader2, Download, RefreshCw, X } from "lucide-react";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { FinancialRecord } from "@/types";
 import { FinancialsTable } from "@/components/financials-table";
@@ -61,6 +61,10 @@ export default function FinancialsPage() {
             }
         }
     }, [toast]);
+    
+    useEffect(() => {
+        runAnalysis(processedFinancialData);
+    }, [processedFinancialData, runAnalysis]);
 
     const handleRewriteAnalysis = () => {
         runAnalysis(processedFinancialData);
@@ -123,8 +127,6 @@ export default function FinancialsPage() {
              });
         }
         setFinancialData(updatedData);
-        const newProcessedData = updatedData.map(calculateTotals);
-        runAnalysis(newProcessedData);
         setOpenAccordionItem(`${recordData.month}-${recordData.year}`);
         setIsFormOpen(false);
     }
@@ -132,8 +134,6 @@ export default function FinancialsPage() {
     const handleDeleteRecord = (month: string, year: number) => {
         const updatedData = financialData.filter(r => !(r.month === month && r.year === year));
         setFinancialData(updatedData);
-        const newProcessedData = updatedData.map(calculateTotals);
-        runAnalysis(newProcessedData);
         setIsFormOpen(false);
     }
 
