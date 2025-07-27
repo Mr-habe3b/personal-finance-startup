@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Menu, Settings, User, LogOut } from 'lucide-react';
+import { Menu, Settings, User, LogOut, LifeBuoy } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -65,7 +65,10 @@ export function AppHeader({ toggleMobileSidebar }: AppHeaderProps) {
                 Settings
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Support</DropdownMenuItem>
+            <DropdownMenuItem>
+                <LifeBuoy className="mr-2 h-4 w-4" />
+                Support
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
                 <LogOut className="mr-2 h-4 w-4" />
