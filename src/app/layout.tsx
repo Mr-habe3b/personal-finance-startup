@@ -10,6 +10,8 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { TeamProvider } from '@/context/team-context';
 import { useEffect, useState } from 'react';
 import { AppHeader } from '@/components/app-header';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { AppBottomNav } from '@/components/app-bottom-nav';
 
 // This is a client component, so metadata should be defined in a parent server component if needed.
 // export const metadata: Metadata = {
@@ -24,6 +26,7 @@ export default function RootLayout({
 }>) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setIsMounted(true);
@@ -51,7 +54,7 @@ export default function RootLayout({
         >
           <TeamProvider>
              <div className="min-h-screen w-full">
-               {isMounted && (
+               {isMounted && !isMobile && (
                 <AppSidebar 
                   isCollapsed={isSidebarCollapsed}
                   toggleSidebar={toggleSidebar}
@@ -59,15 +62,17 @@ export default function RootLayout({
               )}
               <div className={cn(
                   "flex flex-col h-screen",
-                   isMounted && isSidebarCollapsed 
+                  isMounted && !isMobile && (isSidebarCollapsed 
                     ? "md:pl-[72px]" 
-                    : "md:pl-[220px] lg:pl-[280px]"
+                    : "md:pl-[220px] lg:pl-[280px]"),
+                  isMobile && "pb-16" // Padding for bottom nav
               )}>
                 <AppHeader isSidebarCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
                 <main className="flex-1 overflow-y-auto">
                     {children}
                 </main>
               </div>
+               {isMounted && isMobile && <AppBottomNav />}
             </div>
           </TeamProvider>
           <Toaster />
