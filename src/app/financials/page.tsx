@@ -9,8 +9,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { financialData as initialFinancialData } from "@/data/mock";
-import { DollarSign, TrendingDown, TrendingUp, Plus, Sparkles, Loader2 } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { DollarSign, TrendingDown, TrendingUp, Plus, Sparkles, Loader2, Download, RefreshCw, X } from "lucide-react";
+import { useMemo, useState, useCallback } from "react";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { FinancialRecord } from "@/types";
 import { FinancialsTable } from "@/components/financials-table";
@@ -41,30 +41,34 @@ export default function FinancialsPage() {
         return financialData.map(calculateTotals);
     }, [financialData]);
     
-     useEffect(() => {
-        const runAnalysis = async () => {
-            if (processedFinancialData.length > 2) { // Only run analysis if there's enough data
-                setIsAnalyzing(true);
-                try {
-                    const result = await analyzeFinancials({ financialRecords: processedFinancialData });
-                    setAiAnalysis(result);
-                } catch (error) {
-                    console.error("Error analyzing financials:", error);
-                    toast({
-                        variant: 'destructive',
-                        title: 'AI Analysis Failed',
-                        description: 'Could not generate financial insights.'
-                    });
-                } finally {
-                    setIsAnalyzing(false);
-                }
+    const runAnalysis = useCallback(async (data: (FinancialRecord & { totalRevenue: number; totalExpenses: number; netIncome: number; })[]) => {
+        if (data.length > 2) { 
+            setIsAnalyzing(true);
+            try {
+                const result = await analyzeFinancials({ financialRecords: data });
+                setAiAnalysis(result);
+            } catch (error) {
+                console.error("Error analyzing financials:", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'AI Analysis Failed',
+                    description: 'Could not generate financial insights.'
+                });
+            } finally {
+                setIsAnalyzing(false);
             }
-        };
-        runAnalysis();
-    }, [processedFinancialData, toast]);
+        }
+    }, [toast]);
 
+    const handleRewriteAnalysis = () => {
+        runAnalysis(processedFinancialData);
+    }
+    
+    const handleClearAnalysis = () => {
+        setAiAnalysis(null);
+    }
 
-    const analytics = useMemo(() => {
+     const analytics = useMemo(() => {
         const totalRevenue = processedFinancialData.reduce((acc, item) => acc + item.totalRevenue, 0);
         const totalExpenses = processedFinancialData.reduce((acc, item) => acc + item.totalExpenses, 0);
         const netProfit = totalRevenue - totalExpenses;
@@ -93,6 +97,7 @@ export default function FinancialsPage() {
     const handleSaveRecord = (recordData: Omit<FinancialRecord, 'invoicePath' | 'lastUpdated'>, originalRecord?: { month: string, year: number }) => {
         const invoicePath = `/invoices/${recordData.month.toLowerCase()}-${recordData.year}-invoice.pdf`;
         const lastUpdated = new Date().toISOString();
+        let updatedData;
         
         const recordExists = (month: string, year: number) => financialData.some(r => r.month === month && r.year === year);
 
@@ -102,25 +107,31 @@ export default function FinancialsPage() {
                  alert("A record for this month and year already exists.");
                  return;
             }
-            setFinancialData(prev => prev.map(r => (r.month === originalRecord.month && r.year === originalRecord.year) ? { ...recordData, invoicePath, lastUpdated } : r));
+            updatedData = financialData.map(r => (r.month === originalRecord.month && r.year === originalRecord.year) ? { ...recordData, invoicePath, lastUpdated } : r);
         } else { // This is a new record
             if (recordExists(recordData.month, recordData.year)) {
                 alert("A record for this month and year already exists.");
                 return;
             }
             const newRecord = { ...recordData, invoicePath, lastUpdated };
-             setFinancialData(prev => [...prev, newRecord].sort((a, b) => {
+             updatedData = [...financialData, newRecord].sort((a, b) => {
                 const dateA = new Date(a.year, months.indexOf(a.month));
                 const dateB = new Date(b.year, months.indexOf(b.month));
                 return dateA.getTime() - dateB.getTime();
-             }));
+             });
         }
+        setFinancialData(updatedData);
+        const newProcessedData = updatedData.map(calculateTotals);
+        runAnalysis(newProcessedData);
         setOpenAccordionItem(`${recordData.month}-${recordData.year}`);
         setIsFormOpen(false);
     }
     
     const handleDeleteRecord = (month: string, year: number) => {
-        setFinancialData(prev => prev.filter(r => !(r.month === month && r.year === year)));
+        const updatedData = financialData.filter(r => !(r.month === month && r.year === year));
+        setFinancialData(updatedData);
+        const newProcessedData = updatedData.map(calculateTotals);
+        runAnalysis(newProcessedData);
         setIsFormOpen(false);
     }
 
@@ -128,6 +139,51 @@ export default function FinancialsPage() {
         setIsFormOpen(false);
         setSelectedRecord(null);
     }
+
+     const escapeCsvCell = (cell: string | number) => `"${(cell || '').toString().replace(/"/g, '""')}"`;
+
+    const handleDownloadCSV = () => {
+        if (processedFinancialData.length === 0) return;
+
+        const headers = [
+            'Year', 'Month', 'Total Revenue', 'Total Expenses', 'Net Income',
+            'Item Type', 'Item Description', 'Item Amount'
+        ];
+
+        const rows = processedFinancialData.flatMap(record => {
+            const baseRow = [
+                escapeCsvCell(record.year),
+                escapeCsvCell(record.month),
+                escapeCsvCell(record.totalRevenue),
+                escapeCsvCell(record.totalExpenses),
+                escapeCsvCell(record.netIncome),
+            ];
+
+            const revenueRows = record.revenueItems.map(item => 
+                [...baseRow, 'Revenue', escapeCsvCell(item.description), escapeCsvCell(item.amount)].join(',')
+            );
+
+            const expenseRows = record.expenses.map(item => 
+                [...baseRow, 'Expense', escapeCsvCell(item.description), escapeCsvCell(item.amount)].join(',')
+            );
+            
+            if (revenueRows.length === 0 && expenseRows.length === 0) {
+                 return [[...baseRow, '', '', ''].join(',')];
+            }
+
+            return [...revenueRows, ...expenseRows];
+        });
+
+        const csvContent = [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `financials-export-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     
     return (
         <>
@@ -137,10 +193,16 @@ export default function FinancialsPage() {
                         <h1 className="text-3xl font-bold tracking-tight mb-1">Financials</h1>
                         <p className="text-muted-foreground">Track your company's financial performance and get AI-powered insights.</p>
                     </div>
-                     <Button onClick={handleAddRecordClick}>
-                        <Plus className="mr-2" />
-                        Add Record
-                    </Button>
+                     <div className='flex gap-2'>
+                        <Button onClick={handleDownloadCSV} variant="outline" disabled={processedFinancialData.length === 0}>
+                            <Download className="mr-2" />
+                            Download CSV
+                        </Button>
+                        <Button onClick={handleAddRecordClick}>
+                            <Plus className="mr-2" />
+                            Add Record
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -240,11 +302,23 @@ export default function FinancialsPage() {
                      <div className="lg:col-span-2">
                         <Card className="sticky top-20">
                              <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Sparkles className="text-primary" />
-                                    AI-Powered Insights
-                                </CardTitle>
-                                <CardDescription>Your financial co-pilot analyzing the data.</CardDescription>
+                                <div className='flex justify-between items-center'>
+                                    <div className='flex-1'>
+                                        <CardTitle className="flex items-center gap-2">
+                                            <Sparkles className="text-primary" />
+                                            AI-Powered Insights
+                                        </CardTitle>
+                                        <CardDescription>Your financial co-pilot analyzing the data.</CardDescription>
+                                    </div>
+                                    <div className='flex gap-1'>
+                                         <Button variant="ghost" size="icon" onClick={handleRewriteAnalysis} disabled={isAnalyzing}>
+                                            <RefreshCw className="h-4 w-4" />
+                                        </Button>
+                                        <Button variant="ghost" size="icon" onClick={handleClearAnalysis} disabled={isAnalyzing}>
+                                            <X className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </div>
                             </CardHeader>
                             <CardContent>
                                {isAnalyzing ? (
@@ -274,7 +348,7 @@ export default function FinancialsPage() {
                                    </div>
                                ) : (
                                     <div className="text-center py-12">
-                                        <p className="text-muted-foreground">Add more financial records to unlock AI insights.</p>
+                                        <p className="text-muted-foreground">Add or analyze financial records to unlock AI insights.</p>
                                     </div>
                                )}
                             </CardContent>
@@ -295,4 +369,5 @@ export default function FinancialsPage() {
             )}
         </>
     );
-}
+
+    
