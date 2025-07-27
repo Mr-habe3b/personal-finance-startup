@@ -27,6 +27,7 @@ export default function RootLayout({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const isMobile = useIsMobile();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -34,6 +35,10 @@ export default function RootLayout({
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(prev => !prev);
+  }
+  
+  const toggleMobileSidebar = () => {
+      setIsMobileSidebarOpen(prev => !prev);
   }
 
   return (
@@ -53,22 +58,32 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TeamProvider>
-             <div className="min-h-screen w-full">
+             <div className="flex min-h-screen w-full flex-col bg-muted/40">
                {isMounted && !isMobile && (
                 <AppSidebar 
                   isCollapsed={isSidebarCollapsed}
                   toggleSidebar={toggleSidebar}
+                  isMobile={false}
                 />
               )}
+               {isMounted && isMobile && (
+                 <AppSidebar
+                    isCollapsed={isSidebarCollapsed}
+                    toggleSidebar={toggleMobileSidebar}
+                    isMobile={true}
+                    isMobileSidebarOpen={isMobileSidebarOpen}
+                    setIsMobileSidebarOpen={setIsMobileSidebarOpen}
+                />
+               )}
               <div className={cn(
-                  "flex flex-col h-screen",
+                  "flex flex-col",
                   isMounted && !isMobile && (isSidebarCollapsed 
-                    ? "md:pl-[72px]" 
-                    : "md:pl-[220px] lg:pl-[280px]"),
+                    ? "sm:pl-14" 
+                    : "sm:pl-[220px] lg:pl-[280px]"),
                   isMobile && "pb-16" // Padding for bottom nav
               )}>
-                <AppHeader isSidebarCollapsed={isSidebarCollapsed} toggleSidebar={toggleSidebar} />
-                <main className="flex-1 overflow-y-auto">
+                <AppHeader toggleMobileSidebar={toggleMobileSidebar} />
+                <main className="flex-1">
                     {children}
                 </main>
               </div>
