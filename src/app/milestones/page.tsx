@@ -235,7 +235,7 @@ export default function MilestonesPage() {
                 {isFormOpen && (
                     isMobile ? (
                         <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                           <SheetContent side="bottom" className="h-[50vh]">
+                           <SheetContent side="bottom" className="h-[80vh]">
                                 <SheetHeader>
                                    <SheetTitle>{selectedMilestone ? 'Edit Milestone' : 'Add New Milestone'}</SheetTitle>
                                </SheetHeader>
