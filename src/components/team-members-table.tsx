@@ -16,6 +16,8 @@ import { Edit, PlusCircle, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { MoreHorizontal } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface TeamMembersTableProps {
   teamMembers: TeamMember[];
@@ -24,13 +26,32 @@ interface TeamMembersTableProps {
 }
 
 export function TeamMembersTable({ teamMembers, onAddMember, onEditMember }: TeamMembersTableProps) {
+  const isMobile = useIsMobile();
+
+  const AddMemberButton = () => (
+    <Button onClick={onAddMember} size={isMobile ? "icon" : "default"}>
+        <PlusCircle />
+        <span className="sr-only md:not-sr-only md:ml-2">Add Member</span>
+    </Button>
+  );
+
   return (
     <div>
         <div className="flex justify-end mb-4">
-            <Button onClick={onAddMember}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add Member
-            </Button>
+           {isMobile ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AddMemberButton />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Add Member</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+           ) : (
+              <AddMemberButton />
+           )}
         </div>
       <Table>
         <TableHeader>
