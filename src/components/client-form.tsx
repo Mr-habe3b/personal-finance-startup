@@ -331,11 +331,11 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                  </TabsContent>
             </div>
              <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t">
-                <div>
+                <div className={cn("w-full sm:w-auto", isEditMode ? "" : "hidden")}>
                     {isEditMode && (
                         <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button type="button" variant="destructive" size={isSheet ? "icon" : "default"}>
+                            <Button type="button" variant="destructive" size={isSheet ? "icon" : "default"} className="w-full sm:w-auto">
                                 <Trash2 />
                                 <span className="sr-only sm:not-sr-only sm:ml-2">Delete Client</span>
                             </Button>
