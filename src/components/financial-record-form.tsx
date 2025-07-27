@@ -268,14 +268,14 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                 </div>
             </div>
            
-             <DialogFooter className="grid grid-cols-2 gap-4 items-center pt-4 border-t mt-4">
-                <div className="text-left">
+             <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t mt-4 gap-4">
+                <div>
                   {isEditMode && (
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
-                           <Button type="button" variant="destructive">
-                              <Trash2 className="mr-2" />
-                              Delete Record
+                           <Button type="button" variant="destructive" className="w-full sm:w-auto">
+                              <Trash2 className="sm:mr-2" />
+                              <span className="sr-only sm:not-sr-only">Delete Record</span>
                            </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -293,8 +293,8 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                       </AlertDialog>
                   )}
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                     <div className='flex items-baseline gap-2'>
+                <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                     <div className='flex items-baseline gap-2 w-full sm:w-auto justify-end'>
                         <span className='text-muted-foreground text-sm'>Net Income:</span>
                          <span className={cn(
                             "text-lg font-bold",
@@ -303,9 +303,9 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                             ₹{netIncome.toLocaleString()}
                         </span>
                     </div>
-                    <div className='flex gap-2'>
-                        <Button type="button" variant="outline" onClick={onCancel}>Cancel</Button>
-                        <Button type="submit">{isEditMode ? 'Save Changes' : 'Add Record'}</Button>
+                    <div className='flex gap-2 w-full sm:w-auto'>
+                        <Button type="button" variant="outline" onClick={onCancel} className="w-full sm:w-auto">Cancel</Button>
+                        <Button type="submit" className="w-full sm:w-auto">{isEditMode ? 'Save Changes' : 'Add Record'}</Button>
                     </div>
                 </div>
             </DialogFooter>
