@@ -13,7 +13,7 @@ export default function LandingPage() {
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:items-center">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500">
                     Navigate Your Startup&apos;s Equity with Confidence
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
@@ -30,16 +30,14 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
-              <div className="order-first lg:order-last">
-                <Image
-                  src="/images/home/hero.png"
-                  width="600"
-                  height="600"
-                  alt="Hero"
-                  data-ai-hint="abstract metallic"
-                  className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full"
-                />
-              </div>
+              <Image
+                src="/images/home/hero.png"
+                width="600"
+                height="600"
+                alt="Hero"
+                data-ai-hint="abstract metallic"
+                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
+              />
             </div>
           </div>
         </section>
