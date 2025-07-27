@@ -7,6 +7,8 @@ import {
     PieChart,
     Landmark,
     TrendingUp,
+    FileText,
+    Target,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -18,6 +20,8 @@ const menuItems = [
     { href: '/captable', label: 'Cap Table', icon: PieChart },
     { href: '/fundraising', label: 'Fundraising', icon: Landmark },
     { href: '/financials', label: 'Financials', icon: TrendingUp },
+    { href: '/documents', label: 'Documents', icon: FileText },
+    { href: '/milestones', label: 'Milestones', icon: Target },
 ];
 
 export function AppBottomNav() {
@@ -25,13 +29,13 @@ export function AppBottomNav() {
 
     return (
         <div className="fixed bottom-0 left-0 z-50 w-full h-16 bg-background border-t">
-            <div className="grid h-full max-w-lg grid-cols-5 mx-auto font-medium">
+            <div className={`grid h-full max-w-lg grid-cols-${menuItems.length} mx-auto font-medium`}>
                 {menuItems.map((item) => (
                     <Link
                         key={item.href}
                         href={item.href}
                         className={cn(
-                            "inline-flex flex-col items-center justify-center px-5 hover:bg-muted-foreground/10 group",
+                            "inline-flex flex-col items-center justify-center px-2 hover:bg-muted-foreground/10 group",
                             pathname === item.href ? "text-primary" : "text-muted-foreground"
                         )}
                         title={item.label}
