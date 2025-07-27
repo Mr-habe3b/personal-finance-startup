@@ -130,7 +130,7 @@ export default function WikiPage() {
                                     onClick={() => setSelectedPageId(page.id)}
                                 >
                                     <FileText className="mr-2 h-4 w-4" />
-                                    {page.title}
+                                    <span className="truncate">{page.title}</span>
                                 </Button>
                            ))}
                            {pages.length === 0 && (
@@ -141,7 +141,7 @@ export default function WikiPage() {
 
                     <div className="p-4 md:p-6">
                         {selectedPage ? (
-                            <div className="flex flex-col h-full">
+                             <div className="mx-auto w-full max-w-4xl h-full flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
                                      <Input 
                                         className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 p-0" 
@@ -149,7 +149,7 @@ export default function WikiPage() {
                                         onChange={(e) => setActiveTitle(e.target.value)}
                                         onBlur={handleUpdatePage}
                                     />
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 shrink-0 ml-4">
                                         <Button size="sm" variant="outline" onClick={handleGenerateContent} disabled={isGenerating}>
                                             {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                                             Generate
@@ -164,7 +164,7 @@ export default function WikiPage() {
                                     </div>
                                 </div>
                                 <Textarea 
-                                    className="flex-1 text-base resize-none border-none shadow-none focus-visible:ring-0"
+                                    className="flex-1 text-base resize-none border-none shadow-none focus-visible:ring-0 p-0"
                                     placeholder="Start writing your document..."
                                     value={activeContent}
                                     onChange={(e) => setActiveContent(e.target.value)}
