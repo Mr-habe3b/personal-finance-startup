@@ -141,7 +141,7 @@ export default function WikiPage() {
 
                     <div className="p-4 md:p-6">
                         {selectedPage ? (
-                             <div className="mx-auto w-full max-w-4xl h-full flex flex-col">
+                             <div className="w-full h-full flex flex-col">
                                 <div className="flex items-center justify-between mb-4">
                                      <Input 
                                         className="text-2xl font-bold border-none shadow-none focus-visible:ring-0 p-0" 
