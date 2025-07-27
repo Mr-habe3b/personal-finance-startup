@@ -10,6 +10,7 @@ import { documents as initialDocuments } from "@/data/mock";
 import type { Document, UIDocument } from "@/types";
 import { useRef, useState, useEffect } from "react";
 import { DocumentQADialog } from "@/components/document-qa-dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -29,6 +30,7 @@ export default function DocumentsPage() {
     const [documents, setDocuments] = useState<UIDocument[]>([]);
     const [isQADialogOpen, setIsQADialogOpen] = useState(false);
     const [selectedDocument, setSelectedDocument] = useState<UIDocument | null>(null);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         const loadInitialDocuments = async () => {
@@ -118,9 +120,9 @@ export default function DocumentsPage() {
                                 Manage, secure, and ask questions about your company's legal agreements.
                             </CardDescription>
                         </div>
-                        <Button onClick={handleUploadClick}>
-                            <Upload className="mr-2 h-4 w-4" />
-                            Upload Document
+                        <Button onClick={handleUploadClick} size={isMobile ? 'icon' : 'default'}>
+                            <Upload />
+                            <span className="sr-only md:not-sr-only md:ml-2">Upload Document</span>
                         </Button>
                         <input 
                             type="file" 

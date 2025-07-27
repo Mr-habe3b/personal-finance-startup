@@ -12,6 +12,7 @@ import { DealForm } from "@/components/deal-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, LineChart, List, Plus, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function FundraisingPage() {
     const [deals, setDeals] = useState<FundraisingDeal[]>(initialDeals);
@@ -19,6 +20,7 @@ export default function FundraisingPage() {
     const [selectedDeal, setSelectedDeal] = useState<FundraisingDeal | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         setIsMounted(true);
@@ -161,9 +163,9 @@ export default function FundraisingPage() {
                             <h1 className="text-2xl font-bold tracking-tight">Fundraising</h1>
                             <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
                         </div>
-                        <Button onClick={handleAddDealClick}>
-                            <Plus className="mr-2" />
-                            Add Deal
+                        <Button onClick={handleAddDealClick} size={isMobile ? "icon" : "default"}>
+                            <Plus />
+                            <span className="sr-only md:not-sr-only md:ml-2">Add Deal</span>
                         </Button>
                     </div>
 

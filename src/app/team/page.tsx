@@ -7,12 +7,15 @@ import type { TeamMember } from '@/types';
 import { useState } from 'react';
 import { TeamMemberForm } from '@/components/team-member-form';
 import { useTeam } from '@/context/team-context';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 
 
 export default function TeamPage() {
     const { teamMembers, addMember, updateMember, deleteMember } = useTeam();
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
+    const isMobile = useIsMobile();
 
     const handleAddMemberClick = () => {
         setSelectedMember(null);
@@ -50,6 +53,17 @@ export default function TeamPage() {
         setIsFormOpen(false);
         setSelectedMember(null);
     }
+    
+    const renderForm = () => (
+         <TeamMemberForm
+            key={selectedMember?.id || 'new'}
+            member={selectedMember}
+            onSave={handleSaveMember}
+            onDelete={handleDeleteMember}
+            onCancel={handleCancel}
+            isOpen={isFormOpen}
+        />
+    )
 
     return (
         <>
@@ -71,14 +85,13 @@ export default function TeamPage() {
                 </Card>
             </main>
              {isFormOpen && (
-                <TeamMemberForm
-                    key={selectedMember?.id || 'new'}
-                    member={selectedMember}
-                    onSave={handleSaveMember}
-                    onDelete={handleDeleteMember}
-                    onCancel={handleCancel}
-                    isOpen={isFormOpen}
-                />
+                isMobile ? (
+                    <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
+                        <SheetContent side="bottom" className="h-[50vh]">
+                            {renderForm()}
+                        </SheetContent>
+                    </Sheet>
+                ) : renderForm()
             )}
         </>
     );

@@ -169,13 +169,13 @@ export default function MilestonesPage() {
                             <p className="text-muted-foreground">Track your startup's progress with a Kanban-style board.</p>
                         </div>
                         <div className="flex gap-2">
-                             <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Download CSV
+                             <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0} size={isMobile ? 'icon' : 'default'}>
+                                <Download />
+                                <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                             </Button>
-                            <Button onClick={handleAddMilestoneClick}>
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Milestone
+                            <Button onClick={handleAddMilestoneClick} size={isMobile ? 'icon' : 'default'}>
+                                <Plus />
+                                <span className="sr-only md:not-sr-only md:ml-2">Add Milestone</span>
                             </Button>
                         </div>
                     </div>
@@ -216,7 +216,7 @@ export default function MilestonesPage() {
                 {isFormOpen && (
                     isMobile ? (
                         <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                           <SheetContent side="bottom" className="h-[80vh]">
+                           <SheetContent side="bottom" className="h-[50vh]">
                                {renderForm()}
                            </SheetContent>
                         </Sheet>

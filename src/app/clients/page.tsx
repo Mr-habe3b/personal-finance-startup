@@ -10,12 +10,15 @@ import { clients as initialClients } from "@/data/mock";
 import { ClientTable } from "@/components/client-table";
 import { ClientForm } from "@/components/client-form";
 import { useTeam } from "@/context/team-context";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>(initialClients);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
     const { teamMembers } = useTeam();
+    const isMobile = useIsMobile();
 
     const handleAddClientClick = () => {
         setSelectedClient(null);
@@ -98,6 +101,20 @@ export default function ClientsPage() {
         link.click();
         document.body.removeChild(link);
     };
+    
+    const renderForm = () => (
+        <ClientForm
+            key={selectedClient?.id || 'new'}
+            client={selectedClient}
+            teamMembers={teamMembers}
+            onSave={handleSaveClient}
+            onDelete={handleDeleteClient}
+            onCancel={handleCancel}
+            isOpen={isFormOpen}
+            isSheet={isMobile}
+        />
+    );
+
 
     return (
         <>
@@ -111,13 +128,13 @@ export default function ClientsPage() {
                             </CardDescription>
                         </div>
                         <div className="flex gap-2">
-                             <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Download CSV
+                            <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0} size={isMobile ? "icon" : "default"}>
+                                <Download />
+                                <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                             </Button>
-                            <Button onClick={handleAddClientClick}>
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Client
+                            <Button onClick={handleAddClientClick} size={isMobile ? "icon" : "default"}>
+                                <Plus />
+                                <span className="sr-only md:not-sr-only md:ml-2">Add Client</span>
                             </Button>
                         </div>
                     </CardHeader>
@@ -130,15 +147,13 @@ export default function ClientsPage() {
                 </Card>
             </main>
              {isFormOpen && (
-                <ClientForm
-                    key={selectedClient?.id || 'new'}
-                    client={selectedClient}
-                    teamMembers={teamMembers}
-                    onSave={handleSaveClient}
-                    onDelete={handleDeleteClient}
-                    onCancel={handleCancel}
-                    isOpen={isFormOpen}
-                />
+                isMobile ? (
+                    <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
+                        <SheetContent side="bottom" className="h-[80vh] p-0">
+                           {renderForm()}
+                       </SheetContent>
+                    </Sheet>
+                ) : renderForm()
             )}
         </>
     );

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { FinancialRecordForm } from "@/components/financial-record-form";
 import { analyzeFinancials, FinancialAnalysisOutput } from '@/ai/flows/financial-analysis';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const calculateTotals = (record: FinancialRecord) => {
     const totalRevenue = record.revenueItems.reduce((sum, item) => sum + item.amount, 0);
@@ -36,6 +37,7 @@ export default function FinancialsPage() {
     const [aiAnalysis, setAiAnalysis] = useState<FinancialAnalysisOutput | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const { toast } = useToast();
+    const isMobile = useIsMobile();
 
     const processedFinancialData = useMemo(() => {
         return financialData.map(calculateTotals);
@@ -194,13 +196,13 @@ export default function FinancialsPage() {
                         <p className="text-muted-foreground">Track your company's financial performance and get AI-powered insights.</p>
                     </div>
                      <div className='flex gap-2'>
-                        <Button onClick={handleDownloadCSV} variant="outline" disabled={processedFinancialData.length === 0}>
-                            <Download className="mr-2" />
-                            Download CSV
+                        <Button onClick={handleDownloadCSV} variant="outline" disabled={processedFinancialData.length === 0} size={isMobile ? 'icon' : 'default'}>
+                            <Download />
+                            <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                         </Button>
-                        <Button onClick={handleAddRecordClick}>
-                            <Plus className="mr-2" />
-                            Add Record
+                        <Button onClick={handleAddRecordClick} size={isMobile ? 'icon' : 'default'}>
+                            <Plus />
+                            <span className="sr-only md:not-sr-only md:ml-2">Add Record</span>
                         </Button>
                     </div>
                 </div>
@@ -371,3 +373,4 @@ export default function FinancialsPage() {
     );
 
     
+
