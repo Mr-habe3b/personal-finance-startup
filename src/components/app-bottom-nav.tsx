@@ -34,9 +34,10 @@ export function AppBottomNav() {
                             "inline-flex flex-col items-center justify-center px-5 hover:bg-muted-foreground/10 group",
                             pathname === item.href ? "text-primary" : "text-muted-foreground"
                         )}
+                        title={item.label}
                     >
-                        <item.icon className="w-4 h-4 mb-1" />
-                        <span className="text-xs">{item.label}</span>
+                        <item.icon className="w-5 h-5" />
+                        <span className="sr-only">{item.label}</span>
                     </Link>
                 ))}
             </div>
