@@ -143,18 +143,15 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
 
   const isEditMode = !!client;
 
-  const FormBody = ({isSheet}: {isSheet: boolean}) => (
-    <Tabs defaultValue="details" className={cn("flex flex-col h-full", isSheet && "p-4")}>
-        <TabsList className={cn("grid w-full", isSheet ? "grid-cols-2" : "grid-cols-[1fr_2fr]")}>
-            <TabsTrigger value="details">Client Details</TabsTrigger>
-            <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
-        </TabsList>
-         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
-             <div className="flex-1 overflow-hidden">
-                 <TabsContent value="details" className="h-full">
-                     <ScrollArea className="h-full pr-4 -mr-4">
-                        <div className={cn("space-y-4 py-4", isSheet ? "" : "grid md:grid-cols-2 gap-6")}>
+  const DesktopFormLayout = () => (
+    <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
+             <div className="grid md:grid-cols-2 flex-1 gap-6 overflow-hidden">
+                {/* Client Details Column */}
+                <div className="flex flex-col overflow-hidden">
+                    <h3 className="text-lg font-medium mb-4">Client Details</h3>
+                    <ScrollArea className="flex-1 pr-4 -mr-4">
+                        <div className="space-y-4">
                             <FormField
                             control={form.control}
                             name="company"
@@ -168,65 +165,7 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                                 </FormItem>
                             )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="assignedTo"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Assigned To</FormLabel>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <FormControl>
-                                                    <Button variant="outline" className="w-full justify-between">
-                                                        <span>{field.value?.join(', ') || 'Select team members'}</span>
-                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                                    </Button>
-                                                </FormControl>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
-                                                {teamMembers.map(member => (
-                                                    <DropdownMenuCheckboxItem
-                                                        key={member.id}
-                                                        checked={field.value?.includes(member.name)}
-                                                        onCheckedChange={(checked) => {
-                                                            const newOwners = checked 
-                                                                ? [...(field.value || []), member.name] 
-                                                                : (field.value || []).filter(name => name !== member.name);
-                                                            field.onChange(newOwners);
-                                                        }}
-                                                    >
-                                                        {member.name}
-                                                    </DropdownMenuCheckboxItem>
-                                                ))}
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                            control={form.control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormLabel>Status</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select status" />
-                                    </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="lead">Lead</SelectItem>
-                                        <SelectItem value="active">Active</SelectItem>
-                                        <SelectItem value="churned">Churned</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                                </FormItem>
-                            )}
-                            />
-                        <FormField
+                             <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
@@ -252,11 +191,297 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                                 </FormItem>
                             )}
                             />
+                             <FormField
+                                control={form.control}
+                                name="assignedTo"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Assigned To</FormLabel>
+                                        <FormControl>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="outline" className="w-full justify-between">
+                                                        <span>{field.value?.join(', ') || 'Select team members'}</span>
+                                                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+                                                    {teamMembers.map(member => (
+                                                        <DropdownMenuCheckboxItem
+                                                            key={member.id}
+                                                            checked={field.value?.includes(member.name)}
+                                                            onCheckedChange={(checked) => {
+                                                                const newValues = checked 
+                                                                    ? [...(field.value || []), member.name] 
+                                                                    : (field.value || []).filter(name => name !== member.name);
+                                                                field.onChange(newValues);
+                                                            }}
+                                                        >
+                                                            {member.name}
+                                                        </DropdownMenuCheckboxItem>
+                                                    ))}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Status</FormLabel>
+                                <FormControl>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="lead">Lead</SelectItem>
+                                            <SelectItem value="active">Active</SelectItem>
+                                            <SelectItem value="churned">Churned</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="notes"
+                                render={({ field }) => (
+                                    <FormItem>
+                                    <FormLabel>Notes</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Add any relevant notes here..." {...field} rows={5} />
+                                    </FormControl>
+                                    <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+                    </ScrollArea>
+                </div>
+
+                {/* Projects Column */}
+                <div className="flex flex-col overflow-hidden">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-medium">Projects ({projects.length})</h3>
+                        <Button type="button" size="sm" onClick={handleAddProject}><Plus className="mr-2 h-4 w-4" /> Add Project</Button>
+                    </div>
+                    <ScrollArea className="flex-1 pr-4 -mr-4">
+                        <div className="space-y-4">
+                                {projects.length > 0 ? projects.map(p => (
+                                    <Card key={p.id}>
+                                        <CardContent className="p-4 space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <Input 
+                                                    value={p.name} 
+                                                    onChange={(e) => handleProjectChange(p.id, 'name', e.target.value)} 
+                                                    className="text-base font-semibold border-none shadow-none focus-visible:ring-0 p-0"
+                                                />
+                                                <Button type="button" size="icon" variant="ghost" onClick={() => handleDeleteProject(p.id)}>
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                            <Textarea 
+                                                placeholder="Project description..." 
+                                                value={p.description}
+                                                onChange={(e) => handleProjectChange(p.id, 'description', e.target.value)}
+                                            />
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <Select value={p.status} onValueChange={(value) => handleProjectChange(p.id, 'status', value)}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select status" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="planning">Planning</SelectItem>
+                                                        <SelectItem value="active">Active</SelectItem>
+                                                        <SelectItem value="completed">Completed</SelectItem>
+                                                        <SelectItem value="on-hold">On Hold</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <Input 
+                                                    type="date"
+                                                    value={p.deadline ? p.deadline.split('T')[0] : ''}
+                                                    onChange={(e) => handleProjectChange(p.id, 'deadline', e.target.value)}
+                                                />
+                                            </div>
+                                            <Textarea 
+                                                placeholder="Client demands, review meeting notes, etc." 
+                                                value={p.details}
+                                                onChange={(e) => handleProjectChange(p.id, 'details', e.target.value)}
+                                                rows={3}
+                                            />
+                                        </CardContent>
+                                    </Card>
+                                )) : (
+                                    <div className="text-center py-8 text-muted-foreground border-2 border-dashed rounded-lg">
+                                        <p>No projects yet.</p>
+                                        <p className="text-sm">Click "Add Project" to begin.</p>
+                                    </div>
+                                )}
+                        </div>
+                    </ScrollArea>
+                </div>
+             </div>
+             <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t gap-2 mt-6">
+                <div className={cn("w-full sm:w-auto", isEditMode ? "block" : "hidden")}>
+                    {isEditMode && (
+                        <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button type="button" variant="destructive" size={isSheet ? "icon" : "default"} className="w-full sm:w-auto">
+                                <Trash2 />
+                                <span className="sr-only sm:not-sr-only sm:ml-2">Delete Client</span>
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete {client?.company}.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDeleteClick}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                        </AlertDialog>
+                    )}
+                </div>
+                <div className="flex gap-2 w-full sm:w-auto">
+                    <Button type="button" variant="outline" onClick={onCancel} className="flex-1 sm:flex-initial">
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="flex-1 sm:flex-initial">
+                      {isEditMode ? 'Save Changes' : 'Add Client'}
+                    </Button>
+                </div>
+            </DialogFooter>
+        </form>
+    </Form>
+  )
+
+  const MobileFormLayout = () => (
+    <Tabs defaultValue="details" className={cn("flex flex-col h-full", isSheet && "p-4")}>
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="details">Client Details</TabsTrigger>
+            <TabsTrigger value="projects">Projects ({projects.length})</TabsTrigger>
+        </TabsList>
+         <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleFormSubmit)} className="flex-1 flex flex-col overflow-hidden">
+             <div className="flex-1 overflow-hidden">
+                 <TabsContent value="details" className="h-full">
+                     <ScrollArea className="h-full pr-4 -mr-4">
+                        <div className="space-y-4 py-4">
+                             <FormField
+                            control={form.control}
+                            name="company"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Company Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g., Acme Inc." {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                             <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Contact Name</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g., Jane Doe" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                            <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Contact Email</FormLabel>
+                                <FormControl>
+                                    <Input type="email" placeholder="e.g., jane@acme.com" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
+                             <FormField
+                                control={form.control}
+                                name="assignedTo"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Assigned To</FormLabel>
+                                         <FormControl>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    
+                                                        <Button variant="outline" className="w-full justify-between">
+                                                            <span>{field.value?.join(', ') || 'Select team members'}</span>
+                                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                                        </Button>
+                                                    
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width]">
+                                                    {teamMembers.map(member => (
+                                                        <DropdownMenuCheckboxItem
+                                                            key={member.id}
+                                                            checked={field.value?.includes(member.name)}
+                                                            onCheckedChange={(checked) => {
+                                                                const newValues = checked 
+                                                                    ? [...(field.value || []), member.name] 
+                                                                    : (field.value || []).filter(name => name !== member.name);
+                                                                field.onChange(newValues);
+                                                            }}
+                                                        >
+                                                            {member.name}
+                                                        </DropdownMenuCheckboxItem>
+                                                    ))}
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        <FormField
+                            control={form.control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                <FormLabel>Status</FormLabel>
+                                 <FormControl>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select status" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="lead">Lead</SelectItem>
+                                            <SelectItem value="active">Active</SelectItem>
+                                            <SelectItem value="churned">Churned</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </FormControl>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                            />
                         <FormField
                             control={form.control}
                             name="notes"
                             render={({ field }) => (
-                                <FormItem className={isSheet ? "" : "md:col-span-2"}>
+                                <FormItem>
                                 <FormLabel>Notes</FormLabel>
                                 <FormControl>
                                     <Textarea placeholder="Add any relevant notes here..." {...field} rows={5} />
@@ -322,7 +547,10 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                                                     </CardContent>
                                                 </Card>
                                             )) : (
-                                                <div className="text-center py-8 text-muted-foreground">No projects yet.</div>
+                                                <div className="text-center py-8 text-muted-foreground border-2 border-dashed rounded-lg">
+                                                    <p>No projects yet.</p>
+                                                    <p className="text-sm">Click "Add Project" to begin.</p>
+                                                </div>
                                             )}
                                     </div>
                                 </ScrollArea>
@@ -372,12 +600,12 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
   );
 
   if (isSheet) {
-      return <FormBody isSheet={true} />;
+      return <MobileFormLayout />;
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={onCancel}>
-      <DialogContent className="sm:max-w-4xl flex flex-col max-h-[90vh]">
+      <DialogContent className="max-w-4xl h-[90vh] flex flex-col">
         <DialogHeader>
             <div className='flex justify-between items-start'>
                 <div>
@@ -397,7 +625,7 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                 )}
             </div>
         </DialogHeader>
-        <FormBody isSheet={false} />
+        <DesktopFormLayout />
       </DialogContent>
     </Dialog>
   );
