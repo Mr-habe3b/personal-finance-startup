@@ -21,13 +21,12 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link
-                    href="/login"
-                    className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                  >
-                    Get Started
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  <Button asChild size="icon" className="rounded-full">
+                    <Link href="/login">
+                      <ArrowRight className="h-5 w-5" />
+                      <span className="sr-only">Get Started</span>
+                    </Link>
+                  </Button>
                 </div>
               </div>
               <Image
