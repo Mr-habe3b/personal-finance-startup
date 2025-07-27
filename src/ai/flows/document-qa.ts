@@ -1,6 +1,11 @@
+
 'use server';
 /**
  * @fileOverview An AI-powered document Q&A flow.
+ *
+ * This flow allows a user to ask a question about a provided document.
+ * The AI analyzes the document's content to find and return a relevant answer.
+ * If the answer is not found within the document, it informs the user accordingly.
  *
  * - answerDocumentQuestion - Answers a question based on the content of a document.
  * - DocumentQAInput - The input type for the answerDocumentQuestion function.

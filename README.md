@@ -12,6 +12,19 @@ EquityVision is a comprehensive dashboard for early-stage startup founders to ma
 - **Authentication:** Mocked (Context API)
 - **Drag & Drop:** dnd-kit
 
+## Features
+
+- **Dashboard**: Get a high-level overview of key metrics like total investment, team size, ESOP allocation, and active fundraising deals.
+- **Team Management**: Add, edit, and manage team members, including their equity allocation and vesting schedules.
+- **Cap Table Visualization**: View an interactive chart of your company's ownership structure.
+- **Client & Project Management**: Track clients and their associated projects with a detailed CRM-like interface.
+- **Fundraising Pipeline**: Manage your investor pipeline from lead to close using a drag-and-drop Kanban board.
+- **Financials Tracking**: Log monthly revenue and expenses, visualize financial trends, and get AI-powered analysis of your company's performance.
+- **Document Q&A**: Upload legal or other documents and use an AI assistant to ask questions and find information within the text.
+- **Milestone & Target Setting**: Plan and track your startup's progress with a Kanban board for milestones, featuring AI-assisted description and sub-task generation.
+- **AI Dilution Simulator**: Model new funding rounds by inputting investment amounts and valuations to see the immediate impact on your cap table.
+- **Internal Wiki**: Create and manage an internal knowledge base for your team, with AI content generation to get you started.
+
 ## Getting Started
 
 ### Prerequisites
@@ -38,11 +51,11 @@ EquityVision is a comprehensive dashboard for early-stage startup founders to ma
 
 Before running the application, you need to set up your environment variables.
 
-1.  Create a `.env` file in the `src` directory by copying the example:
+1.  Create a `.env` file in the root directory by copying the example:
     ```bash
     cp .env.example .env
     ```
-2.  Add your Google AI API key to the `src/.env` file:
+2.  Add your Google AI API key to the `.env` file:
     ```
     GEMINI_API_KEY="YOUR_API_KEY_HERE"
     ```

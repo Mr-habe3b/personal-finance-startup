@@ -13,6 +13,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, LineChart, List, Plus, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { Metadata } from "next";
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Fundraising | EquityVision',
+  description: 'Manage your investor pipeline from lead to close with a drag-and-drop Kanban board.',
+};
+
 
 export default function FundraisingPage() {
     const [deals, setDeals] = useState<FundraisingDeal[]>(initialDeals);
@@ -163,7 +171,7 @@ export default function FundraisingPage() {
                             <h1 className="text-2xl font-bold tracking-tight">Fundraising</h1>
                             <p className="text-muted-foreground">Manage your investor pipeline from lead to close.</p>
                         </div>
-                        <Button onClick={handleAddDealClick} size={isMobile ? "icon" : "default"}>
+                        <Button onClick={handleAddDealClick} size={isMobile ? "icon" : "default"} aria-label="Add Deal">
                             <Plus />
                             <span className="sr-only md:not-sr-only md:ml-2">Add Deal</span>
                         </Button>

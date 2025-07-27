@@ -11,6 +11,13 @@ import type { Document, UIDocument } from "@/types";
 import { useRef, useState, useEffect } from "react";
 import { DocumentQADialog } from "@/components/document-qa-dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { Metadata } from "next";
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Documents | EquityVision',
+  description: 'Manage, secure, and ask questions about your company\'s legal agreements.',
+};
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {
@@ -120,7 +127,7 @@ export default function DocumentsPage() {
                                 Manage, secure, and ask questions about your company's legal agreements.
                             </CardDescription>
                         </div>
-                        <Button onClick={handleUploadClick} size={isMobile ? 'icon' : 'default'}>
+                        <Button onClick={handleUploadClick} size={isMobile ? 'icon' : 'default'} aria-label="Upload Document">
                             <Upload />
                             <span className="sr-only md:not-sr-only md:ml-2">Upload Document</span>
                         </Button>
@@ -161,13 +168,13 @@ export default function DocumentsPage() {
                                                     <Sparkles className="mr-2 h-4 w-4" />
                                                     Ask AI
                                                 </Button>
-                                                 <Button variant="ghost" size="icon" asChild>
+                                                 <Button variant="ghost" size="icon" asChild aria-label="Download Document">
                                                     <a href={doc.url} download={doc.name}>
                                                         <Download className="h-4 w-4" />
                                                         <span className="sr-only">Download</span>
                                                     </a>
                                                 </Button>
-                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(doc.id)}>
+                                                <Button variant="ghost" size="icon" onClick={() => handleDelete(doc.id)} aria-label="Delete Document">
                                                     <Trash2 className="h-4 w-4" />
                                                     <span className="sr-only">Delete</span>
                                                 </Button>

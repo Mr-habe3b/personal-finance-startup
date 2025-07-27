@@ -3,6 +3,11 @@
 /**
  * @fileOverview AI-powered dilution impact simulator for modeling funding rounds.
  *
+ * This flow takes the current cap table, a new investment amount, and a pre-money valuation
+ * to simulate the effects of a new funding round. It calculates the post-money valuation,
+ * the updated cap table with diluted percentages for all stakeholders, and provides
+ * strategic advice on the implications for future fundraising.
+ *
  * - simulateDilutionImpact - Simulates the impact of new funding rounds on equity distribution.
  * - DilutionImpactInput - The input type for the simulateDilutionImpact function.
  * - DilutionImpactOutput - The return type for the simulateDilutionImpact function.

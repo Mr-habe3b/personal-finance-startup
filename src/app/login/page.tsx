@@ -17,6 +17,13 @@ import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { PieChart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import type { Metadata } from 'next';
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Login | EquityVision',
+  description: 'Login to access your startup equity dashboard.',
+};
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -62,6 +69,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete='email'
                 />
             </div>
             <div className="space-y-2">
@@ -72,6 +80,7 @@ export default function LoginPage() {
                     required 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    autoComplete='current-password'
                 />
             </div>
             </CardContent>

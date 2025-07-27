@@ -1,6 +1,11 @@
+
 'use server';
 /**
  * @fileOverview AI-powered financial analysis for generating insights from records.
+ *
+ * This flow takes an array of financial records (revenue and expenses) and
+ * generates a high-level analysis. It identifies key trends, analyzes profitability
+ * and burn rate, and provides a forward-looking statement based on the data.
  *
  * - analyzeFinancials - Analyzes historical financial data to identify trends.
  * - FinancialAnalysisInput - The input type for the analyzeFinancials function.

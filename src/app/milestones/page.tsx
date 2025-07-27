@@ -19,6 +19,13 @@ import {
 } from "@/components/ui/sheet"
 import { useTeam } from "@/context/team-context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import type { Metadata } from 'next';
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Milestones | EquityVision',
+  description: 'Track your startup\'s progress with a Kanban-style board for milestones and targets.',
+};
 
 const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 
@@ -175,7 +182,7 @@ export default function MilestonesPage() {
                              <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0} size={isMobile ? 'icon' : 'default'}>
+                                        <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0} size={isMobile ? 'icon' : 'default'} aria-label="Download CSV">
                                             <Download />
                                             <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                                         </Button>
@@ -186,7 +193,7 @@ export default function MilestonesPage() {
                                 </Tooltip>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button onClick={handleAddMilestoneClick} size={isMobile ? 'icon' : 'default'}>
+                                        <Button onClick={handleAddMilestoneClick} size={isMobile ? 'icon' : 'default'} aria-label="Add Milestone">
                                             <Plus />
                                             <span className="sr-only md:not-sr-only md:ml-2">Add Milestone</span>
                                         </Button>

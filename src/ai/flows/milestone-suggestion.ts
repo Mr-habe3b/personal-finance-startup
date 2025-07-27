@@ -1,6 +1,11 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to generate milestone descriptions and sub-tasks.
+ *
+ * This flow takes a milestone title and uses AI to generate a detailed,
+ * goal-oriented description and a list of actionable sub-tasks required to
+ * achieve that milestone. This helps streamline project planning.
  *
  * - suggestMilestoneDetails - Suggests a detailed description and sub-tasks for a given milestone title.
  * - MilestoneSuggestionInput - The input type for the suggestMilestoneDetails function.

@@ -13,6 +13,13 @@ import { useTeam } from "@/context/team-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import type { Metadata } from "next";
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Clients | EquityVision',
+  description: 'Manage your client relationships and track their status.',
+};
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>(initialClients);
@@ -132,7 +139,7 @@ export default function ClientsPage() {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                         <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0} size={isMobile ? "icon" : "default"}>
+                                         <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0} size={isMobile ? "icon" : "default"} aria-label="Download CSV">
                                             <Download />
                                             <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                                         </Button>
@@ -143,7 +150,7 @@ export default function ClientsPage() {
                                 </Tooltip>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button onClick={handleAddClientClick} size={isMobile ? "icon" : "default"}>
+                                        <Button onClick={handleAddClientClick} size={isMobile ? "icon" : "default"} aria-label="Add Client">
                                             <Plus />
                                             <span className="sr-only md:not-sr-only md:ml-2">Add Client</span>
                                         </Button>

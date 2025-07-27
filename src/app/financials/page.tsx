@@ -19,6 +19,13 @@ import { FinancialRecordForm } from "@/components/financial-record-form";
 import { analyzeFinancials, FinancialAnalysisOutput } from '@/ai/flows/financial-analysis';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { Metadata } from 'next';
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Financials | EquityVision',
+  description: 'Track your company\'s financial performance and get AI-powered insights.',
+};
 
 const calculateTotals = (record: FinancialRecord) => {
     const totalRevenue = record.revenueItems.reduce((sum, item) => sum + item.amount, 0);
@@ -110,13 +117,13 @@ export default function FinancialsPage() {
         if (originalRecord) { // This is an update
             const isNewMonthYear = originalRecord.month !== recordData.month || originalRecord.year !== recordData.year;
             if (isNewMonthYear && recordExists(recordData.month, recordData.year)) {
-                 alert("A record for this month and year already exists.");
+                 toast({ variant: 'destructive', title: 'Duplicate Record', description: 'A record for this month and year already exists.' });
                  return;
             }
             updatedData = financialData.map(r => (r.month === originalRecord.month && r.year === originalRecord.year) ? { ...recordData, invoicePath, lastUpdated } : r);
         } else { // This is a new record
             if (recordExists(recordData.month, recordData.year)) {
-                alert("A record for this month and year already exists.");
+                toast({ variant: 'destructive', title: 'Duplicate Record', description: 'A record for this month and year already exists.' });
                 return;
             }
             const newRecord = { ...recordData, invoicePath, lastUpdated };
@@ -196,11 +203,11 @@ export default function FinancialsPage() {
                         <p className="text-muted-foreground">Track your company's financial performance and get AI-powered insights.</p>
                     </div>
                      <div className='flex gap-2'>
-                        <Button onClick={handleDownloadCSV} variant="outline" disabled={processedFinancialData.length === 0} size={isMobile ? 'icon' : 'default'}>
+                        <Button onClick={handleDownloadCSV} variant="outline" disabled={processedFinancialData.length === 0} size={isMobile ? 'icon' : 'default'} aria-label="Download CSV">
                             <Download />
                             <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
                         </Button>
-                        <Button onClick={handleAddRecordClick} size={isMobile ? 'icon' : 'default'}>
+                        <Button onClick={handleAddRecordClick} size={isMobile ? 'icon' : 'default'} aria-label="Add Financial Record">
                             <Plus />
                             <span className="sr-only md:not-sr-only md:ml-2">Add Record</span>
                         </Button>
@@ -313,10 +320,10 @@ export default function FinancialsPage() {
                                         <CardDescription>Your financial co-pilot analyzing the data.</CardDescription>
                                     </div>
                                     <div className='flex gap-1'>
-                                         <Button variant="ghost" size="icon" onClick={handleRewriteAnalysis} disabled={isAnalyzing}>
+                                         <Button variant="ghost" size="icon" onClick={handleRewriteAnalysis} disabled={isAnalyzing} aria-label="Regenerate Analysis">
                                             <RefreshCw className="h-4 w-4" />
                                         </Button>
-                                        <Button variant="ghost" size="icon" onClick={handleClearAnalysis} disabled={isAnalyzing}>
+                                        <Button variant="ghost" size="icon" onClick={handleClearAnalysis} disabled={isAnalyzing} aria-label="Clear Analysis">
                                             <X className="h-4 w-4" />
                                         </Button>
                                     </div>
@@ -377,3 +384,4 @@ export default function FinancialsPage() {
 
 
     
+

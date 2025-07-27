@@ -16,7 +16,13 @@ import { useTeam } from '@/context/team-context';
 import { useState } from 'react';
 import { TeamMemberForm } from '@/components/team-member-form';
 import type { TeamMember } from '@/types';
+import type { Metadata } from 'next';
 
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Dashboard | EquityVision',
+  description: 'High-level overview of your startup\'s key equity and team metrics.',
+};
 
 export default function DashboardPage() {
   const { teamMembers, capTable, addMember, updateMember } = useTeam();
@@ -56,7 +62,7 @@ export default function DashboardPage() {
   const handleDeleteMember = (memberId: string) => {
     // Note: The useTeam hook does not expose a delete function in this implementation.
     // To add delete functionality, you would need to expose it from the context.
-    console.log("Delete functionality not implemented in this context provider version.");
+    console.warn("Delete functionality not implemented in this context provider version.");
     setIsFormOpen(false);
   };
 

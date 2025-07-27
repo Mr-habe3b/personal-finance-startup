@@ -1,6 +1,11 @@
+
 'use server';
 /**
  * @fileOverview An AI flow to generate content for a wiki page.
+ *
+ * This flow takes a title and generates comprehensive, well-structured
+ * content for a wiki page in Markdown format. It can include headings,
+ * lists, and code snippets to quickly bootstrap documentation.
  *
  * - generateWikiContent - Generates wiki page content based on a title.
  * - WikiContentInput - The input type for the generateWikiContent function.

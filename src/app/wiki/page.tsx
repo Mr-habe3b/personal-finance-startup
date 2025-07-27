@@ -10,6 +10,13 @@ import { useState, useEffect } from "react";
 import type { WikiPage as WikiPageType } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { generateWikiContent } from "@/ai/flows/wiki-content-generator";
+import type { Metadata } from 'next';
+
+// Although this is a client component, we can still export metadata
+export const metadata: Metadata = {
+  title: 'Wiki | EquityVision',
+  description: 'Create and manage your internal team knowledge base.',
+};
 
 const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
 
@@ -42,6 +49,8 @@ export default function WikiPage() {
         try {
              if (pages.length > 0) {
                 localStorage.setItem(WIKI_STORAGE_KEY, JSON.stringify(pages));
+            } else {
+                 localStorage.removeItem(WIKI_STORAGE_KEY);
             }
         } catch (error) {
             console.error("Failed to save wiki pages to localStorage", error);
@@ -83,10 +92,6 @@ export default function WikiPage() {
         const newPages = pages.filter(p => p.id !== id);
         setPages(newPages);
         
-        if(newPages.length === 0) {
-             localStorage.removeItem(WIKI_STORAGE_KEY);
-        }
-
         if (selectedPageId === id) {
             setSelectedPageId(newPages.length > 0 ? newPages[0].id : null);
         }
@@ -160,7 +165,7 @@ export default function WikiPage() {
                                             <Save className="mr-2 h-4 w-4" />
                                             Save
                                         </Button>
-                                         <Button size="icon" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)}>
+                                         <Button size="icon" variant="destructive" onClick={() => handleDeletePage(selectedPage.id)} aria-label="Delete Page">
                                             <Trash2 className="h-4 w-4" />
                                         </Button>
                                     </div>
