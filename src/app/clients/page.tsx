@@ -166,7 +166,7 @@ export default function ClientsPage() {
              {isFormOpen && (
                 isMobile ? (
                     <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                        <SheetContent side="bottom" className="h-[50vh] p-0">
+                        <SheetContent side="bottom" className="h-[80vh] p-0">
                            <SheetHeader className="p-4">
                                <SheetTitle>{selectedClient ? 'Edit Client' : 'Add New Client'}</SheetTitle>
                            </SheetHeader>
