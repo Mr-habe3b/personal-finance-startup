@@ -12,20 +12,22 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { Client, Project } from '@/types';
-import { Edit, FolderKanban, MoreHorizontal, CalendarClock, Users, Mail, Building, User } from 'lucide-react';
+import { Edit, FolderKanban, MoreHorizontal, CalendarClock, Users, Mail, Building, User, Trash2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { format } from 'date-fns';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from './ui/alert-dialog';
 
 interface ClientTableProps {
   clients: Client[];
   onEditClient: (client: Client) => void;
+  onDeleteClient: (clientId: string) => void;
 }
 
-export function ClientTable({ clients, onEditClient }: ClientTableProps) {
+export function ClientTable({ clients, onEditClient, onDeleteClient }: ClientTableProps) {
   const isMobile = useIsMobile();
 
   const getStatusVariant = (status: Client['status']) => {
@@ -56,37 +58,60 @@ export function ClientTable({ clients, onEditClient }: ClientTableProps) {
         {clients.map((client) => {
           const upcomingDeadline = getUpcomingDeadline(client.projects);
           return (
-             <Card key={client.id} onClick={() => onEditClient(client)} className="cursor-pointer">
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-base font-semibold">{client.company}</CardTitle>
-                    <Badge variant={getStatusVariant(client.status)} className="capitalize">{client.status}</Badge>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                    <div className="text-sm text-muted-foreground space-y-2">
-                        <div className="flex items-center gap-2">
-                           <User className="h-4 w-4" />
-                           <span>{client.name}</span>
-                        </div>
-                         <div className="flex items-center gap-2">
-                           <Mail className="h-4 w-4" />
-                           <span>{client.email}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <FolderKanban className="h-4 w-4" />
-                            <span>{client.projects?.length || 0} Projects</span>
-                        </div>
-                        {upcomingDeadline && (
-                            <div className="flex items-center gap-2 pt-1">
-                               <CalendarClock className="h-4 w-4" />
-                               <span>Next Deadline: {upcomingDeadline}</span>
+             <Card key={client.id}>
+                <div onClick={() => onEditClient(client)} className="cursor-pointer">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                        <CardTitle className="text-base font-semibold">{client.company}</CardTitle>
+                        <Badge variant={getStatusVariant(client.status)} className="capitalize">{client.status}</Badge>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        <div className="text-sm text-muted-foreground space-y-2">
+                            <div className="flex items-center gap-2">
+                               <User className="h-4 w-4" />
+                               <span>{client.name}</span>
                             </div>
-                        )}
-                         <div className="flex items-center gap-2 pt-1">
-                            <Users className="h-4 w-4" />
-                            <span>{client.assignedTo?.join(', ') || 'Unassigned'}</span>
+                             <div className="flex items-center gap-2">
+                               <Mail className="h-4 w-4" />
+                               <span>{client.email}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <FolderKanban className="h-4 w-4" />
+                                <span>{client.projects?.length || 0} Projects</span>
+                            </div>
+                            {upcomingDeadline && (
+                                <div className="flex items-center gap-2 pt-1">
+                                   <CalendarClock className="h-4 w-4" />
+                                   <span>Next Deadline: {upcomingDeadline}</span>
+                                </div>
+                            )}
+                             <div className="flex items-center gap-2 pt-1">
+                                <Users className="h-4 w-4" />
+                                <span>{client.assignedTo?.join(', ') || 'Unassigned'}</span>
+                            </div>
                         </div>
-                    </div>
-                </CardContent>
+                    </CardContent>
+                </div>
+                <CardFooter className="flex justify-end pt-2 pb-3 px-4">
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete {client.company}.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => onDeleteClient(client.id)}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </CardFooter>
             </Card>
           )
         })}

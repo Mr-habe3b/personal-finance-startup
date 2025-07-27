@@ -159,6 +159,7 @@ export default function ClientsPage() {
                         <ClientTable 
                             clients={clients} 
                             onEditClient={handleEditClientClick}
+                            onDeleteClient={handleDeleteClient}
                         />
                     </CardContent>
                 </Card>
