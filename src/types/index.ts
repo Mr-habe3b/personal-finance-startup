@@ -1,4 +1,5 @@
 
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -100,4 +101,10 @@ export interface Client {
   notes: string;
   projects?: Project[];
   assignedTo?: string[];
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
 }
