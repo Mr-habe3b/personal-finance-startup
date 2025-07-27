@@ -111,7 +111,7 @@ export function DealForm({ deal, onSave, onDelete, onCancel, isOpen }: DealFormP
               name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount ($)</FormLabel>
+                  <FormLabel>Amount (₹)</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="e.g., 2,000,000" {...field} />
                   </FormControl>

@@ -174,7 +174,7 @@ export default function FundraisingPage() {
                                 <DollarSign className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">${analytics.totalPipelineValue.toLocaleString()}</div>
+                                <div className="text-2xl font-bold">₹{analytics.totalPipelineValue.toLocaleString()}</div>
                                 <p className="text-xs text-muted-foreground">Sum of all deal amounts.</p>
                             </CardContent>
                         </Card>
@@ -194,7 +194,7 @@ export default function FundraisingPage() {
                                 <LineChart className="h-4 w-4 text-muted-foreground" />
                             </CardHeader>
                             <CardContent>
-                                <div className="text-2xl font-bold">${Math.round(analytics.averageDealSize).toLocaleString()}</div>
+                                <div className="text-2xl font-bold">₹{Math.round(analytics.averageDealSize).toLocaleString()}</div>
                                 <p className="text-xs text-muted-foreground">Mean value of all deals.</p>
                             </CardContent>
                         </Card>

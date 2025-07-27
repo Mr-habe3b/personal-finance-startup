@@ -212,7 +212,7 @@ export default function FinancialsPage() {
                             <TrendingUp className="h-4 w-4 text-green-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">${analytics.totalRevenue.toLocaleString()}</div>
+                            <div className="text-2xl font-bold">₹{analytics.totalRevenue.toLocaleString()}</div>
                         </CardContent>
                     </Card>
                      <Card>
@@ -221,7 +221,7 @@ export default function FinancialsPage() {
                             <TrendingDown className="h-4 w-4 text-red-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">${analytics.totalExpenses.toLocaleString()}</div>
+                            <div className="text-2xl font-bold">₹{analytics.totalExpenses.toLocaleString()}</div>
                         </CardContent>
                     </Card>
                      <Card>
@@ -231,7 +231,7 @@ export default function FinancialsPage() {
                         </CardHeader>
                         <CardContent>
                             <div className={`text-2xl font-bold ${analytics.netProfit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                ${analytics.netProfit.toLocaleString()}
+                                ₹{analytics.netProfit.toLocaleString()}
                             </div>
                         </CardContent>
                     </Card>
@@ -241,7 +241,7 @@ export default function FinancialsPage() {
                              <TrendingDown className="h-4 w-4 text-red-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">${analytics.averageMonthlyBurn.toLocaleString(undefined, {maximumFractionDigits: 0})}</div>
+                            <div className="text-2xl font-bold">₹{analytics.averageMonthlyBurn.toLocaleString(undefined, {maximumFractionDigits: 0})}</div>
                         </CardContent>
                     </Card>
                 </div>

@@ -300,7 +300,7 @@ export function FinancialRecordForm({ record, onSave, onDelete, onCancel, isOpen
                             "text-lg font-bold",
                             netIncome >= 0 ? "text-green-500" : "text-red-500"
                         )}>
-                            ${netIncome.toLocaleString()}
+                            ₹{netIncome.toLocaleString()}
                         </span>
                     </div>
                     <div className='flex gap-2'>

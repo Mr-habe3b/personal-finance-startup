@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -95,7 +96,7 @@ export function DilutionSimulatorClient({ currentCapTable }: DilutionSimulatorCl
                 name="newInvestmentAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>New Investment ($)</FormLabel>
+                    <FormLabel>New Investment (₹)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="e.g., 1,000,000" {...field} />
                     </FormControl>
@@ -108,7 +109,7 @@ export function DilutionSimulatorClient({ currentCapTable }: DilutionSimulatorCl
                 name="preMoneyValuation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Pre-Money Valuation ($)</FormLabel>
+                    <FormLabel>Pre-Money Valuation (₹)</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="e.g., 5,000,000" {...field} />
                     </FormControl>
@@ -168,7 +169,7 @@ export function DilutionSimulatorClient({ currentCapTable }: DilutionSimulatorCl
                 <CardContent className="grid gap-4 sm:grid-cols-2">
                     <div className="rounded-lg border p-4">
                         <p className="text-sm text-muted-foreground">Post-Money Valuation</p>
-                        <p className="text-2xl font-bold">${result.postMoneyValuation.toLocaleString()}</p>
+                        <p className="text-2xl font-bold">₹{result.postMoneyValuation.toLocaleString()}</p>
                     </div>
                      <div className="rounded-lg border p-4">
                         <p className="text-sm text-muted-foreground">New Investor Stake</p>

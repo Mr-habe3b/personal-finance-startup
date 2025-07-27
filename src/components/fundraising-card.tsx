@@ -80,7 +80,7 @@ export function FundraisingCard({ deal, isOverlay, onClick }: FundraisingCardPro
                         <div className="flex-1 space-y-1">
                             <p className="font-semibold">{deal.investor}</p>
                             <p className="text-sm text-muted-foreground font-mono">
-                                ${deal.amount.toLocaleString()}
+                                ₹{deal.amount.toLocaleString()}
                             </p>
                             <div className="flex items-center gap-2 text-xs text-muted-foreground pt-1">
                                 <Mail className="h-3 w-3" />

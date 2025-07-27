@@ -32,7 +32,7 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                 <div className="flex justify-between items-center w-full">
                                     <div className="font-medium text-lg">{record.month} {record.year}</div>
                                     <Badge variant={record.netIncome >= 0 ? 'default' : 'destructive'} className="text-base">
-                                        ${record.netIncome.toLocaleString()}
+                                        ₹{record.netIncome.toLocaleString()}
                                     </Badge>
                                 </div>
                             </AccordionTrigger>
@@ -43,14 +43,14 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                             <TrendingUp className="h-5 w-5 text-green-500" />
                                             <div>
                                                 <div className="text-muted-foreground">Revenue</div>
-                                                <div className="font-semibold text-green-500">${record.totalRevenue.toLocaleString()}</div>
+                                                <div className="font-semibold text-green-500">₹{record.totalRevenue.toLocaleString()}</div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 p-3 bg-secondary rounded-lg">
                                             <TrendingDown className="h-5 w-5 text-red-500" />
                                             <div>
                                                 <div className="text-muted-foreground">Total Expenses</div>
-                                                <div className="font-semibold text-red-500">${record.totalExpenses.toLocaleString()}</div>
+                                                <div className="font-semibold text-red-500">₹{record.totalExpenses.toLocaleString()}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                                 {record.revenueItems.map(item => (
                                                     <div key={item.id} className="flex justify-between">
                                                         <span>{item.description}</span>
-                                                        <span>${item.amount.toLocaleString()}</span>
+                                                        <span>₹{item.amount.toLocaleString()}</span>
                                                     </div>
                                                 ))}
                                             </div>
@@ -72,7 +72,7 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                                 {record.expenses.map(exp => (
                                                     <div key={exp.id} className="flex justify-between">
                                                         <span>{exp.description}</span>
-                                                        <span>${exp.amount.toLocaleString()}</span>
+                                                        <span>₹{exp.amount.toLocaleString()}</span>
                                                     </div>
                                                 ))}
                                             </div>

@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview AI-powered dilution impact simulator for modeling funding rounds.
@@ -12,8 +13,8 @@ import {z} from 'genkit';
 
 const DilutionImpactInputSchema = z.object({
   currentCapTable: z.record(z.number()).describe('Current cap table with stakeholder names as keys and equity percentage as values (0-100).'),
-  newInvestmentAmount: z.number().describe('Amount of new investment raised in USD.'),
-  preMoneyValuation: z.number().describe('Pre-money valuation of the company in USD.'),
+  newInvestmentAmount: z.number().describe('Amount of new investment raised in the local currency.'),
+  preMoneyValuation: z.number().describe('Pre-money valuation of the company in the local currency.'),
   roundName: z.string().describe('The name of the funding round (e.g., Series A).'),
 });
 
@@ -37,16 +38,16 @@ const dilutionImpactPrompt = ai.definePrompt({
   name: 'dilutionImpactPrompt',
   input: {schema: DilutionImpactInputSchema},
   output: {schema: DilutionImpactOutputSchema},
-  prompt: `You are an expert in venture capital and startup equity.  Given the following cap table, investment amount, and pre-money valuation, calculate the post-money valuation and the resulting dilution for each stakeholder.
+  prompt: `You are an expert in venture capital and startup equity.  Given the following cap table, investment amount, and pre-money valuation, calculate the post-money valuation and the resulting dilution for each stakeholder. The currency is in Rupees (₹).
 
 Current Cap Table:
 {{#each currentCapTable}}{{{@key}}}: {{{this}}}%
 {{/each}}
 
-New Investment Amount: ${'{{{newInvestmentAmount}}}'}
-Pre-Money Valuation: ${'{{{preMoneyValuation}}}'}
+New Investment Amount: ₹{{newInvestmentAmount}}
+Pre-Money Valuation: ₹{{preMoneyValuation}}
 
-Round Name: ${'{{{roundName}}}'}
+Round Name: {{{roundName}}}
 
 Consider the implications of these terms on future fundraising rounds. What strategic advice would you give the founders regarding valuation and future equity allocation?
 

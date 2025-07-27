@@ -79,7 +79,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    ${initialInvestment.totalInvested.toLocaleString()}
+                    ₹{initialInvestment.totalInvested.toLocaleString()}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Initial founder investment
