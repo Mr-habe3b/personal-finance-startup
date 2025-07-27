@@ -81,6 +81,7 @@ export default function TeamPage() {
                             teamMembers={teamMembers} 
                             onAddMember={handleAddMemberClick}
                             onEditMember={handleEditMemberClick}
+                            onDeleteMember={deleteMember}
                         />
                     </CardContent>
                 </Card>
