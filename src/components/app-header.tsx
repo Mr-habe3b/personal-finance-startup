@@ -48,7 +48,7 @@ export function AppHeader({ toggleMobileSidebar }: AppHeaderProps) {
               className="rounded-full"
             >
               <Avatar>
-                <AvatarImage src="https://placehold.co/32x32" alt={user?.name} data-ai-hint="person" />
+                <AvatarImage src="/images/user/avatar.png" alt={user?.name} data-ai-hint="person" />
                 <AvatarFallback>
                   <User className="h-5 w-5" />
                 </AvatarFallback>

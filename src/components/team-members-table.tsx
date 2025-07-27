@@ -75,7 +75,7 @@ export function TeamMembersTable({
                     <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarImage
-                        src={`https://placehold.co/40x40.png`}
+                        src={`/images/user/avatar.png`}
                         alt="Avatar"
                         data-ai-hint="person"
                       />
@@ -186,7 +186,7 @@ export function TeamMembersTable({
                   <div className="flex items-center gap-3">
                     <Avatar className="h-9 w-9">
                       <AvatarImage
-                        src={`https://placehold.co/40x40.png`}
+                        src={`/images/user/avatar.png`}
                         alt="Avatar"
                         data-ai-hint="person"
                       />

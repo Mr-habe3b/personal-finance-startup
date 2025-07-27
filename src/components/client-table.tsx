@@ -166,7 +166,7 @@ export function ClientTable({ clients, onEditClient, onDeleteClient }: ClientTab
                             <Tooltip>
                               <TooltipTrigger asChild>
                                   <Avatar className="h-7 w-7 border-2 border-background">
-                                      <AvatarImage src={`https://placehold.co/32x32.png`} alt={name} data-ai-hint="person" />
+                                      <AvatarImage src={`/images/user/avatar.png`} alt={name} data-ai-hint="person" />
                                       <AvatarFallback>{name.charAt(0)}</AvatarFallback>
                                   </Avatar>
                               </TooltipTrigger>
