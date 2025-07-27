@@ -7,7 +7,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
-        <section className="w-full py-20 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:items-center">
               <div className="flex flex-col justify-center space-y-4">
@@ -29,14 +29,16 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
-              <Image
-                src="https://placehold.co/600x600.png"
-                width="600"
-                height="600"
-                alt="Hero"
-                data-ai-hint="abstract metallic"
-                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full"
-              />
+              <div className="order-first lg:order-last">
+                <Image
+                  src="/images/home/hero.png"
+                  width="600"
+                  height="600"
+                  alt="Hero"
+                  data-ai-hint="abstract metallic"
+                  className="mx-auto aspect-square overflow-hidden rounded-xl object-cover sm:w-full"
+                />
+              </div>
             </div>
           </div>
         </section>
