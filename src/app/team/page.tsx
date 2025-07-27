@@ -62,6 +62,7 @@ export default function TeamPage() {
             onDelete={handleDeleteMember}
             onCancel={handleCancel}
             isOpen={isFormOpen}
+            isMobile={isMobile}
         />
     )
 
@@ -87,8 +88,8 @@ export default function TeamPage() {
              {isFormOpen && (
                 isMobile ? (
                     <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                        <SheetContent side="bottom" className="h-[50vh]">
-                            <SheetHeader>
+                        <SheetContent side="bottom" className="h-[50vh] p-0">
+                            <SheetHeader className="p-4">
                                 <SheetTitle>{selectedMember ? 'Edit Team Member' : 'Add New Member'}</SheetTitle>
                             </SheetHeader>
                             {renderForm()}
