@@ -330,8 +330,8 @@ export function ClientForm({ client, teamMembers, onSave, onDelete, onCancel, is
                       </div>
                  </TabsContent>
             </div>
-             <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t">
-                <div className={cn("w-full sm:w-auto", isEditMode ? "" : "hidden")}>
+             <DialogFooter className="flex-shrink-0 flex flex-col-reverse sm:flex-row sm:justify-between items-center w-full pt-4 border-t gap-2">
+                <div className={cn("w-full sm:w-auto", isEditMode ? "block" : "hidden")}>
                     {isEditMode && (
                         <AlertDialog>
                         <AlertDialogTrigger asChild>
