@@ -35,7 +35,7 @@ export function AppBottomNav() {
                             pathname === item.href ? "text-primary" : "text-muted-foreground"
                         )}
                     >
-                        <item.icon className="w-5 h-5 mb-1" />
+                        <item.icon className="w-4 h-4 mb-1" />
                         <span className="text-xs">{item.label}</span>
                     </Link>
                 ))}
