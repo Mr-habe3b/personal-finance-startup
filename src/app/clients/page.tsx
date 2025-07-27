@@ -11,7 +11,8 @@ import { ClientTable } from "@/components/client-table";
 import { ClientForm } from "@/components/client-form";
 import { useTeam } from "@/context/team-context";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>(initialClients);
@@ -128,14 +129,30 @@ export default function ClientsPage() {
                             </CardDescription>
                         </div>
                         <div className="flex gap-2">
-                            <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0} size={isMobile ? "icon" : "default"}>
-                                <Download />
-                                <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
-                            </Button>
-                            <Button onClick={handleAddClientClick} size={isMobile ? "icon" : "default"}>
-                                <Plus />
-                                <span className="sr-only md:not-sr-only md:ml-2">Add Client</span>
-                            </Button>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                         <Button onClick={handleDownloadCSV} variant="outline" disabled={clients.length === 0} size={isMobile ? "icon" : "default"}>
+                                            <Download />
+                                            <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Download CSV</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button onClick={handleAddClientClick} size={isMobile ? "icon" : "default"}>
+                                            <Plus />
+                                            <span className="sr-only md:not-sr-only md:ml-2">Add Client</span>
+                                        </Button>
+                                    </TooltipTrigger>
+                                     <TooltipContent>
+                                        <p>Add Client</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                     </CardHeader>
                     <CardContent>
@@ -149,7 +166,10 @@ export default function ClientsPage() {
              {isFormOpen && (
                 isMobile ? (
                     <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
-                        <SheetContent side="bottom" className="h-[80vh] p-0">
+                        <SheetContent side="bottom" className="h-[50vh] p-0">
+                           <SheetHeader className="p-4">
+                               <SheetTitle>{selectedClient ? 'Edit Client' : 'Add New Client'}</SheetTitle>
+                           </SheetHeader>
                            {renderForm()}
                        </SheetContent>
                     </Sheet>

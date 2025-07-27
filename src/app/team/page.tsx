@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { TeamMemberForm } from '@/components/team-member-form';
 import { useTeam } from '@/context/team-context';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 
 export default function TeamPage() {
@@ -88,6 +88,9 @@ export default function TeamPage() {
                 isMobile ? (
                     <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
                         <SheetContent side="bottom" className="h-[50vh]">
+                            <SheetHeader>
+                                <SheetTitle>{selectedMember ? 'Edit Team Member' : 'Add New Member'}</SheetTitle>
+                            </SheetHeader>
                             {renderForm()}
                         </SheetContent>
                     </Sheet>

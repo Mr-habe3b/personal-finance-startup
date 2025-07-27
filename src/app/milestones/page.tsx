@@ -14,8 +14,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
 } from "@/components/ui/sheet"
 import { useTeam } from "@/context/team-context";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 
@@ -169,14 +172,30 @@ export default function MilestonesPage() {
                             <p className="text-muted-foreground">Track your startup's progress with a Kanban-style board.</p>
                         </div>
                         <div className="flex gap-2">
-                             <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0} size={isMobile ? 'icon' : 'default'}>
-                                <Download />
-                                <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
-                            </Button>
-                            <Button onClick={handleAddMilestoneClick} size={isMobile ? 'icon' : 'default'}>
-                                <Plus />
-                                <span className="sr-only md:not-sr-only md:ml-2">Add Milestone</span>
-                            </Button>
+                             <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button onClick={handleDownloadCSV} variant="outline" disabled={milestones.length === 0} size={isMobile ? 'icon' : 'default'}>
+                                            <Download />
+                                            <span className="sr-only md:not-sr-only md:ml-2">Download CSV</span>
+                                        </Button>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Download CSV</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <Button onClick={handleAddMilestoneClick} size={isMobile ? 'icon' : 'default'}>
+                                            <Plus />
+                                            <span className="sr-only md:not-sr-only md:ml-2">Add Milestone</span>
+                                        </Button>
+                                    </TooltipTrigger>
+                                     <TooltipContent>
+                                        <p>Add Milestone</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                     </div>
 
@@ -217,6 +236,9 @@ export default function MilestonesPage() {
                     isMobile ? (
                         <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>
                            <SheetContent side="bottom" className="h-[50vh]">
+                                <SheetHeader>
+                                   <SheetTitle>{selectedMilestone ? 'Edit Milestone' : 'Add New Milestone'}</SheetTitle>
+                               </SheetHeader>
                                {renderForm()}
                            </SheetContent>
                         </Sheet>
