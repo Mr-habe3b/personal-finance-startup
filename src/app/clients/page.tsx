@@ -13,13 +13,6 @@ import { useTeam } from "@/context/team-context";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { Metadata } from "next";
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Clients | EquityVision',
-  description: 'Manage your client relationships and track their status.',
-};
 
 export default function ClientsPage() {
     const [clients, setClients] = useState<Client[]>(initialClients);

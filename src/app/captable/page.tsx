@@ -10,13 +10,6 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { useTeam } from "@/context/team-context";
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Cap Table | EquityVision',
-  description: 'View the current company ownership structure and equity distribution.',
-};
 
 export default function CapTablePage() {
     const { capTable } = useTeam();

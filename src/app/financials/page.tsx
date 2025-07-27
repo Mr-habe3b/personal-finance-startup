@@ -19,13 +19,6 @@ import { FinancialRecordForm } from "@/components/financial-record-form";
 import { analyzeFinancials, FinancialAnalysisOutput } from '@/ai/flows/financial-analysis';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Financials | EquityVision',
-  description: 'Track your company\'s financial performance and get AI-powered insights.',
-};
 
 const calculateTotals = (record: FinancialRecord) => {
     const totalRevenue = record.revenueItems.reduce((sum, item) => sum + item.amount, 0);
@@ -384,4 +377,5 @@ export default function FinancialsPage() {
 
 
     
+
 

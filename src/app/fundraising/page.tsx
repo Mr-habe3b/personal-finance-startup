@@ -13,14 +13,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, LineChart, List, Plus, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import type { Metadata } from "next";
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Fundraising | EquityVision',
-  description: 'Manage your investor pipeline from lead to close with a drag-and-drop Kanban board.',
-};
-
 
 export default function FundraisingPage() {
     const [deals, setDeals] = useState<FundraisingDeal[]>(initialDeals);

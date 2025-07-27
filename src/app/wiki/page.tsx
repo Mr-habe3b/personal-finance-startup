@@ -10,13 +10,6 @@ import { useState, useEffect } from "react";
 import type { WikiPage as WikiPageType } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { generateWikiContent } from "@/ai/flows/wiki-content-generator";
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Wiki | EquityVision',
-  description: 'Create and manage your internal team knowledge base.',
-};
 
 const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
 

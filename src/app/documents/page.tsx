@@ -11,13 +11,6 @@ import type { Document, UIDocument } from "@/types";
 import { useRef, useState, useEffect } from "react";
 import { DocumentQADialog } from "@/components/document-qa-dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
-import type { Metadata } from "next";
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Documents | EquityVision',
-  description: 'Manage, secure, and ask questions about your company\'s legal agreements.',
-};
 
 const getIconForType = (type: Document['type']) => {
     switch (type) {

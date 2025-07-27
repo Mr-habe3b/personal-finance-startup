@@ -9,13 +9,6 @@ import { TeamMemberForm } from '@/components/team-member-form';
 import { useTeam } from '@/context/team-context';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Team | EquityVision',
-  description: 'Add, view, and manage your team members and their equity stakes.',
-};
 
 export default function TeamPage() {
     const { teamMembers, addMember, updateMember, deleteMember } = useTeam();

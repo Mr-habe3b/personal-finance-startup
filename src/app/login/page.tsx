@@ -17,13 +17,6 @@ import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { PieChart } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Login | EquityVision',
-  description: 'Login to access your startup equity dashboard.',
-};
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');

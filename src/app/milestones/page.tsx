@@ -19,13 +19,6 @@ import {
 } from "@/components/ui/sheet"
 import { useTeam } from "@/context/team-context";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import type { Metadata } from 'next';
-
-// Although this is a client component, we can still export metadata
-export const metadata: Metadata = {
-  title: 'Milestones | EquityVision',
-  description: 'Track your startup\'s progress with a Kanban-style board for milestones and targets.',
-};
 
 const milestoneStatuses: Milestone['status'][] = ['todo', 'inprogress', 'done'];
 
