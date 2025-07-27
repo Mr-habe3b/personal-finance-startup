@@ -24,7 +24,7 @@ export default function CapTablePage() {
                             Current company ownership structure.
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="flex flex-col items-center">
                         <CapTableChart capTable={capTable} />
                     </CardContent>
                 </Card>
