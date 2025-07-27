@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Menu, Settings, User, LogOut, LifeBuoy, PieChart } from 'lucide-react';
+import { MoreHorizontal, Settings, User, LogOut, LifeBuoy, PieChart } from 'lucide-react';
 import Link from 'next/link';
 import { ThemeToggle } from './theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -30,12 +30,12 @@ export function AppHeader({ toggleMobileSidebar }: AppHeaderProps) {
        <div className="flex items-center gap-2">
             {isMobile && (
                 <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
                     className="md:hidden"
                     onClick={toggleMobileSidebar}
                 >
-                    <Menu className="h-5 w-5" />
+                    <MoreHorizontal className="h-5 w-5" />
                     <span className="sr-only">Toggle Menu</span>
                 </Button>
             )}
