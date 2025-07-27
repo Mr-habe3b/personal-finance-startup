@@ -7,7 +7,7 @@ import { useState } from "react";
 import type { Milestone } from "@/types";
 import { MilestoneForm } from "@/components/milestone-form";
 import { Card, CardContent } from "@/components/ui/card";
-import { DndContext, DragEndEvent, DragStartEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DragStartEvent, PointerSensor, useSensor, useSensors, DragOverlay } from "@dnd-kit/core";
 import { MilestoneColumn } from "@/components/milestone-column";
 import { MilestoneCard } from "@/components/milestone-card";
 import { useIsMobile } from "@/hooks/use-mobile";
