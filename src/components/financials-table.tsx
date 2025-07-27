@@ -83,8 +83,8 @@ export function FinancialsTable({ records, onEdit, onDelete, openItem, onOpenCha
                                         <div className='flex items-center gap-2'>
                                             <Button variant="outline" size="sm" asChild>
                                                 <a href={record.invoicePath} download>
-                                                    <Download className="mr-2" />
-                                                    Download Invoice
+                                                    <Download />
+                                                    <span className="sr-only md:not-sr-only md:ml-2">Download Invoice</span>
                                                 </a>
                                             </Button>
                                              <TooltipProvider>
