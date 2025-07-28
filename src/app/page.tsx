@@ -11,7 +11,7 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="w-full py-20 md:py-24 lg:py-28">
           <div className="container px-4 md:px-6">
-            <div className="grid items-center justify-center gap-6 text-center">
+            <div className="grid items-center justify-center gap-10 text-center">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary to-foreground/80">
@@ -28,6 +28,18 @@ export default function LandingPage() {
                       <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </Button>
+                </div>
+              </div>
+              <div className="w-full max-w-4xl mx-auto">
+                <div className="rounded-xl shadow-2xl border overflow-hidden">
+                    <Image
+                        src="/images/home/hero.png"
+                        width="1200"
+                        height="630"
+                        alt="Zynoit Dashboard"
+                        className="w-full h-auto"
+                        data-ai-hint="dashboard application"
+                    />
                 </div>
               </div>
             </div>
