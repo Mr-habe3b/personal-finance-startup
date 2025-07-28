@@ -1,10 +1,9 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CandlestickChart, Landmark, Library, List, PieChart, Users } from 'lucide-react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PieChart, CandlestickChart, Users } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -41,41 +40,74 @@ export default function LandingPage() {
                 <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Key Features</div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Everything you need to manage equity</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  From initial splits to fundraising scenarios, we've got you covered.
+                  From initial splits to fundraising scenarios, we&apos;ve got you covered.
                 </p>
               </div>
             </div>
             <div className="mx-auto grid max-w-sm gap-4 py-12 sm:max-w-4xl sm:grid-cols-2 md:gap-6 lg:max-w-5xl lg:grid-cols-3">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
-                    <CardTitle className="text-base font-medium">Cap Table Management</CardTitle>
-                    <PieChart className="h-5 w-5 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                    <CardTitle className="text-sm font-medium">Cap Table Management</CardTitle>
+                    <PieChart className="h-4 w-4 text-primary" />
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <p className="text-sm text-muted-foreground">
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
                     Visualize your ownership structure with an interactive and sortable cap table.
                   </p>
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
-                   <CardTitle className="text-base font-medium">Dilution Simulation</CardTitle>
-                    <CandlestickChart className="h-5 w-5 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                   <CardTitle className="text-sm font-medium">AI Dilution Simulation</CardTitle>
+                    <CandlestickChart className="h-4 w-4 text-primary" />
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <p className="text-sm text-muted-foreground">
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
                     Model future funding rounds and understand the impact on your equity.
                   </p>
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
-                    <CardTitle className="text-base font-medium">Team Equity Allocation</CardTitle>
-                    <Users className="h-5 w-5 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                    <CardTitle className="text-sm font-medium">Team Equity Allocation</CardTitle>
+                    <Users className="h-4 w-4 text-primary" />
                 </CardHeader>
-                <CardContent className="p-4 pt-0">
-                  <p className="text-sm text-muted-foreground">
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
                     Easily add team members and allocate equity with AI-powered suggestions.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                    <CardTitle className="text-sm font-medium">Fundraising Pipeline</CardTitle>
+                    <Landmark className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
+                    Manage your investor pipeline from lead to close with a drag-and-drop board.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                    <CardTitle className="text-sm font-medium">Financials Tracking</CardTitle>
+                    <List className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
+                    Log revenue and expenses, and visualize financial trends with AI analysis.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between p-2 pb-1">
+                    <CardTitle className="text-sm font-medium">Internal Wiki</CardTitle>
+                    <Library className="h-4 w-4 text-primary" />
+                </CardHeader>
+                <CardContent className="p-2 pt-0">
+                  <p className="text-xs text-muted-foreground">
+                   Create and manage an internal knowledge base with AI content generation.
                   </p>
                 </CardContent>
               </Card>
