@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
    useEffect(() => {
     try {
-      const storedUser = localStorage.getItem('equityvision-user');
+      const storedUser = localStorage.getItem('zynoit-user');
       if (storedUser) {
         setUser(JSON.parse(storedUser));
       }
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (foundUser) {
       const userToStore = { id: foundUser.id, name: foundUser.name, email: foundUser.email };
       setUser(userToStore);
-      localStorage.setItem('equityvision-user', JSON.stringify(userToStore));
+      localStorage.setItem('zynoit-user', JSON.stringify(userToStore));
     } else {
       throw new Error('Invalid email or password');
     }
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('equityvision-user');
+    localStorage.removeItem('zynoit-user');
     router.push('/login');
   };
 

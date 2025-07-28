@@ -1,10 +1,9 @@
-
 import { DilutionSimulatorClient } from "@/components/dilution-simulator-client";
 import { capTable } from "@/data/mock";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Dilution Simulator | EquityVision',
+  title: 'Dilution Simulator | Zynoit',
   description: 'Use AI to model new funding rounds and understand the dilution effects on existing stakeholders.',
 };
 

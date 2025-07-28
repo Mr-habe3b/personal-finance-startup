@@ -1,9 +1,8 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Settings | EquityVision',
+  title: 'Settings | Zynoit',
   description: 'Manage your account and application settings.',
 };
 

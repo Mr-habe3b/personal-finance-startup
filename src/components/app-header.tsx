@@ -41,7 +41,7 @@ export function AppHeader({ toggleMobileSidebar }: AppHeaderProps) {
             )}
              <Link href="/" className="flex items-center gap-2 font-semibold text-primary sm:hidden">
                 <PieChart className="h-6 w-6" />
-                <span>EquityVision</span>
+                <span>Zynoit</span>
             </Link>
         </div>
       <div className="flex items-center gap-4 ml-auto">

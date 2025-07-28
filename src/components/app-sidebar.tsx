@@ -90,7 +90,7 @@ export function AppSidebar({ isCollapsed, toggleSidebar, isMobile, isMobileSideb
                 <div className="flex h-16 items-center border-b px-4 lg:px-6">
                     <Link href="/" className="flex items-center gap-2 font-semibold text-primary">
                         <PieChart className="h-6 w-6" />
-                         <span className={cn("truncate", isCollapsed && !isMobileLink && "sr-only")}>EquityVision</span>
+                         <span className={cn("truncate", isCollapsed && !isMobileLink && "sr-only")}>Zynoit</span>
                     </Link>
                 </div>
                 <div className="flex-1 overflow-y-auto">

@@ -11,7 +11,7 @@ import type { WikiPage as WikiPageType } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { generateWikiContent } from "@/ai/flows/wiki-content-generator";
 
-const WIKI_STORAGE_KEY = 'equityvision-wiki-pages';
+const WIKI_STORAGE_KEY = 'zynoit-wiki-pages';
 
 export default function WikiPage() {
     const [pages, setPages] = useState<WikiPageType[]>([]);
@@ -139,7 +139,7 @@ export default function WikiPage() {
                         </nav>
                     </div>
 
-                    <div className="p-4 md:p-6">
+                    <div className="p-4 md:p-6 h-full">
                         {selectedPage ? (
                              <div className="w-full h-full flex flex-col">
                                 <div className="flex items-center justify-between mb-4">

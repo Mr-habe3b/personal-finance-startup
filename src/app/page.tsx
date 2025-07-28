@@ -19,7 +19,7 @@ export default function LandingPage() {
                     Navigate Your Startup&apos;s Equity with Confidence
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    EquityVision provides intuitive tools for founders to manage cap tables, model fundraising rounds, and understand dilution. Make smarter decisions from day one.
+                    Zynoit provides intuitive tools for founders to manage cap tables, model fundraising rounds, and understand dilution. Make smarter decisions from day one.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -31,16 +31,14 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <div className="mx-auto aspect-square overflow-hidden rounded-xl">
-                <Image
-                  src="/images/home/hero.png"
-                  width="600"
-                  height="600"
-                  alt="Hero"
-                  data-ai-hint="abstract metallic"
-                  className="object-cover"
-                />
-              </div>
+              <Image
+                src="/images/home/hero.png"
+                width="600"
+                height="600"
+                alt="Hero"
+                data-ai-hint="abstract metallic"
+                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
+              />
             </div>
           </div>
         </section>
@@ -94,7 +92,7 @@ export default function LandingPage() {
         </section>
       </main>
       <footer className="flex items-center justify-center py-6">
-        <p className="text-xs text-muted-foreground">&copy; 2024 EquityVision. All rights reserved.</p>
+        <p className="text-xs text-muted-foreground">&copy; 2024 Zynoit. All rights reserved.</p>
       </footer>
     </div>
   );

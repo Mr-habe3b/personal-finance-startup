@@ -1,6 +1,6 @@
-# EquityVision - Startup Equity Management Dashboard
+# Zynoit - Startup Equity Management Dashboard
 
-EquityVision is a comprehensive dashboard for early-stage startup founders to manage, visualize, and model their company's equity. It provides tools for cap table management, fundraising pipeline tracking, financial analysis, and more, with AI-powered features to provide insights and streamline workflows.
+Zynoit is a comprehensive dashboard for early-stage startup founders to manage, visualize, and model their company's equity. It provides tools for cap table management, fundraising pipeline tracking, financial analysis, and more, with AI-powered features to provide insights and streamline workflows.
 
 ## Tech Stack
 
@@ -40,7 +40,7 @@ EquityVision is a comprehensive dashboard for early-stage startup founders to ma
     ```
 2.  Navigate to the project directory:
     ```bash
-    cd equityvision
+    cd zynoit
     ```
 3.  Install the dependencies:
     ```bash

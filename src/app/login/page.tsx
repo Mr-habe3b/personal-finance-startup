@@ -45,7 +45,7 @@ export default function LoginPage() {
         <CardHeader className="text-center">
             <div className="flex justify-center items-center gap-2 mb-2">
                  <PieChart className="h-8 w-8 text-primary" />
-                 <CardTitle className="text-3xl">EquityVision</CardTitle>
+                 <CardTitle className="text-3xl">Zynoit</CardTitle>
             </div>
           <CardDescription>
             Enter your credentials to access your dashboard.
