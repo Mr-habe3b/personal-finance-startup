@@ -10,10 +10,10 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-20 md:py-24 lg:py-28">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:gap-12 items-center justify-center">
-              <div className="flex flex-col justify-center space-y-4 text-center">
+            <div className="grid items-center justify-center gap-6 text-center">
+              <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-primary to-foreground/80">
                     Navigate Your Startup&apos;s Equity with Confidence
@@ -47,34 +47,34 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto grid max-w-sm gap-4 py-12 sm:max-w-4xl sm:grid-cols-2 md:gap-6 lg:max-w-5xl lg:grid-cols-3">
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-lg font-medium">Cap Table Management</CardTitle>
-                    <PieChart className="h-6 w-6 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
+                    <CardTitle className="text-base font-medium">Cap Table Management</CardTitle>
+                    <PieChart className="h-5 w-5 text-primary" />
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
+                <CardContent className="p-4 pt-0">
+                  <p className="text-sm text-muted-foreground">
                     Visualize your ownership structure with an interactive and sortable cap table.
                   </p>
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                   <CardTitle className="text-lg font-medium">Dilution Simulation</CardTitle>
-                    <CandlestickChart className="h-6 w-6 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
+                   <CardTitle className="text-base font-medium">Dilution Simulation</CardTitle>
+                    <CandlestickChart className="h-5 w-5 text-primary" />
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
+                <CardContent className="p-4 pt-0">
+                  <p className="text-sm text-muted-foreground">
                     Model future funding rounds and understand the impact on your equity.
                   </p>
                 </CardContent>
               </Card>
               <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-lg font-medium">Team Equity Allocation</CardTitle>
-                    <Users className="h-6 w-6 text-primary" />
+                <CardHeader className="flex flex-row items-center justify-between p-4 pb-2">
+                    <CardTitle className="text-base font-medium">Team Equity Allocation</CardTitle>
+                    <Users className="h-5 w-5 text-primary" />
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
+                <CardContent className="p-4 pt-0">
+                  <p className="text-sm text-muted-foreground">
                     Easily add team members and allocate equity with AI-powered suggestions.
                   </p>
                 </CardContent>
