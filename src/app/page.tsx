@@ -31,16 +31,14 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <div className="flex justify-center">
-                <Image
-                  src="/images/home/hero.png"
-                  width="600"
-                  height="600"
-                  alt="Hero"
-                  data-ai-hint="abstract metallic"
-                  className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
-                />
-              </div>
+              <Image
+                src="/images/home/hero.png"
+                width="600"
+                height="600"
+                alt="Hero"
+                data-ai-hint="abstract metallic"
+                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
+              />
             </div>
           </div>
         </section>
