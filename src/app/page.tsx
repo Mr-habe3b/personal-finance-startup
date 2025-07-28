@@ -31,14 +31,16 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <Image
-                src="/images/home/hero.png"
-                width="600"
-                height="600"
-                alt="Hero"
-                data-ai-hint="abstract metallic"
-                className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
-              />
+              <div className="mx-auto aspect-square overflow-hidden rounded-xl">
+                <Image
+                  src="/images/home/hero.png"
+                  width="600"
+                  height="600"
+                  alt="Hero"
+                  data-ai-hint="abstract metallic"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -53,7 +55,7 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-sm gap-6 py-12 sm:max-w-4xl sm:grid-cols-2 md:gap-8 lg:max-w-5xl lg:grid-cols-3">
+            <div className="mx-auto grid max-w-sm gap-4 py-12 sm:max-w-4xl sm:grid-cols-2 md:gap-6 lg:max-w-5xl lg:grid-cols-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="text-lg font-medium">Cap Table Management</CardTitle>
