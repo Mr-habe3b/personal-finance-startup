@@ -1,6 +1,6 @@
 # Zyyn8 - Startup Equity Management Dashboard
 
-Zynoit is a comprehensive dashboard for early-stage startup founders to manage, visualize, and model their company's equity. It provides tools for cap table management, fundraising pipeline tracking, financial analysis, and more, with AI-powered features to provide insights and streamline workflows.
+Zyyn8 is a comprehensive dashboard for early-stage startup founders to manage, visualize, and model their company's equity. It provides tools for cap table management, fundraising pipeline tracking, financial analysis, and more, with AI-powered features to provide insights and streamline workflows.
 
 ## Tech Stack
 
@@ -40,7 +40,7 @@ Zynoit is a comprehensive dashboard for early-stage startup founders to manage, 
     ```
 2.  Navigate to the project directory:
     ```bash
-    cd zynoit
+    cd Zyyn8
     ```
 3.  Install the dependencies:
     ```bash
